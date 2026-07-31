@@ -39,13 +39,15 @@ flowchart LR
     R["Ping Tool Registration"]
     P["Ping Result"]
 
-    H <-->|"JSON-RPC over stdin/stdout"| T
-    T <--> S
+    H -->|"JSON-RPC requests over stdin"| T
+    T -->|"JSON-RPC responses over stdout"| H
+    T --> S
+    S --> T
     S --> R
     R --> P
 
-    C["CLI serve command"] -.->|"constructs and connects"| T
-    C -.->|"creates"| S
+    C["CLI serve command"] -.-> T
+    C -.-> S
 ```
 
 The current implementation has four responsibilities:
@@ -215,7 +217,6 @@ npm run start -- --help
 
 ```text
 mcp-failure-lab/
-├── AGENTS.md
 ├── README.md
 ├── package.json
 ├── package-lock.json
@@ -253,8 +254,6 @@ The current ping test injects a fixed clock so its result is deterministic acros
 - Introduce abstractions only after a concrete requirement appears.
 - Add regression coverage for every bug fix.
 - Keep commits focused and reviewable.
-
-Repository-specific development guidance is recorded in [`AGENTS.md`](./AGENTS.md).
 
 ## Development workflow
 
