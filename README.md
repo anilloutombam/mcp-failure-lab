@@ -109,7 +109,7 @@ The architecture will evolve incrementally. New abstractions will be introduced 
 
 ## Requirements
 
-- Node.js 22 or newer
+- Node.js 22.19.0 or newer
 - npm
 
 ## Install for development
@@ -117,7 +117,7 @@ The architecture will evolve incrementally. New abstractions will be introduced 
 Clone the repository and install its dependencies:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/mcp-failure-lab.git
+git clone https://github.com/anilloutombam/mcp-failure-lab.git
 cd mcp-failure-lab
 npm install
 ```
@@ -141,7 +141,7 @@ npm run dev -- --version
 Start the MCP server over stdio:
 
 ```bash
-npm run dev -- serve
+npm --silent run dev -- serve
 ```
 
 The process waits silently for an MCP client. Press `Ctrl+C` to shut it down gracefully.
@@ -151,7 +151,7 @@ The process waits silently for an MCP client. Press `Ctrl+C` to shut it down gra
 Launch the official MCP Inspector:
 
 ```bash
-npx @modelcontextprotocol/inspector npm -- run dev -- serve
+npx @modelcontextprotocol/inspector npm --silent run dev -- serve
 ```
 
 In the Inspector:
