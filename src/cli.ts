@@ -1,5 +1,9 @@
 #!/usr/bin/env node
 
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+
+import { createServer } from "./server.js";
+
 const VERSION = "0.1.0";
 
 function printHelp(): void {
@@ -12,6 +16,7 @@ Usage:
   mcp-failure-lab <command> [options]
 
 Commands:
+  serve       Start the MCP server using stdio
   help        Show this help message
 
 Options:
@@ -20,7 +25,51 @@ Options:
 `);
 }
 
-function main(args: string[]): void {
+async function serve(): Promise<void> {
+  const server = createServer();
+  const transport = new StdioServerTransport();
+
+  let shuttingDown = false;
+
+  async function shutdown(signal: NodeJS.Signals): Promise<void> {
+    if (shuttingDown) {
+      return;
+    }
+
+    shuttingDown = true;
+    console.error(`Received ${signal}; shutting down.`);
+
+    await server.close();
+    process.exitCode = 0;
+  }
+
+  function requestShutdown(signal: NodeJS.Signals): void {
+    void shutdown(signal).catch((error: unknown) => {
+      console.error(`Failed to shut down after ${signal}:`, error);
+      process.exitCode = 1;
+    });
+  }
+
+  process.once("SIGINT", () => {
+    requestShutdown("SIGINT");
+  });
+
+  process.once("SIGTERM", () => {
+    requestShutdown("SIGTERM");
+  });
+
+  process.once("SIGINT", () => {
+    void shutdown("SIGINT");
+  });
+
+  process.once("SIGTERM", () => {
+    void shutdown("SIGTERM");
+  });
+
+  await server.connect(transport);
+}
+
+async function main(args: string[]): Promise<void> {
   const [command] = args;
 
   if (!command || command === "help" || command === "-h" || command === "--help") {
@@ -33,9 +82,17 @@ function main(args: string[]): void {
     return;
   }
 
+  if (command === "serve") {
+    await serve();
+    return;
+  }
+
   console.error(`Unknown command: ${command}`);
   console.error("Run with --help to see available commands.");
   process.exitCode = 1;
 }
 
-main(process.argv.slice(2));
+main(process.argv.slice(2)).catch((error: unknown) => {
+  console.error("Unexpected failure:", error);
+  process.exitCode = 1;
+});
