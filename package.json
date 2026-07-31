@@ -1,0 +1,30 @@
+{
+  "name": "mcp-failure-lab",
+  "version": "0.1.0",
+  "description": "A chaos-engineering and resilience testing toolkit for MCP servers.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "tsx src/cli.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "start": "node dist/cli.js",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "keywords": [
+    "mcp",
+    "testing",
+    "chaos-engineering",
+    "resilience"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^26.1.2",
+    "prettier": "^3.9.6",
+    "tsx": "^4.23.1",
+    "typescript": "^7.0.2"
+  }
+}
