@@ -32,22 +32,15 @@ Scenario execution and fault injection are not implemented yet.
 ### Current architecture
 
 ```mermaid
-flowchart LR
-    H["MCP Host or Inspector"]
-    T["stdio Transport"]
-    S["MCP Server"]
-    R["Ping Tool Registration"]
-    P["Ping Result"]
-
-    H -->|"JSON-RPC requests over stdin"| T
-    T -->|"JSON-RPC responses over stdout"| H
-    T --> S
-    S --> T
-    S --> R
-    R --> P
-
-    C["CLI serve command"] -.-> T
-    C -.-> S
+graph LR
+    Host[MCP Host or Inspector] --> Transport[stdio Transport]
+    Transport --> Host
+    Transport --> Server[MCP Server]
+    Server --> Transport
+    Server --> Registration[Ping Tool Registration]
+    Registration --> Result[Ping Result]
+    CLI[CLI serve command] --> Transport
+    CLI --> Server
 ```
 
 The current implementation has four responsibilities:
@@ -75,23 +68,15 @@ Diagnostics must never be written to stdout while the stdio transport is active 
 ## Planned architecture
 
 ```mermaid
-flowchart TD
-    C["CLI"]
-    R["Scenario Runner"]
-    F["Fault-Injection Proxy"]
-    M["Target MCP Server"]
-    A["Assertion Engine"]
-    O["Reporters"]
-
-    C --> R
-    R --> F
-    F --> M
-    R --> A
-    A --> O
-
-    O --> Console["Console Report"]
-    O --> JSON["JSON Report"]
-    O --> JUnit["JUnit Report"]
+graph TD
+    CLI[CLI] --> Runner[Scenario Runner]
+    Runner --> Proxy[Fault Injection Proxy]
+    Proxy --> Target[Target MCP Server]
+    Runner --> Assertions[Assertion Engine]
+    Assertions --> Reporters[Reporters]
+    Reporters --> ConsoleReport[Console Report]
+    Reporters --> JsonReport[JSON Report]
+    Reporters --> JunitReport[JUnit Report]
 ```
 
 Planned capabilities include:
