@@ -266,7 +266,7 @@ The `main` branch should remain in a working, reviewable state.
 - [x] Add stdio transport
 - [x] Add the deterministic `ping` tool
 - [x] Validate the server with MCP Inspector
-- [ ] Add MCP client-server integration coverage
+- [x] Add MCP client-server integration coverage
 - [ ] Define the scenario schema
 - [ ] Add the first response-delay fault
 - [ ] Add timeout assertions
