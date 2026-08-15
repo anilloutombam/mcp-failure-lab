@@ -1,11 +1,10 @@
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { CallToolResultSchema } from "@modelcontextprotocol/sdk/types.js";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 
 import type { Clock } from "../../src/ping.js";
 import { createServer } from "../../src/server.js";
+import { connectTestClient } from "../helpers/mcpTestClient.js";
 
 const pingToolResponseSchema = z.object({
   isError: z.boolean().optional(),
@@ -26,29 +25,29 @@ describe("ping MCP integration", () => {
     };
 
     const server = createServer(clock);
-
-    const client = new Client({
-      name: "mcp-failure-lab-integration-test",
-      version: "0.1.0",
-    });
-
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    const connection = await connectTestClient(server);
 
     try {
-      await server.connect(serverTransport);
-      await client.connect(clientTransport);
-
-      const { tools } = await client.listTools();
+      const { tools } = await connection.client.listTools();
 
       expect(tools).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             name: "ping",
           }),
+          expect.objectContaining({
+            name: "delay",
+          }),
+          expect.objectContaining({
+            name: "hang",
+          }),
+          expect.objectContaining({
+            name: "disconnect",
+          }),
         ]),
       );
 
-      const rawResult = await client.callTool(
+      const rawResult = await connection.client.callTool(
         {
           name: "ping",
           arguments: {},
@@ -67,8 +66,7 @@ describe("ping MCP integration", () => {
         timestamp: fixedTimestamp,
       });
     } finally {
-      await client.close();
-      await server.close();
+      await connection.close();
     }
   });
 });

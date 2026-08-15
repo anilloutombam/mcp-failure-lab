@@ -19,13 +19,16 @@ The first working milestone includes:
 - An MCP server factory
 - MCP communication over stdio
 - A discoverable `ping` tool
+- A bounded, cancellation-aware `delay` fault tool
+- A cancellation-aware `hang` fault tool
+- A `disconnect` fault tool that interrupts the active transport
 - Dependency-injected time for deterministic testing
 - Unit coverage for the ping result
 - Graceful `SIGINT` and `SIGTERM` handling
 - Clean, reproducible build output
 - Manual end-to-end verification with MCP Inspector
 
-Scenario execution and fault injection are not implemented yet.
+General scenario execution and additional fault types are not implemented yet.
 
 ## Architecture
 
@@ -157,6 +160,18 @@ A successful response resembles:
   "timestamp": "2026-07-31T16:32:47.570Z"
 }
 ```
+
+The `delay` tool accepts `delayMs` from `0` through `30000` and waits that long
+before returning a successful response. This can be used to verify client timeout
+and cancellation behavior without introducing nondeterministic latency.
+
+The `hang` tool intentionally never returns a response. It remains pending until
+the client cancels the request, allowing timeout and cancellation cleanup paths to
+be tested without leaving work running on the server.
+
+The `disconnect` tool closes the active MCP transport while its request is in
+flight. The client receives a connection failure instead of a tool response, which
+exercises transport-loss recovery behavior.
 
 Do not share or commit the temporary authentication token included in the Inspector URL.
 

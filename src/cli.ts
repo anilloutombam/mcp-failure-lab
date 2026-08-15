@@ -58,14 +58,6 @@ async function serve(): Promise<void> {
     requestShutdown("SIGTERM");
   });
 
-  process.once("SIGINT", () => {
-    void shutdown("SIGINT");
-  });
-
-  process.once("SIGTERM", () => {
-    void shutdown("SIGTERM");
-  });
-
   await server.connect(transport);
 }
 
