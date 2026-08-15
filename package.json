@@ -15,6 +15,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "test:watch": "vitest"
   },
   "keywords": [
@@ -26,6 +27,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^26.1.2",
+    "@vitest/coverage-v8": "^4.1.10",
     "prettier": "^3.9.6",
     "tsx": "^4.23.1",
     "typescript": "^7.0.2",
