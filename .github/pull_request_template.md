@@ -1,36 +1,34 @@
-## Summary
+### 🔗 Linked issue
 
 <!--
-What does this pull request change? Keep this concise and write it in your own
-words, even if an AI coding assistant helped with the implementation.
+Mention the related issue, for example: "Fixes #12".
+Small documentation corrections may explain why no issue is needed.
 -->
 
-## Problem
+Fixes #
 
-<!-- What problem, failure mode, or requirement does this address? -->
+### 🧭 Context
 
-## Implementation
+<!-- Briefly explain the problem, failure mode, or reason for this change. -->
 
-<!-- Explain the approach and important design decisions. -->
-
-## Behavior and failure semantics
+### 📚 Description
 
 <!--
-Describe activation conditions and observable outcomes. For fault scenarios,
-include limits, cancellation behavior, cleanup, and reproduction details.
-Write "Not applicable" when this change has no runtime behavior.
+Describe what changed and the important design decisions.
+Write this in your own words, even if an AI assistant helped with the code.
 -->
 
-## Verification
+### ⚠️ Behavior and limitations
 
-<!-- List the tests and manual checks performed. -->
+<!--
+For fault scenarios, describe activation conditions, observable results,
+timeouts, cancellation, cleanup, safety limits, and known limitations.
+Write "Not applicable" when there is no runtime behavior.
+-->
 
-- [ ] Unit tests added or updated
-- [ ] Integration tests added or updated
-- [ ] Regression test added for a bug fix
-- [ ] Manual verification described, if applicable
+### 🧪 Testing
 
-Commands run:
+<!-- List the automated tests and manual checks you performed. -->
 
 ```text
 npm run format:check
@@ -39,33 +37,28 @@ npm test
 npm run build
 ```
 
-## Documentation
+### 📷 Screenshots or output
 
-<!-- List documentation changes or explain why none are required. -->
+<!--
+Add screenshots or terminal output when they help explain the change.
+Delete this section when it is not applicable.
+-->
 
-- [ ] README reflects affected commands, tools, behavior, and limits
-- [ ] Architecture diagrams and responsibility lists match the implementation
-- [ ] CONTRIBUTING.md updated if the contributor workflow changed
-- [ ] No documentation change required
+<!--
+Before submitting this pull request, please make sure:
 
-## Risks and limitations
+- The pull request contains one focused change.
+- The issue is assigned to you or a maintainer approved the work.
+- There is no existing pull request solving the same issue.
+- The title follows Conventional Commits.
+- Tests cover the new behavior or bug fix where applicable.
+- Documentation matches the implementation.
+- Shared helpers are reused instead of duplicating behavior.
+- Formatting, type checks, tests, and the production build pass.
+- Stdout remains reserved for MCP protocol messages during stdio operation.
+- No secrets, credentials, Inspector tokens, or machine-specific files are included.
+- You understand the submitted code and described it in your own words.
+- Relevant review comments have been addressed.
 
-<!-- Note compatibility concerns, cleanup risks, known limitations, and follow-up work. -->
-
-## Final checklist
-
-- [ ] This pull request contains one focused change
-- [ ] The branch is current with `main` and has no conflicts
-- [ ] Inputs and protocol data are validated at their boundaries
-- [ ] Cancellation, timeouts, signals, and cleanup are handled where applicable
-- [ ] Tests are deterministic and do not rely on arbitrary sleeps
-- [ ] Shared helpers are reused; equivalent setup or behavior is not duplicated
-- [ ] I understand the submitted code and described the change in my own words
-- [ ] Stdout remains reserved for MCP protocol messages during stdio operation
-- [ ] No secrets, credentials, Inspector tokens, or machine-specific files are included
-- [ ] Formatting, type checks, tests, and the production build pass
-- [ ] All actionable review comments are resolved
-
-## Reviewer notes
-
-<!-- Point reviewers to the most important files, decisions, or open questions. -->
+Thank you for contributing to MCP Failure Lab!
+-->
