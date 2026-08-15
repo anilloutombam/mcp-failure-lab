@@ -23,12 +23,14 @@ The first working milestone includes:
 - A cancellation-aware `hang` fault tool
 - A `disconnect` fault tool that interrupts the active transport
 - Dependency-injected time for deterministic testing
+- A code-first scenario model and in-process scenario runner
+- Outcome and maximum-duration assertions for scenario recordings
 - Unit coverage for the ping result
 - Graceful `SIGINT` and `SIGTERM` handling
 - Clean, reproducible build output
 - Manual end-to-end verification with MCP Inspector
 
-General scenario execution and additional fault types are not implemented yet.
+CLI-driven scenarios, external client adapters, reporting, and additional fault types are not implemented yet.
 
 ## Architecture
 
@@ -71,15 +73,36 @@ MCP Host
 
 Diagnostics must never be written to stdout while the stdio transport is active because stdout carries MCP protocol messages. Operational diagnostics are written to stderr.
 
-## Planned architecture
+## Scenario execution
+
+```mermaid
+graph TD
+    Scenario[TypeScript Scenario] --> Runner[Scenario Runner]
+    Runner --> Client[MCP Client]
+    Client --> Server[MCP Failure Lab Server]
+    Server --> Fault[Registered Fault Tool]
+    Fault --> Client
+    Client --> Runner
+    Runner --> Assertions[Assertion Engine]
+    Assertions --> Recording[Scenario Recording]
+```
+
+The initial runner executes code-first TypeScript scenarios against MCP Failure
+Lab through a real MCP client connection. It records the observed outcome and
+duration, then evaluates declarative expectations. This validates failure
+semantics in-process without introducing a proxy or a second fault implementation.
+
+The runner does not yet orchestrate external MCP clients. Target-client adapters
+are a separate future layer for verifying how a specific host reacts to the
+controlled faulty server.
+
+### Planned reporting and orchestration
 
 ```mermaid
 graph TD
     CLI[CLI] --> Runner[Scenario Runner]
-    Runner --> Proxy[Fault Injection Proxy]
-    Proxy --> Target[Target MCP Server]
-    Runner --> Assertions[Assertion Engine]
-    Assertions --> Reporters[Reporters]
+    Runner --> Adapter[Target Client Adapter]
+    Runner --> Reporters[Reporters]
     Reporters --> ConsoleReport[Console Report]
     Reporters --> JsonReport[JSON Report]
     Reporters --> JunitReport[JUnit Report]
@@ -226,12 +249,16 @@ mcp-failure-lab/
 ├── tsconfig.json
 ├── src/
 │   ├── cli.ts
+│   ├── delay.ts
+│   ├── disconnect.ts
+│   ├── hang.ts
 │   ├── ping.ts
+│   ├── scenario.ts
 │   └── server.ts
 └── tests/
-    ├── unit/
-    │   └── ping.test.ts
+    ├── helpers/
     ├── integration/
+    ├── unit/
     └── e2e/
 ```
 
@@ -242,10 +269,10 @@ Generated directories such as `dist/`, `coverage/`, and `node_modules/` are not 
 The project separates tests by responsibility:
 
 - **Unit tests** validate isolated domain behavior.
-- **Integration tests** will validate MCP client-server communication and transports.
+- **Integration tests** validate MCP client-server communication and transports.
 - **End-to-end tests** will validate CLI-driven scenarios involving real processes.
 
-The current ping test injects a fixed clock so its result is deterministic across machines, timezones, and test runs.
+Tests inject clocks and delay implementations where appropriate so assertions remain deterministic across machines, timezones, and test runs.
 
 ## Engineering principles
 
@@ -285,11 +312,12 @@ The `main` branch should remain in a working, reviewable state.
 - [x] Add the deterministic `ping` tool
 - [x] Validate the server with MCP Inspector
 - [x] Add MCP client-server integration coverage
-- [ ] Define the scenario schema
-- [ ] Add the first response-delay fault
-- [ ] Add timeout assertions
+- [x] Define the code-first scenario model
+- [x] Add the first response-delay fault
+- [x] Add timeout and maximum-duration assertions
 - [ ] Add structured reports
-- [ ] Add CI
+- [x] Add CI
+- [ ] Add target-client adapters
 - [ ] Add Streamable HTTP support
 - [ ] Publish the first npm prerelease
 
