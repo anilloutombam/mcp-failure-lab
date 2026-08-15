@@ -1,0 +1,77 @@
+name: Feature request
+description: Propose an improvement or new resilience-testing capability
+title: "feat: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve MCP Failure Lab. Describe the requirement before proposing a large abstraction.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and pull requests for this proposal.
+          required: true
+        - label: This request describes one focused capability.
+          required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or failure mode
+      description: What resilience-testing problem cannot be handled today?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe activation conditions, observable results, limits, cancellation, and cleanup where applicable.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Fault tool
+        - Scenario runner
+        - Assertions and reporting
+        - Transport
+        - CLI
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: example
+    attributes:
+      label: Example scenario or usage
+      description: Show how a user would activate and verify the proposed behavior.
+      render: typescript
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Describe existing tools or workarounds you considered.
+
+  - type: textarea
+    id: risks
+    attributes:
+      label: Safety considerations
+      description: Note resource limits, cleanup risks, compatibility concerns, or possible misuse.
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: I would like to work on this after a maintainer confirms the approach and assigns the issue.
