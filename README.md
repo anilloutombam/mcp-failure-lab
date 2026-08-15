@@ -40,18 +40,22 @@ graph LR
     Transport --> Host
     Transport --> Server[MCP Server]
     Server --> Transport
-    Server --> Registration[Ping Tool Registration]
-    Registration --> Result[Ping Result]
+    Server --> Registration[Tool Registration]
+    Registration --> Ping[ping]
+    Registration --> Delay[delay]
+    Registration --> Hang[hang]
+    Registration --> Disconnect[disconnect]
     CLI[CLI serve command] --> Transport
     CLI --> Server
 ```
 
-The current implementation has four responsibilities:
+The current implementation has five responsibilities:
 
 - **CLI** — parses commands and starts the server through `serve`.
 - **Transport** — `StdioServerTransport` exchanges JSON-RPC messages over standard input and output.
 - **Server factory** — `createServer` constructs and configures the MCP server without starting I/O.
-- **Ping tool** — registers the first MCP capability and returns a deterministic, testable health response.
+- **Health tool** — `ping` returns a deterministic, testable health response.
+- **Fault tools** — `delay`, `hang`, and `disconnect` reproduce timing, cancellation, and transport-loss behavior.
 
 Server construction and server execution remain separate. This allows future transports and integration tests to reuse the same server configuration.
 
@@ -61,9 +65,8 @@ Server construction and server execution remain separate. This allows future tra
 MCP Host
   → stdio transport
   → MCP server
-  → ping tool handler
-  → ping result
-  → MCP response
+  → registered tool handler
+  → response, pending request, or transport interruption
 ```
 
 Diagnostics must never be written to stdout while the stdio transport is active because stdout carries MCP protocol messages. Operational diagnostics are written to stderr.
