@@ -37,6 +37,39 @@ For roadmap work, implement fault primitives before orchestration and reporting:
 Open an issue before making a large architectural change or introducing a new
 runtime dependency.
 
+## Working on issues
+
+Issues available for community contributions will normally have the
+`help wanted` or `good first issue` label.
+
+Before starting substantial work:
+
+1. Confirm that the issue is open and unassigned.
+2. Comment with a short explanation of your intended approach.
+3. Ask a maintainer to assign the issue to you.
+4. Wait for confirmation before beginning the implementation.
+
+External contributors cannot assign issues to themselves. A maintainer will
+assign an issue after confirming that it is ready and that the proposed approach
+fits the project. Do not open a competing pull request for assigned work unless
+the assignee or a maintainer approves collaboration.
+
+Post a progress update if the work takes longer than expected. After 14 days
+without an update, a maintainer may remove the assignment so another contributor
+can work on it. You may ask for more time before then.
+
+For work without an existing issue, open one and discuss the proposal before
+starting a large feature, dependency, or architectural change. Small typo and
+documentation corrections may be submitted directly.
+
+## Community expectations
+
+- Be respectful, constructive, and patient in issues and reviews.
+- Keep technical disagreement focused on the change, not the contributor.
+- Assume good intent, but support claims with code, tests, or documentation.
+- Do not pressure maintainers or repeatedly request immediate reviews.
+- Harassment, discrimination, spam, and abusive behavior are not accepted.
+
 ## Engineering rules
 
 ### Preserve MCP protocol safety
@@ -138,6 +171,9 @@ docs: update fault tool architecture
 
 Do not mix unrelated formatting or refactoring with a behavior change.
 
+By submitting a contribution, you agree that it may be distributed under the
+project's MIT License and that you have the right to submit it.
+
 ## Pull requests
 
 A pull request description should explain:
@@ -164,6 +200,10 @@ Before merging, confirm that:
 - The author understands the submitted code and described it in their own words.
 - All actionable review comments are resolved.
 
+Maintainers may close pull requests that ignore the contribution process, remain
+inactive after follow-up, duplicate existing work, or do not align with the
+project roadmap. Closing a pull request is not a judgment of the contributor.
+
 ## CodeRabbit reviews
 
 CodeRabbit is configured through `.coderabbit.yaml`. Automatic review may be
@@ -185,6 +225,10 @@ findings, explain rejected findings in the discussion, and resolve the thread
 only after the code and documentation are consistent.
 
 ## Security and responsible testing
+
+Do not report suspected security vulnerabilities in a public issue. Use GitHub's
+private vulnerability reporting feature when it is available, or contact the
+repository owner privately.
 
 Run fault scenarios only against systems you own or are authorized to test. Do
 not include production credentials, private protocol transcripts, or temporary
