@@ -60,3 +60,72 @@ describe("scenario runner MCP integration", () => {
     }
   });
 });
+
+describe("scenario runner recording", () => {
+  const scenario: Scenario = {
+    name: "record tool outcome",
+    call: { tool: "example", args: {} },
+    expect: { outcome: "error" },
+  };
+
+  it("classifies MCP tool error results", async () => {
+    const client = {
+      callTool: vi.fn(async () => ({
+        content: [{ type: "text" as const, text: "tool failed" }],
+        isError: true,
+      })),
+    };
+
+    const recording = await runScenario(client, scenario, clockReturning(10, 15));
+
+    expect(recording).toMatchObject({
+      outcome: "error",
+      durationMs: 5,
+      passed: true,
+      failures: [],
+    });
+  });
+
+  it("classifies non-timeout exceptions as errors", async () => {
+    const connectionError = new Error("connection closed");
+    const client = {
+      callTool: vi.fn(async () => {
+        throw connectionError;
+      }),
+    };
+
+    const recording = await runScenario(client, scenario, clockReturning(20, 25));
+
+    expect(recording).toMatchObject({
+      outcome: "error",
+      durationMs: 5,
+      passed: true,
+      failures: [],
+      error: connectionError,
+    });
+  });
+
+  it("records outcome and maximum-duration assertion failures", async () => {
+    const client = {
+      callTool: vi.fn(async () => ({
+        content: [{ type: "text" as const, text: "completed" }],
+      })),
+    };
+    const mismatchedScenario: Scenario = {
+      ...scenario,
+      expect: { outcome: "timeout", maxDurationMs: 10 },
+    };
+
+    const recording = await runScenario(client, mismatchedScenario, clockReturning(100, 125));
+
+    expect(recording).toMatchObject({
+      outcome: "success",
+      durationMs: 25,
+      passed: false,
+      failures: [
+        "expected outcome timeout, received success",
+        "expected duration at most 10ms, received 25ms",
+      ],
+    });
+  });
+});
