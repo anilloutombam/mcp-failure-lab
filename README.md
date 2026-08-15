@@ -19,13 +19,16 @@ The first working milestone includes:
 - An MCP server factory
 - MCP communication over stdio
 - A discoverable `ping` tool
+- A bounded, cancellation-aware `delay` fault tool
+- A cancellation-aware `hang` fault tool
+- A `disconnect` fault tool that interrupts the active transport
 - Dependency-injected time for deterministic testing
 - Unit coverage for the ping result
 - Graceful `SIGINT` and `SIGTERM` handling
 - Clean, reproducible build output
 - Manual end-to-end verification with MCP Inspector
 
-Scenario execution and fault injection are not implemented yet.
+General scenario execution and additional fault types are not implemented yet.
 
 ## Architecture
 
@@ -37,18 +40,22 @@ graph LR
     Transport --> Host
     Transport --> Server[MCP Server]
     Server --> Transport
-    Server --> Registration[Ping Tool Registration]
-    Registration --> Result[Ping Result]
+    Server --> Registration[Tool Registration]
+    Registration --> Ping[ping]
+    Registration --> Delay[delay]
+    Registration --> Hang[hang]
+    Registration --> Disconnect[disconnect]
     CLI[CLI serve command] --> Transport
     CLI --> Server
 ```
 
-The current implementation has four responsibilities:
+The current implementation has five responsibilities:
 
 - **CLI** — parses commands and starts the server through `serve`.
 - **Transport** — `StdioServerTransport` exchanges JSON-RPC messages over standard input and output.
 - **Server factory** — `createServer` constructs and configures the MCP server without starting I/O.
-- **Ping tool** — registers the first MCP capability and returns a deterministic, testable health response.
+- **Health tool** — `ping` returns a deterministic, testable health response.
+- **Fault tools** — `delay`, `hang`, and `disconnect` reproduce timing, cancellation, and transport-loss behavior.
 
 Server construction and server execution remain separate. This allows future transports and integration tests to reuse the same server configuration.
 
@@ -58,9 +65,8 @@ Server construction and server execution remain separate. This allows future tra
 MCP Host
   → stdio transport
   → MCP server
-  → ping tool handler
-  → ping result
-  → MCP response
+  → registered tool handler
+  → response, pending request, or transport interruption
 ```
 
 Diagnostics must never be written to stdout while the stdio transport is active because stdout carries MCP protocol messages. Operational diagnostics are written to stderr.
@@ -157,6 +163,18 @@ A successful response resembles:
   "timestamp": "2026-07-31T16:32:47.570Z"
 }
 ```
+
+The `delay` tool accepts `delayMs` from `0` through `30000` and waits that long
+before returning a successful response. This can be used to verify client timeout
+and cancellation behavior without introducing nondeterministic latency.
+
+The `hang` tool intentionally never returns a response. It remains pending until
+the client cancels the request, allowing timeout and cancellation cleanup paths to
+be tested without leaving work running on the server.
+
+The `disconnect` tool closes the active MCP transport while its request is in
+flight. The client receives a connection failure instead of a tool response, which
+exercises transport-loss recovery behavior.
 
 Do not share or commit the temporary authentication token included in the Inspector URL.
 
