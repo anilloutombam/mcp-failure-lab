@@ -128,6 +128,20 @@ The architecture will evolve incrementally. New abstractions will be introduced 
 - Node.js 22.19.0 or newer
 - npm
 
+## Installation
+
+Run MCP Failure Lab without installing it:
+
+```bash
+npx mcp-failure-lab --help
+```
+
+Or install it globally:
+
+```bash
+npm install -g mcp-failure-lab
+```
+
 ## Install for development
 
 Clone the repository and install its dependencies:
@@ -137,8 +151,6 @@ git clone https://github.com/anilloutombam/mcp-failure-lab.git
 cd mcp-failure-lab
 npm install
 ```
-
-The package has not been published to npm yet.
 
 ## Usage
 
@@ -319,7 +331,7 @@ The `main` branch should remain in a working, reviewable state.
 - [x] Add CI
 - [ ] Add target-client adapters
 - [ ] Add Streamable HTTP support
-- [ ] Publish the first npm prerelease
+- [x] Publish the first npm release
 
 ## License
 
