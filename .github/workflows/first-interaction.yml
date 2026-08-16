@@ -17,14 +17,14 @@ jobs:
       - name: Welcome first-time contributors
         uses: actions/first-interaction@v3
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          issue-message: |
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          issue_message: |
             Thanks for opening your first issue in MCP Failure Lab! 👋
 
             I’ll take a look when I can. If you have any additional context, reproduction steps, or ideas, feel free to add them here.
 
             Thanks for helping improve the project! 🚀
-          pr-message: |
+          pr_message: |
             Thanks for opening your first pull request to MCP Failure Lab! 👋
 
             CI will run automatically to check your changes. If anything fails or looks confusing, feel free to ask here.
