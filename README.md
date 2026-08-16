@@ -174,6 +174,46 @@ npm --silent run dev -- serve
 
 The process waits silently for an MCP client. Press `Ctrl+C` to shut it down gracefully.
 
+### Run a scenario
+
+Scenario files use JSON. For example, `examples/scenarios/delay-success.json`
+contains:
+
+```json
+{
+  "name": "bounded delay succeeds",
+  "call": {
+    "tool": "delay",
+    "args": {
+      "delayMs": 250
+    }
+  },
+  "timeoutMs": 1000,
+  "expect": {
+    "outcome": "success",
+    "maxDurationMs": 500
+  }
+}
+```
+
+Run it against an in-memory MCP Failure Lab server:
+
+```bash
+npx mcp-failure-lab run examples/scenarios/delay-success.json
+```
+
+Use `--report json` for machine-readable output:
+
+```bash
+npx mcp-failure-lab run examples/scenarios/delay-success.json --report json
+```
+
+The command applies a 30-second timeout when `timeoutMs` is omitted. It exits with
+status `0` when all expectations pass, `2` when scenario assertions fail, and `1`
+when the scenario cannot be loaded or executed. This initial command runs
+scenarios against MCP Failure Lab itself; external MCP client orchestration is
+planned separately.
+
 ## Inspect the MCP server
 
 Launch the official MCP Inspector:
@@ -255,6 +295,8 @@ npm run start -- --help
 
 ```text
 mcp-failure-lab/
+├── examples/
+│   └── scenarios/
 ├── README.md
 ├── package.json
 ├── package-lock.json
@@ -266,6 +308,7 @@ mcp-failure-lab/
 │   ├── hang.ts
 │   ├── ping.ts
 │   ├── scenario.ts
+│   ├── scenarioCommand.ts
 │   └── server.ts
 └── tests/
     ├── helpers/
@@ -327,6 +370,7 @@ The `main` branch should remain in a working, reviewable state.
 - [x] Define the code-first scenario model
 - [x] Add the first response-delay fault
 - [x] Add timeout and maximum-duration assertions
+- [x] Add CLI scenario execution
 - [ ] Add structured reports
 - [x] Add CI
 - [ ] Add target-client adapters
