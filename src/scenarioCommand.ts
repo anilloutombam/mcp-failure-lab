@@ -29,6 +29,8 @@ const scenarioSchema = z
   .strict();
 
 export type ReportFormat = "console" | "json";
+export type ScenarioCommandErrorCode =
+  "invalid_arguments" | "scenario_load_failed" | "scenario_execution_failed";
 
 export interface ScenarioCommandOutput {
   write(message: string): void;
@@ -37,6 +39,29 @@ export interface ScenarioCommandOutput {
 
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
+}
+
+export function writeScenarioCommandError(
+  code: ScenarioCommandErrorCode,
+  message: string,
+  format: ReportFormat,
+  output: ScenarioCommandOutput,
+): void {
+  if (format === "json") {
+    output.write(
+      JSON.stringify(
+        {
+          passed: false,
+          error: { code, message },
+        },
+        null,
+        2,
+      ),
+    );
+    return;
+  }
+
+  output.writeError(message);
 }
 
 export async function loadScenario(path: string): Promise<Scenario> {
@@ -132,13 +157,31 @@ export async function runScenarioCommand(
   format: ReportFormat,
   output: ScenarioCommandOutput,
 ): Promise<number> {
+  let scenario: Scenario;
+
   try {
-    const scenario = await loadScenario(path);
+    scenario = await loadScenario(path);
+  } catch (error) {
+    writeScenarioCommandError(
+      "scenario_load_failed",
+      `Failed to run scenario: ${errorMessage(error)}`,
+      format,
+      output,
+    );
+    return 1;
+  }
+
+  try {
     const result = await executeScenario(scenario);
     output.write(formatScenarioResult(result, format));
     return result.passed ? 0 : 2;
   } catch (error) {
-    output.writeError(`Failed to run scenario: ${errorMessage(error)}`);
+    writeScenarioCommandError(
+      "scenario_execution_failed",
+      `Failed to run scenario: ${errorMessage(error)}`,
+      format,
+      output,
+    );
     return 1;
   }
 }

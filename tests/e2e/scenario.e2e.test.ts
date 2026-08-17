@@ -99,6 +99,19 @@ describe("scenario CLI", () => {
     expect(result.stderr).toContain("is not valid JSON");
   });
 
+  it("writes invalid JSON failures as a JSON report", async () => {
+    const path = await writeScenario("{");
+
+    const result = await runCli("run", path, "--report", "json");
+
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toBe("");
+    expect(JSON.parse(result.stdout)).toMatchObject({
+      passed: false,
+      error: { code: "scenario_load_failed" },
+    });
+  });
+
   it("rejects missing files and unknown options", async () => {
     const missingFile = await runCli("run");
     const unknownOption = await runCli("run", "examples/scenarios/delay-success.json", "--unknown");
@@ -107,6 +120,20 @@ describe("scenario CLI", () => {
     expect(missingFile.stderr).toContain("Missing scenario file");
     expect(unknownOption.exitCode).toBe(1);
     expect(unknownOption.stderr).toContain("Unknown run option: --unknown");
+  });
+
+  it("writes argument failures as JSON when requested", async () => {
+    const result = await runCli("run", "--unknown", "--report", "json");
+
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toBe("");
+    expect(JSON.parse(result.stdout)).toEqual({
+      passed: false,
+      error: {
+        code: "invalid_arguments",
+        message: "Unknown run option: --unknown",
+      },
+    });
   });
 
   it("times out and cleans up a hanging scenario", async () => {

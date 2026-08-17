@@ -2,7 +2,8 @@
 
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 
-import { runScenarioCommand, type ReportFormat } from "./scenarioCommand.js";
+import { runScenarioCommand, writeScenarioCommandError } from "./scenarioCommand.js";
+import { parseRunArguments } from "./runArguments.js";
 import { createServer } from "./server.js";
 
 const VERSION = "0.1.0";
@@ -26,37 +27,6 @@ Options:
   -h, --help         Show this help message
   -v, --version      Show the current version
 `);
-}
-
-function parseRunArguments(args: string[]): { path: string; format: ReportFormat } | undefined {
-  const [path, ...options] = args;
-  if (!path) {
-    console.error(
-      "Missing scenario file. Usage: mcp-failure-lab run <file> [--report console|json]",
-    );
-    return undefined;
-  }
-
-  let format: ReportFormat = "console";
-
-  for (let index = 0; index < options.length; index += 1) {
-    const option = options[index];
-    if (option !== "--report") {
-      console.error(`Unknown run option: ${option}`);
-      return undefined;
-    }
-
-    const value = options[index + 1];
-    if (value !== "console" && value !== "json") {
-      console.error("--report must be either console or json");
-      return undefined;
-    }
-
-    format = value;
-    index += 1;
-  }
-
-  return { path, format };
 }
 
 async function serve(): Promise<void> {
@@ -115,15 +85,18 @@ async function main(args: string[]): Promise<void> {
 
   if (command === "run") {
     const parsed = parseRunArguments(commandArgs);
-    if (!parsed) {
+    const output = {
+      write: console.log,
+      writeError: console.error,
+    };
+
+    if (!parsed.ok) {
+      writeScenarioCommandError("invalid_arguments", parsed.error, parsed.format, output);
       process.exitCode = 1;
       return;
     }
 
-    process.exitCode = await runScenarioCommand(parsed.path, parsed.format, {
-      write: console.log,
-      writeError: console.error,
-    });
+    process.exitCode = await runScenarioCommand(parsed.path, parsed.format, output);
     return;
   }
 

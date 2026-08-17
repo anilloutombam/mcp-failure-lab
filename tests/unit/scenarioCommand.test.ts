@@ -8,6 +8,7 @@ import {
   formatScenarioResult,
   loadScenario,
   runScenarioCommand,
+  writeScenarioCommandError,
 } from "../../src/scenarioCommand.js";
 
 const temporaryDirectories: string[] = [];
@@ -117,6 +118,26 @@ describe("scenario reports", () => {
       failures: [],
     });
   });
+
+  it("emits a stable JSON command error", () => {
+    const output = { write: vi.fn(), writeError: vi.fn() };
+
+    writeScenarioCommandError(
+      "scenario_load_failed",
+      "Failed to run scenario: missing file",
+      "json",
+      output,
+    );
+
+    expect(JSON.parse(output.write.mock.calls[0]?.[0] as string)).toEqual({
+      passed: false,
+      error: {
+        code: "scenario_load_failed",
+        message: "Failed to run scenario: missing file",
+      },
+    });
+    expect(output.writeError).not.toHaveBeenCalled();
+  });
 });
 
 describe("scenario command", () => {
@@ -161,5 +182,16 @@ describe("scenario command", () => {
     expect(output.writeError).toHaveBeenCalledWith(
       expect.stringContaining("Failed to run scenario: cannot read scenario file missing.json"),
     );
+  });
+
+  it("writes load failures as JSON when requested", async () => {
+    const output = { write: vi.fn(), writeError: vi.fn() };
+
+    await expect(runScenarioCommand("missing.json", "json", output)).resolves.toBe(1);
+    expect(output.writeError).not.toHaveBeenCalled();
+    expect(JSON.parse(output.write.mock.calls[0]?.[0] as string)).toMatchObject({
+      passed: false,
+      error: { code: "scenario_load_failed" },
+    });
   });
 });

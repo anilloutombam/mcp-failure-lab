@@ -208,6 +208,22 @@ Use `--report json` for machine-readable output:
 npx mcp-failure-lab run examples/scenarios/delay-success.json --report json
 ```
 
+When JSON reporting is selected, input and execution failures also produce a
+machine-readable report on stdout:
+
+```json
+{
+  "passed": false,
+  "error": {
+    "code": "scenario_load_failed",
+    "message": "Failed to run scenario: cannot read scenario file missing.json"
+  }
+}
+```
+
+Error codes are `invalid_arguments`, `scenario_load_failed`, and
+`scenario_execution_failed`.
+
 The command applies a 30-second timeout when `timeoutMs` is omitted. It exits with
 status `0` when all expectations pass, `2` when scenario assertions fail, and `1`
 when the scenario cannot be loaded or executed. This initial command runs
@@ -307,6 +323,7 @@ mcp-failure-lab/
 │   ├── disconnect.ts
 │   ├── hang.ts
 │   ├── ping.ts
+│   ├── runArguments.ts
 │   ├── scenario.ts
 │   ├── scenarioCommand.ts
 │   └── server.ts
