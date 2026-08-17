@@ -1,6 +1,6 @@
 {
   "name": "mcp-failure-lab",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A chaos-engineering and resilience testing toolkit for MCP servers.",
   "type": "module",
   "bin": {
@@ -25,6 +25,7 @@
     "dev": "tsx src/cli.ts",
     "typecheck": "tsc --noEmit && tsc --project tests/tsconfig.json",
     "build": "npm run clean && tsc",
+    "postbuild": "node -e \"require('node:fs').chmodSync('dist/cli.js', 0o755)\"",
     "start": "node dist/cli.js",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
