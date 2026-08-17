@@ -1,0 +1,12 @@
+{
+  "name": "hanging tool times out",
+  "call": {
+    "tool": "hang",
+    "args": {}
+  },
+  "timeoutMs": 1000,
+  "expect": {
+    "outcome": "timeout",
+    "maxDurationMs": 1500
+  }
+}
