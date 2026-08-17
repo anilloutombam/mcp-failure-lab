@@ -102,7 +102,7 @@ controlled faulty server.
 ```mermaid
 graph TD
     CLI[CLI] --> Runner[Scenario Runner]
-    Runner --> Adapter[Target Client Adapter]
+    Runner -. planned .-> Adapter[Target Client Adapter]
     Runner --> Recording[Scenario Result]
     Recording --> Reporters[Reporters]
     Reporters --> ConsoleReport[Console Report]
@@ -121,7 +121,7 @@ Planned capabilities include:
 - Cancellation testing
 - Timeout assertions
 - Reproduction metadata
-- Console, JSON, and JUnit reports
+- JUnit reports
 
 The architecture will evolve incrementally. New abstractions will be introduced only when supported by a concrete requirement and corresponding tests.
 
