@@ -10,10 +10,10 @@ Run an included scenario from a repository checkout:
 npm run dev -- run examples/scenarios/delay-success.json
 ```
 
-Or run it with the published package:
+Or try the published CLI without installing it:
 
 ```bash
-npx mcp-failure-lab run examples/scenarios/delay-success.json
+npx mcp-failure-lab --help
 ```
 
 ## Goal
