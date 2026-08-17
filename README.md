@@ -1,5 +1,8 @@
 # MCP Failure Lab
 
+[![npm version](https://img.shields.io/npm/v/mcp-failure-lab)](https://www.npmjs.com/package/mcp-failure-lab)
+[![CI](https://github.com/anilloutombam/mcp-failure-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/anilloutombam/mcp-failure-lab/actions/workflows/ci.yml)
+
 A chaos-engineering and resilience-testing toolkit for Model Context Protocol servers.
 
 ![MCP Failure Lab demonstrating a bounded delay and an expected timeout](docs/demo.gif)
