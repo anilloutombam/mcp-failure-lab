@@ -30,7 +30,9 @@ The first working milestone includes:
 - Clean, reproducible build output
 - Manual end-to-end verification with MCP Inspector
 
-CLI-driven scenarios, external client adapters, reporting, and additional fault types are not implemented yet.
+CLI-driven JSON scenarios and initial console and JSON reporting are available.
+External client adapters, reusable reporter abstractions, and additional fault
+types are not implemented yet.
 
 ## Architecture
 
