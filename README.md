@@ -2,6 +2,8 @@
 
 A chaos-engineering and resilience-testing toolkit for Model Context Protocol servers.
 
+![MCP Failure Lab demonstrating a bounded delay and an expected timeout](docs/demo.gif)
+
 ## Goal
 
 MCP Failure Lab helps server authors reproduce transport failures, hanging tools, malformed responses, session loss, cancellation races, and other reliability problems in a deterministic way.
@@ -112,14 +114,11 @@ graph TD
 
 Planned capabilities include:
 
-- Deterministic fault scenarios
-- Response delays and hanging tools
-- Transport interruption
 - Malformed MCP messages
 - Duplicate responses
 - Session loss
-- Cancellation testing
-- Timeout assertions
+- Post-condition assertions
+- Independent observer/read-path verification
 - Reproduction metadata
 - JUnit reports
 
@@ -202,6 +201,13 @@ Run it against an in-memory MCP Failure Lab server:
 
 ```bash
 npx mcp-failure-lab run examples/scenarios/delay-success.json
+```
+
+An expected timeout can pass too. The included `hang-timeout.json` scenario
+verifies that a hanging tool reaches its configured deadline:
+
+```bash
+npx mcp-failure-lab run examples/scenarios/hang-timeout.json
 ```
 
 Use `--report json` for machine-readable output:
@@ -365,7 +371,7 @@ The project separates tests by responsibility:
 
 - **Unit tests** validate isolated domain behavior.
 - **Integration tests** validate MCP client-server communication and transports.
-- **End-to-end tests** will validate CLI-driven scenarios involving real processes.
+- **End-to-end tests** validate CLI-driven scenarios involving real processes.
 
 Tests inject clocks and delay implementations where appropriate so assertions remain deterministic across machines, timezones, and test runs.
 
@@ -413,6 +419,8 @@ The `main` branch should remain in a working, reviewable state.
 - [x] Add CLI scenario execution
 - [x] Add structured reports
 - [x] Add CI
+- [ ] Add post-condition assertions
+- [ ] Add independent observer/read-path verification
 - [ ] Add target-client adapters
 - [ ] Add Streamable HTTP support
 - [x] Publish the first npm release
