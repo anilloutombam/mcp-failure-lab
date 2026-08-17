@@ -30,9 +30,8 @@ The first working milestone includes:
 - Clean, reproducible build output
 - Manual end-to-end verification with MCP Inspector
 
-CLI-driven JSON scenarios and initial console and JSON reporting are available.
-External client adapters, reusable reporter abstractions, and additional fault
-types are not implemented yet.
+CLI-driven JSON scenarios and reusable console and JSON reporters are available.
+External client adapters and additional fault types are not implemented yet.
 
 ## Architecture
 
@@ -98,16 +97,17 @@ The runner does not yet orchestrate external MCP clients. Target-client adapters
 are a separate future layer for verifying how a specific host reacts to the
 controlled faulty server.
 
-### Planned reporting and orchestration
+### Reporting and planned orchestration
 
 ```mermaid
 graph TD
     CLI[CLI] --> Runner[Scenario Runner]
     Runner --> Adapter[Target Client Adapter]
-    Runner --> Reporters[Reporters]
+    Runner --> Recording[Scenario Result]
+    Recording --> Reporters[Reporters]
     Reporters --> ConsoleReport[Console Report]
     Reporters --> JsonReport[JSON Report]
-    Reporters --> JunitReport[JUnit Report]
+    Reporters -. planned .-> JunitReport[JUnit Report]
 ```
 
 Planned capabilities include:
@@ -209,6 +209,26 @@ Use `--report json` for machine-readable output:
 ```bash
 npx mcp-failure-lab run examples/scenarios/delay-success.json --report json
 ```
+
+Report formatting is implemented behind a small `ScenarioReporter` interface.
+The console reporter renders the scenario name, observed outcome, duration,
+assertion status, and any assertion failures. The JSON reporter emits this stable
+structure:
+
+```json
+{
+  "name": "bounded delay succeeds",
+  "outcome": "success",
+  "durationMs": 251.25,
+  "passed": true,
+  "failures": []
+}
+```
+
+`outcome` is one of `success`, `error`, or `timeout`. `result` is included when
+the MCP tool returns a result, and `error` is included as a string when execution
+throws. Reports are returned to the command layer, which writes them to the
+caller-selected output stream; reporters do not write to stdout themselves.
 
 When JSON reporting is selected, input and execution failures also produce a
 machine-readable report on stdout:
@@ -325,6 +345,7 @@ mcp-failure-lab/
 │   ├── disconnect.ts
 │   ├── hang.ts
 │   ├── ping.ts
+│   ├── reporter.ts
 │   ├── runArguments.ts
 │   ├── scenario.ts
 │   ├── scenarioCommand.ts
@@ -390,7 +411,7 @@ The `main` branch should remain in a working, reviewable state.
 - [x] Add the first response-delay fault
 - [x] Add timeout and maximum-duration assertions
 - [x] Add CLI scenario execution
-- [ ] Add structured reports
+- [x] Add structured reports
 - [x] Add CI
 - [ ] Add target-client adapters
 - [ ] Add Streamable HTTP support
