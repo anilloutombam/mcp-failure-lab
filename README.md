@@ -4,17 +4,26 @@ A chaos-engineering and resilience-testing toolkit for Model Context Protocol se
 
 ![MCP Failure Lab demonstrating a bounded delay and an expected timeout](docs/demo.gif)
 
+From a repository checkout, run an included JSON scenario without installing the
+package globally:
+
+```bash
+npx mcp-failure-lab run examples/scenarios/delay-success.json
+```
+
 ## Goal
 
-MCP Failure Lab helps server authors reproduce transport failures, hanging tools, malformed responses, session loss, cancellation races, and other reliability problems in a deterministic way.
+MCP Failure Lab helps server authors reproduce delays, hanging tools, cancellation, and transport loss in a deterministic way. Additional protocol faults are planned.
 
 The project is being built incrementally, with an emphasis on protocol correctness, reproducible tests, explicit failure semantics, and clean operational behavior.
 
 ## Status
 
-Early development.
+Usable early release. MCP Failure Lab can run deterministic JSON scenarios against
+its built-in test server from the command line. It is not yet a general-purpose
+proxy or an external MCP client test orchestrator.
 
-The first working milestone includes:
+Available now:
 
 - A TypeScript command-line application
 - A `serve` command
@@ -26,14 +35,24 @@ The first working milestone includes:
 - A `disconnect` fault tool that interrupts the active transport
 - Dependency-injected time for deterministic testing
 - A code-first scenario model and in-process scenario runner
+- CLI-driven JSON scenario files
 - Outcome and maximum-duration assertions for scenario recordings
-- Unit coverage for the ping result
+- Console and JSON scenario reporters
+- Machine-readable JSON command errors
+- CI-friendly exit codes for passes, assertion failures, and execution errors
+- Unit, integration, and end-to-end test coverage
 - Graceful `SIGINT` and `SIGTERM` handling
 - Clean, reproducible build output
-- Manual end-to-end verification with MCP Inspector
+- Manual verification with MCP Inspector
 
-CLI-driven JSON scenarios and reusable console and JSON reporters are available.
-External client adapters and additional fault types are not implemented yet.
+Planned, but not implemented:
+
+- Post-condition assertions
+- Independent observer/read-path verification
+- JUnit reports
+- Target-client adapters and external client orchestration
+- Streamable HTTP transport
+- Malformed-message, duplicate-response, and session-loss faults
 
 ## Architecture
 
@@ -112,15 +131,10 @@ graph TD
     Reporters -. planned .-> JunitReport[JUnit Report]
 ```
 
-Planned capabilities include:
-
-- Malformed MCP messages
-- Duplicate responses
-- Session loss
-- Post-condition assertions
-- Independent observer/read-path verification
-- Reproduction metadata
-- JUnit reports
+Console and JSON reporting are implemented. Target-client adapters and JUnit
+reporting are planned. Post-condition assertions and independent observer/read-path
+verification are also planned; current assertions cover only observed outcome and
+maximum duration.
 
 The architecture will evolve incrementally. New abstractions will be introduced only when supported by a concrete requirement and corresponding tests.
 
@@ -339,12 +353,18 @@ npm run start -- --help
 
 ```text
 mcp-failure-lab/
+├── docs/
+│   ├── demo.gif
+│   └── demo.tape
 ├── examples/
 │   └── scenarios/
+│       ├── delay-success.json
+│       └── hang-timeout.json
 ├── README.md
 ├── package.json
 ├── package-lock.json
 ├── tsconfig.json
+├── vitest.config.ts
 ├── src/
 │   ├── cli.ts
 │   ├── delay.ts
@@ -358,9 +378,10 @@ mcp-failure-lab/
 │   └── server.ts
 └── tests/
     ├── helpers/
+    ├── e2e/
     ├── integration/
     ├── unit/
-    └── e2e/
+    └── tsconfig.json
 ```
 
 Generated directories such as `dist/`, `coverage/`, and `node_modules/` are not committed.
@@ -421,8 +442,10 @@ The `main` branch should remain in a working, reviewable state.
 - [x] Add CI
 - [ ] Add post-condition assertions
 - [ ] Add independent observer/read-path verification
+- [ ] Add JUnit reports
 - [ ] Add target-client adapters
 - [ ] Add Streamable HTTP support
+- [ ] Add malformed-message, duplicate-response, and session-loss faults
 - [x] Publish the first npm release
 
 ## License

@@ -1,6 +1,6 @@
 {
   "name": "mcp-failure-lab",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "A chaos-engineering and resilience testing toolkit for MCP servers.",
   "type": "module",
   "bin": {
