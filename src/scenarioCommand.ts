@@ -4,6 +4,11 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { z } from "zod";
 
+import {
+  ConsoleScenarioReporter,
+  JsonScenarioReporter,
+  type ScenarioReporter,
+} from "./reporter.js";
 import { runScenario, type Scenario, type ScenarioResult } from "./scenario.js";
 import { createServer } from "./server.js";
 
@@ -104,34 +109,9 @@ export async function loadScenario(path: string): Promise<Scenario> {
 }
 
 export function formatScenarioResult(result: ScenarioResult, format: ReportFormat): string {
-  if (format === "json") {
-    return JSON.stringify(
-      {
-        name: result.name,
-        outcome: result.outcome,
-        durationMs: result.durationMs,
-        passed: result.passed,
-        failures: result.failures,
-        ...(result.result === undefined ? {} : { result: result.result }),
-        ...(result.error === undefined ? {} : { error: errorMessage(result.error) }),
-      },
-      null,
-      2,
-    );
-  }
-
-  const lines = [
-    `Scenario: ${result.name}`,
-    `Outcome: ${result.outcome}`,
-    `Duration: ${result.durationMs.toFixed(2)} ms`,
-    `Assertions: ${result.passed ? "passed" : "failed"}`,
-  ];
-
-  if (result.failures.length > 0) {
-    lines.push("Failures:", ...result.failures.map((failure) => `- ${failure}`));
-  }
-
-  return lines.join("\n");
+  const reporter: ScenarioReporter =
+    format === "json" ? new JsonScenarioReporter() : new ConsoleScenarioReporter();
+  return reporter.report(result);
 }
 
 export async function executeScenario(scenario: Scenario): Promise<ScenarioResult> {
