@@ -6,7 +6,7 @@ import { runScenarioCommand, writeScenarioCommandError } from "./scenarioCommand
 import { parseRunArguments } from "./runArguments.js";
 import { createServer } from "./server.js";
 
-const VERSION = "0.1.0";
+const VERSION = "0.3.0";
 
 function printHelp(): void {
   console.log(`
