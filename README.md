@@ -4,8 +4,13 @@ A chaos-engineering and resilience-testing toolkit for Model Context Protocol se
 
 ![MCP Failure Lab demonstrating a bounded delay and an expected timeout](docs/demo.gif)
 
-From a repository checkout, run an included JSON scenario without installing the
-package globally:
+Run an included scenario from a repository checkout:
+
+```bash
+npm run dev -- run examples/scenarios/delay-success.json
+```
+
+Or run it with the published package:
 
 ```bash
 npx mcp-failure-lab run examples/scenarios/delay-success.json
