@@ -1,0 +1,14 @@
+{
+  "name": "bounded delay succeeds",
+  "call": {
+    "tool": "delay",
+    "args": {
+      "delayMs": 250
+    }
+  },
+  "timeoutMs": 1000,
+  "expect": {
+    "outcome": "success",
+    "maxDurationMs": 500
+  }
+}

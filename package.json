@@ -23,7 +23,7 @@
   "scripts": {
     "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
     "dev": "tsx src/cli.ts",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --project tests/tsconfig.json",
     "build": "npm run clean && tsc",
     "start": "node dist/cli.js",
     "format": "prettier --write .",
