@@ -380,7 +380,8 @@ mcp-failure-lab/
 │   ├── runArguments.ts
 │   ├── scenario.ts
 │   ├── scenarioCommand.ts
-│   └── server.ts
+│   ├── server.ts
+│   └── version.ts
 └── tests/
     ├── helpers/
     ├── e2e/

@@ -1,8 +1,15 @@
+import { createRequire } from "node:module";
+
 import { describe, expect, it } from "vitest";
 
 import { createServer } from "../../src/server.js";
-import { VERSION } from "../../src/version.js";
 import { connectTestClient } from "../helpers/mcpTestClient.js";
+
+const require = createRequire(import.meta.url);
+
+const packageJson = require("../../package.json") as {
+  version: string;
+};
 
 describe("MCP server metadata", () => {
   it("reports the package version during initialization", async () => {
@@ -12,7 +19,7 @@ describe("MCP server metadata", () => {
     try {
       expect(connection.client.getServerVersion()).toEqual({
         name: "mcp-failure-lab",
-        version: VERSION,
+        version: packageJson.version,
       });
     } finally {
       await connection.close();
