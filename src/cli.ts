@@ -7,7 +7,6 @@ import { parseRunArguments } from "./runArguments.js";
 import { createServer } from "./server.js";
 import { VERSION } from "./version.js";
 
-
 function printHelp(): void {
   console.log(`
 MCP Failure Lab
