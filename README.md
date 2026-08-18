@@ -429,6 +429,35 @@ The project separates tests by responsibility:
 
 Tests inject clocks and delay implementations where appropriate so assertions remain deterministic across machines, timezones, and test runs.
 
+## External integration validation
+
+MCP Failure Lab can be combined with external simulation and evaluation
+frameworks to test how agents behave after deterministic MCP failures.
+
+The published `mcp-failure-lab@0.3.2` package has been exercised with Future AGI
+using an independent Python MCP client. The test invoked the real `hang` tool
+over stdio, applied a client-side timeout, and passed the resulting failure into
+simulated agent conversations for behavioral evaluation.
+
+All 10 simulation calls completed. The external evaluation also identified
+cases where the deliberately simple test adapter became repetitive after the
+timeout, demonstrating the distinction between deterministic fault reproduction
+and agent recovery behavior.
+
+```mermaid
+flowchart LR
+    A[Future AGI] --> B[Test Adapter]
+    B --> C[Python MCP Client]
+    C -->|stdio| D[MCP Failure Lab]
+    D --> E[hang]
+    E --> F[Timeout]
+    F --> G[Agent Response]
+    G --> A
+```
+
+See [`examples/integrations/futureagi`](examples/integrations/futureagi) for
+the experiment and reproduction steps.
+
 ## Engineering principles
 
 - Prefer small, explicit interfaces.
