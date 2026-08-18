@@ -389,6 +389,10 @@ mcp-failure-lab/
 │   ├── demo.gif
 │   └── demo.tape
 ├── examples/
+│   ├── integrations/
+│   │   └── futureagi/
+│   │       ├── README.md
+│   │       └── hang_test.py
 │   └── scenarios/
 │       ├── delay-success.json
 │       └── hang-timeout.json
