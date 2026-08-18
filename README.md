@@ -7,16 +7,22 @@ A chaos-engineering and resilience-testing toolkit for Model Context Protocol se
 
 ![MCP Failure Lab demonstrating a bounded delay and an expected timeout](docs/demo.gif)
 
-Run an included scenario from a repository checkout:
-
-```bash
-npm run dev -- run examples/scenarios/delay-success.json
-```
-
-Or try the published CLI without installing it:
+Try MCP Failure Lab without cloning or installing anything:
 
 ```bash
 npx mcp-failure-lab --help
+```
+
+Start the MCP server over stdio:
+
+```bash
+npx mcp-failure-lab serve
+```
+
+Or clone the repository to run the included scenarios:
+
+```bash
+npm run dev -- run examples/scenarios/delay-success.json
 ```
 
 ## Goal
@@ -51,7 +57,7 @@ Available now:
 - Unit, integration, and end-to-end test coverage
 - Graceful `SIGINT` and `SIGTERM` handling
 - Clean, reproducible build output
-- Manual verification with MCP Inspector
+- Verification with MCP Inspector and independent MCP clients
 
 Planned, but not implemented:
 
@@ -165,34 +171,24 @@ Or install it globally:
 npm install -g mcp-failure-lab
 ```
 
-## Install for development
-
-Clone the repository and install its dependencies:
-
-```bash
-git clone https://github.com/anilloutombam/mcp-failure-lab.git
-cd mcp-failure-lab
-npm install
-```
-
 ## Usage
 
 Display CLI help:
 
 ```bash
-npm run dev -- --help
+npx mcp-failure-lab --help
 ```
 
 Display the current version:
 
 ```bash
-npm run dev -- --version
+npx mcp-failure-lab --version
 ```
 
 Start the MCP server over stdio:
 
 ```bash
-npm --silent run dev -- serve
+npx mcp-failure-lab serve
 ```
 
 The process waits silently for an MCP client. Press `Ctrl+C` to shut it down gracefully.
@@ -219,7 +215,7 @@ contains:
 }
 ```
 
-Run it against an in-memory MCP Failure Lab server:
+From a repository checkout, run the included scenario against an in-memory MCP Failure Lab server:
 
 ```bash
 npx mcp-failure-lab run examples/scenarios/delay-success.json
@@ -282,10 +278,10 @@ planned separately.
 
 ## Inspect the MCP server
 
-Launch the official MCP Inspector:
+Launch the official MCP Inspector against the published package:
 
 ```bash
-npx @modelcontextprotocol/inspector npm --silent run dev -- serve
+npx @modelcontextprotocol/inspector npx mcp-failure-lab serve
 ```
 
 In the Inspector:
@@ -317,9 +313,37 @@ The `disconnect` tool closes the active MCP transport while its request is in
 flight. The client receives a connection failure instead of a tool response, which
 exercises transport-loss recovery behavior.
 
-Do not share or commit the temporary authentication token included in the Inspector URL.
+Do not share or commit temporary authentication tokens included in Inspector URLs.
+
+## Install for development
+
+Clone the repository and install its dependencies:
+
+```bash
+git clone https://github.com/anilloutombam/mcp-failure-lab.git
+cd mcp-failure-lab
+npm install
+```
 
 ## Development commands
+
+Display development CLI help:
+
+```bash
+npm run dev -- --help
+```
+
+Display the development version:
+
+```bash
+npm run dev -- --version
+```
+
+Start the development MCP server over stdio:
+
+```bash
+npm --silent run dev -- serve
+```
 
 Format the repository:
 
