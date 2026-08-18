@@ -5,8 +5,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { runScenarioCommand, writeScenarioCommandError } from "./scenarioCommand.js";
 import { parseRunArguments } from "./runArguments.js";
 import { createServer } from "./server.js";
-
-const VERSION = "0.3.1";
+import { VERSION } from "./version.js";
 
 function printHelp(): void {
   console.log(`
