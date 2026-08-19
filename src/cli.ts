@@ -20,7 +20,7 @@ Usage:
 Commands:
   serve       Start the MCP server using stdio
   run <file>  Run a JSON scenario against MCP Failure Lab
-  demo        Run a built-in deterministic failure scenario
+  demo        Run a built-in deterministic delay scenario
   help        Show this help message
 
 Options:

@@ -62,7 +62,7 @@ proxy or an external MCP client test orchestrator.
 Available now:
 
 - A TypeScript command-line application
-- A built-in `demo` command for running a real failure scenario directly from npm
+- A built-in `demo` command for running a real delay scenario directly from npm
 - A `serve` command
 - An MCP server factory
 - MCP communication over stdio
