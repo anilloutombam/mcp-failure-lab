@@ -3,7 +3,7 @@ import {
   formatScenarioResult,
   type ScenarioCommandOutput,
 } from "./scenarioCommand.js";
-import type { Scenario } from "./scenario.js";
+import type { Scenario, ScenarioResult } from "./scenario.js";
 
 const DEMO_SCENARIO: Scenario = {
   name: "Deterministic delay demo",
@@ -20,13 +20,18 @@ const DEMO_SCENARIO: Scenario = {
   timeoutMs: 5_000,
 };
 
-export async function runDemoCommand(output: ScenarioCommandOutput): Promise<number> {
+type ScenarioExecutor = (scenario: Scenario) => Promise<ScenarioResult>;
+
+export async function runDemoCommand(
+  output: ScenarioCommandOutput,
+  execute: ScenarioExecutor = executeScenario,
+): Promise<number> {
   try {
     output.write("MCP Failure Lab — Demo");
     output.write("Running a real 500ms delay scenario...");
     output.write("");
 
-    const result = await executeScenario(DEMO_SCENARIO);
+    const result = await execute(DEMO_SCENARIO);
 
     output.write(formatScenarioResult(result, "console"));
 
