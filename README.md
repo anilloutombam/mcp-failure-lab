@@ -472,6 +472,7 @@ mcp-failure-lab/
 ├── vitest.config.ts
 ├── src/
 │   ├── cli.ts
+│   ├── cliCommand.ts
 │   ├── delay.ts
 │   ├── demoCommand.ts
 │   ├── disconnect.ts
@@ -499,7 +500,7 @@ The project separates tests by responsibility:
 
 - **Unit tests** validate isolated domain behavior.
 - **Integration tests** validate MCP client-server communication and transports.
-- **End-to-end tests** validate CLI-driven scenarios involving real processes.
+- **End-to-end tests** validate CLI commands and scenario execution through real child processes.
 
 Tests inject clocks and delay implementations where appropriate so assertions remain deterministic across machines, timezones, and test runs.
 
