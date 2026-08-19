@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 import { afterEach, describe, expect, it } from "vitest";
+import { runCli } from "../helpers/runCli.js";
 
 interface CliResult {
   exitCode: number | null;
@@ -21,31 +22,31 @@ async function writeScenario(contents: string): Promise<string> {
   return path;
 }
 
-async function runCli(...args: string[]): Promise<CliResult> {
-  const child = spawn(process.execPath, ["--import", "tsx", "src/cli.ts", ...args], {
-    cwd: process.cwd(),
-    env: { ...process.env, FORCE_COLOR: "0", NO_COLOR: "1" },
-    stdio: ["ignore", "pipe", "pipe"],
-  });
-  let stdout = "";
-  let stderr = "";
+// async function runCli(...args: string[]): Promise<CliResult> {
+//   const child = spawn(process.execPath, ["--import", "tsx", "src/cli.ts", ...args], {
+//     cwd: process.cwd(),
+//     env: { ...process.env, FORCE_COLOR: "0", NO_COLOR: "1" },
+//     stdio: ["ignore", "pipe", "pipe"],
+//   });
+//   let stdout = "";
+//   let stderr = "";
 
-  child.stdout.setEncoding("utf8");
-  child.stderr.setEncoding("utf8");
-  child.stdout.on("data", (chunk: string) => {
-    stdout += chunk;
-  });
-  child.stderr.on("data", (chunk: string) => {
-    stderr += chunk;
-  });
+//   child.stdout.setEncoding("utf8");
+//   child.stderr.setEncoding("utf8");
+//   child.stdout.on("data", (chunk: string) => {
+//     stdout += chunk;
+//   });
+//   child.stderr.on("data", (chunk: string) => {
+//     stderr += chunk;
+//   });
 
-  const exitCode = await new Promise<number | null>((resolve, reject) => {
-    child.once("error", reject);
-    child.once("close", resolve);
-  });
+//   const exitCode = await new Promise<number | null>((resolve, reject) => {
+//     child.once("error", reject);
+//     child.once("close", resolve);
+//   });
 
-  return { exitCode, stdout, stderr };
-}
+//   return { exitCode, stdout, stderr };
+// }
 
 afterEach(async () => {
   await Promise.all(
