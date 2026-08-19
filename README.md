@@ -7,7 +7,29 @@ A chaos-engineering and resilience-testing toolkit for Model Context Protocol se
 
 ![MCP Failure Lab demonstrating a bounded delay and an expected timeout](docs/demo.gif)
 
-Try MCP Failure Lab without cloning or installing anything:
+Try MCP Failure Lab without cloning the repository or installing it globally:
+
+```bash
+npx mcp-failure-lab demo
+```
+
+This runs a real deterministic 500ms delay scenario through MCP Failure Lab's built-in MCP client, server, scenario runner, and assertion pipeline.
+
+Example output:
+
+```text
+MCP Failure Lab — Demo
+Running a real 500ms delay scenario...
+
+Scenario: Deterministic delay demo
+Outcome: success
+Duration: ~500 ms
+Assertions: passed
+```
+
+The exact duration may vary slightly between runs. No API key or external MCP server is required.
+
+See all available commands:
 
 ```bash
 npx mcp-failure-lab --help
@@ -40,6 +62,7 @@ proxy or an external MCP client test orchestrator.
 Available now:
 
 - A TypeScript command-line application
+- A built-in `demo` command for running a real failure scenario directly from npm
 - A `serve` command
 - An MCP server factory
 - MCP communication over stdio
@@ -128,6 +151,30 @@ Lab through a real MCP client connection. It records the observed outcome and
 duration, then evaluates declarative expectations. This validates failure
 semantics in-process without introducing a proxy or a second fault implementation.
 
+The built-in `demo` command uses this same execution path. It runs a real
+deterministic delay scenario through the MCP client and built-in server rather
+than printing prerecorded output:
+
+```text
+npx mcp-failure-lab demo
+        ↓
+built-in scenario
+        ↓
+scenario runner
+        ↓
+MCP client
+        ↓
+in-memory MCP transport
+        ↓
+MCP Failure Lab server
+        ↓
+delay tool
+        ↓
+assertions
+        ↓
+console report
+```
+
 The runner does not yet orchestrate external MCP clients. Target-client adapters
 are a separate future layer for verifying how a specific host reacts to the
 controlled faulty server.
@@ -159,7 +206,15 @@ The architecture will evolve incrementally. New abstractions will be introduced 
 
 ## Installation
 
-Run MCP Failure Lab without installing it:
+Try MCP Failure Lab directly from npm:
+
+```bash
+npx mcp-failure-lab demo
+```
+
+No global installation is required.
+
+Display the available commands:
 
 ```bash
 npx mcp-failure-lab --help
@@ -173,19 +228,27 @@ npm install -g mcp-failure-lab
 
 ## Usage
 
-Display CLI help:
+### Run the built-in demo
+
+```bash
+npx mcp-failure-lab demo
+```
+
+The demo executes a real deterministic 500ms delay scenario against the built-in MCP Failure Lab server and reports the observed outcome, duration, and assertion result.
+
+### Display CLI help
 
 ```bash
 npx mcp-failure-lab --help
 ```
 
-Display the current version:
+### Display the current version
 
 ```bash
 npx mcp-failure-lab --version
 ```
 
-Start the MCP server over stdio:
+### Start the MCP server over stdio
 
 ```bash
 npx mcp-failure-lab serve
@@ -333,6 +396,12 @@ Display development CLI help:
 npm run dev -- --help
 ```
 
+Run the built-in demo:
+
+```bash
+npm run dev -- demo
+```
+
 Display the development version:
 
 ```bash
@@ -404,6 +473,7 @@ mcp-failure-lab/
 ├── src/
 │   ├── cli.ts
 │   ├── delay.ts
+│   ├── demoCommand.ts
 │   ├── disconnect.ts
 │   ├── hang.ts
 │   ├── ping.ts
@@ -504,6 +574,7 @@ The `main` branch should remain in a working, reviewable state.
 - [x] Add the first response-delay fault
 - [x] Add timeout and maximum-duration assertions
 - [x] Add CLI scenario execution
+- [x] Add the built-in CLI demo
 - [x] Add structured reports
 - [x] Add CI
 - [ ] Add post-condition assertions

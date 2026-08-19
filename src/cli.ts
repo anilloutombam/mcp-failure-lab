@@ -3,6 +3,7 @@
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 
 import { runScenarioCommand, writeScenarioCommandError } from "./scenarioCommand.js";
+import { runDemoCommand } from "./demoCommand.js";
 import { parseRunArguments } from "./runArguments.js";
 import { createServer } from "./server.js";
 import { VERSION } from "./version.js";
@@ -19,6 +20,7 @@ Usage:
 Commands:
   serve       Start the MCP server using stdio
   run <file>  Run a JSON scenario against MCP Failure Lab
+  demo        Run a built-in deterministic failure scenario
   help        Show this help message
 
 Options:
@@ -96,6 +98,16 @@ async function main(args: string[]): Promise<void> {
     }
 
     process.exitCode = await runScenarioCommand(parsed.path, parsed.format, output);
+    return;
+  }
+
+  if (command === "demo") {
+    const output = {
+      write: console.log,
+      writeError: console.error,
+    };
+
+    process.exitCode = await runDemoCommand(output);
     return;
   }
 
