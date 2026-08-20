@@ -5,15 +5,19 @@ on:
     tags:
       - "v*"
 
-permissions:
-  contents: read
-  id-token: write
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
 
 jobs:
   publish:
     name: Publish
     runs-on: ubuntu-latest
     timeout-minutes: 10
+
+    permissions:
+      contents: read
+      id-token: write # Required for npm Trusted Publishing via OIDC
 
     steps:
       - name: Check out repository
@@ -28,11 +32,20 @@ jobs:
           registry-url: https://registry.npmjs.org
           package-manager-cache: false
 
-      - name: Update npm
-        run: npm install --global npm@latest
+      - name: Set up npm
+        run: npm install --global npm@11.5.1
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Verify release version
+        run: |
+          PACKAGE_VERSION="v$(node -p "require('./package.json').version")"
+
+          if [ "$GITHUB_REF_NAME" != "$PACKAGE_VERSION" ]; then
+            echo "Release tag $GITHUB_REF_NAME does not match package version $PACKAGE_VERSION"
+            exit 1
+          fi
 
       - name: Build
         run: npm run build
