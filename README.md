@@ -292,7 +292,7 @@ npx mcp-failure-lab run examples/scenarios/hang-timeout.json
 
 Result assertions are nested under `expect.result`. `isError` checks the MCP tool
 result error flag, while `textContains` searches only MCP content items whose type
-is `text`:
+is `text`. The substring match is case-sensitive:
 
 ```json
 {

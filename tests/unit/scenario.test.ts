@@ -95,6 +95,25 @@ describe("scenario result assertions", () => {
     expect(recording).toMatchObject({ passed: true, failures: [] });
   });
 
+  it("matches textContains case-sensitively", async () => {
+    const client = {
+      callTool: vi.fn(async () => ({
+        content: [{ type: "text" as const, text: "Expected phrase" }],
+      })),
+    };
+
+    const recording = await runScenario(
+      client,
+      scenarioWithResultExpectation({ textContains: "expected phrase" }),
+      clockReturning(10, 15),
+    );
+
+    expect(recording).toMatchObject({
+      passed: false,
+      failures: ['expected result text to contain "expected phrase"'],
+    });
+  });
+
   it("reports a missing result when execution throws", async () => {
     const client = {
       callTool: vi.fn(async () => {
