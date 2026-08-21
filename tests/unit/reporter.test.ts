@@ -49,6 +49,27 @@ describe("console scenario reporter", () => {
       ].join("\n"),
     );
   });
+
+  it("reports observer outcome and assertion status", () => {
+    expect(
+      consoleReporter.report(
+        result({
+          observer: {
+            outcome: "success",
+            durationMs: 2.5,
+            passed: true,
+            failures: [],
+          },
+        }),
+      ),
+    ).toContain(
+      [
+        "Observer outcome: success",
+        "Observer duration: 2.50 ms",
+        "Observer assertions: passed",
+      ].join("\n"),
+    );
+  });
 });
 
 describe("JSON scenario reporter", () => {
@@ -75,5 +96,34 @@ describe("JSON scenario reporter", () => {
         failures: [],
       },
     );
+  });
+
+  it("serializes observer recordings and errors", () => {
+    expect(
+      JSON.parse(
+        jsonReporter.report(
+          result({
+            passed: false,
+            failures: ["observer: observer execution failed: observer unavailable"],
+            observer: {
+              outcome: "error",
+              durationMs: 4,
+              passed: false,
+              failures: ["observer execution failed: observer unavailable"],
+              error: new Error("observer unavailable"),
+            },
+          }),
+        ),
+      ),
+    ).toMatchObject({
+      passed: false,
+      observer: {
+        outcome: "error",
+        durationMs: 4,
+        passed: false,
+        failures: ["observer execution failed: observer unavailable"],
+        error: "observer unavailable",
+      },
+    });
   });
 });

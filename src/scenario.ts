@@ -15,18 +15,38 @@ export interface ScenarioResultExpectation {
   textContains?: string;
 }
 
+export interface ScenarioCall {
+  tool: string;
+  args: Record<string, unknown>;
+}
+
+export interface ScenarioExpectation {
+  outcome: ScenarioOutcome;
+  maxDurationMs?: number;
+  result?: ScenarioResultExpectation;
+}
+
+export interface ScenarioObserver {
+  call: ScenarioCall;
+  timeoutMs?: number;
+  expect: ScenarioExpectation;
+}
+
 export interface Scenario {
   name: string;
-  call: {
-    tool: string;
-    args: Record<string, unknown>;
-  };
+  call: ScenarioCall;
   timeoutMs?: number;
-  expect: {
-    outcome: ScenarioOutcome;
-    maxDurationMs?: number;
-    result?: ScenarioResultExpectation;
-  };
+  expect: ScenarioExpectation;
+  observe?: ScenarioObserver;
+}
+
+export interface ScenarioObservationResult {
+  outcome: ScenarioOutcome;
+  durationMs: number;
+  passed: boolean;
+  failures: string[];
+  result?: CallToolResult;
+  error?: unknown;
 }
 
 export interface ScenarioResult {
@@ -37,6 +57,7 @@ export interface ScenarioResult {
   failures: string[];
   result?: CallToolResult;
   error?: unknown;
+  observer?: ScenarioObservationResult;
 }
 
 export interface MonotonicClock {
@@ -51,29 +72,37 @@ function classifyError(error: unknown): ScenarioOutcome {
   return error instanceof McpError && error.code === ErrorCode.RequestTimeout ? "timeout" : "error";
 }
 
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}
+
 interface ScenarioObservation {
   outcome: ScenarioOutcome;
   durationMs: number;
   result?: CallToolResult;
+  error?: unknown;
 }
 
-function evaluateScenario(scenario: Scenario, observation: ScenarioObservation): string[] {
+function evaluateExpectation(
+  expectation: ScenarioExpectation,
+  observation: ScenarioObservation,
+): string[] {
   const failures: string[] = [];
 
-  if (observation.outcome !== scenario.expect.outcome) {
-    failures.push(`expected outcome ${scenario.expect.outcome}, received ${observation.outcome}`);
+  if (observation.outcome !== expectation.outcome) {
+    failures.push(`expected outcome ${expectation.outcome}, received ${observation.outcome}`);
   }
 
   if (
-    scenario.expect.maxDurationMs !== undefined &&
-    observation.durationMs > scenario.expect.maxDurationMs
+    expectation.maxDurationMs !== undefined &&
+    observation.durationMs > expectation.maxDurationMs
   ) {
     failures.push(
-      `expected duration at most ${scenario.expect.maxDurationMs}ms, received ${observation.durationMs}ms`,
+      `expected duration at most ${expectation.maxDurationMs}ms, received ${observation.durationMs}ms`,
     );
   }
 
-  const resultExpectation = scenario.expect.result;
+  const resultExpectation = expectation.result;
   if (resultExpectation === undefined) {
     return failures;
   }
@@ -105,11 +134,12 @@ function evaluateScenario(scenario: Scenario, observation: ScenarioObservation):
   return failures;
 }
 
-export async function runScenario(
+async function executeCall(
   client: ScenarioClient,
-  scenario: Scenario,
-  clock: MonotonicClock = systemClock,
-): Promise<ScenarioResult> {
+  call: ScenarioCall,
+  timeoutMs: number | undefined,
+  clock: MonotonicClock,
+): Promise<ScenarioObservation> {
   const startedAt = clock.now();
   let outcome: ScenarioOutcome;
   let result: CallToolResult | undefined;
@@ -117,9 +147,9 @@ export async function runScenario(
 
   try {
     const response = await client.callTool(
-      { name: scenario.call.tool, arguments: scenario.call.args },
+      { name: call.tool, arguments: call.args },
       CallToolResultSchema,
-      scenario.timeoutMs === undefined ? undefined : { timeout: scenario.timeoutMs },
+      timeoutMs === undefined ? undefined : { timeout: timeoutMs },
     );
     result = CallToolResultSchema.parse(response);
     outcome = result.isError ? "error" : "success";
@@ -128,20 +158,58 @@ export async function runScenario(
     outcome = classifyError(caught);
   }
 
-  const durationMs = clock.now() - startedAt;
-  const failures = evaluateScenario(scenario, {
+  return {
     outcome,
-    durationMs,
+    durationMs: clock.now() - startedAt,
     ...(result === undefined ? {} : { result }),
-  });
+    ...(error === undefined ? {} : { error }),
+  };
+}
+
+export async function runScenario(
+  client: ScenarioClient,
+  scenario: Scenario,
+  clock: MonotonicClock = systemClock,
+): Promise<ScenarioResult> {
+  const primaryObservation = await executeCall(client, scenario.call, scenario.timeoutMs, clock);
+  const primaryFailures = evaluateExpectation(scenario.expect, primaryObservation);
+  let observer: ScenarioObservationResult | undefined;
+
+  if (scenario.observe !== undefined) {
+    const observerObservation = await executeCall(
+      client,
+      scenario.observe.call,
+      scenario.observe.timeoutMs,
+      clock,
+    );
+    const observerFailures =
+      observerObservation.error === undefined
+        ? evaluateExpectation(scenario.observe.expect, observerObservation)
+        : [
+            observerObservation.outcome === "timeout"
+              ? "observer execution timed out"
+              : `observer execution failed: ${errorMessage(observerObservation.error)}`,
+          ];
+    observer = {
+      ...observerObservation,
+      passed: observerFailures.length === 0,
+      failures: observerFailures,
+    };
+  }
+
+  const failures = [
+    ...primaryFailures,
+    ...(observer?.failures.map((failure) => `observer: ${failure}`) ?? []),
+  ];
 
   return {
     name: scenario.name,
-    outcome,
-    durationMs,
+    outcome: primaryObservation.outcome,
+    durationMs: primaryObservation.durationMs,
     passed: failures.length === 0,
     failures,
-    ...(result === undefined ? {} : { result }),
-    ...(error === undefined ? {} : { error }),
+    ...(primaryObservation.result === undefined ? {} : { result: primaryObservation.result }),
+    ...(primaryObservation.error === undefined ? {} : { error: primaryObservation.error }),
+    ...(observer === undefined ? {} : { observer }),
   };
 }

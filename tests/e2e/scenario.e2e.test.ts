@@ -41,6 +41,14 @@ describe("scenario CLI", () => {
     });
   });
 
+  it("runs an observer scenario successfully", async () => {
+    const result = await runCli("run", "examples/scenarios/delay-observe-ping.json");
+
+    expect(result).toMatchObject({ exitCode: 0, stderr: "" });
+    expect(result.stdout).toContain("Observer outcome: success");
+    expect(result.stdout).toContain("Observer assertions: passed");
+  });
+
   it("uses exit code 2 when assertions fail", async () => {
     const path = await writeScenario(
       JSON.stringify({
