@@ -12,6 +12,14 @@ export interface JsonScenarioReport {
   failures: string[];
   result?: ScenarioResult["result"];
   error?: string;
+  observer?: {
+    outcome: ScenarioResult["outcome"];
+    durationMs: number;
+    passed: boolean;
+    failures: string[];
+    result?: ScenarioResult["result"];
+    error?: string;
+  };
 }
 
 function errorMessage(error: unknown): string {
@@ -24,8 +32,17 @@ export class ConsoleScenarioReporter implements ScenarioReporter {
       `Scenario: ${result.name}`,
       `Outcome: ${result.outcome}`,
       `Duration: ${result.durationMs.toFixed(2)} ms`,
-      `Assertions: ${result.passed ? "passed" : "failed"}`,
     ];
+
+    if (result.observer !== undefined) {
+      lines.push(
+        `Observer outcome: ${result.observer.outcome}`,
+        `Observer duration: ${result.observer.durationMs.toFixed(2)} ms`,
+        `Observer assertions: ${result.observer.passed ? "passed" : "failed"}`,
+      );
+    }
+
+    lines.push(`Assertions: ${result.passed ? "passed" : "failed"}`);
 
     if (result.failures.length > 0) {
       lines.push("Failures:", ...result.failures.map((failure) => `- ${failure}`));
@@ -45,6 +62,20 @@ export class JsonScenarioReporter implements ScenarioReporter {
       failures: [...result.failures],
       ...(result.result === undefined ? {} : { result: result.result }),
       ...(result.error === undefined ? {} : { error: errorMessage(result.error) }),
+      ...(result.observer === undefined
+        ? {}
+        : {
+            observer: {
+              outcome: result.observer.outcome,
+              durationMs: result.observer.durationMs,
+              passed: result.observer.passed,
+              failures: [...result.observer.failures],
+              ...(result.observer.result === undefined ? {} : { result: result.observer.result }),
+              ...(result.observer.error === undefined
+                ? {}
+                : { error: errorMessage(result.observer.error) }),
+            },
+          }),
     };
 
     return JSON.stringify(report, null, 2);

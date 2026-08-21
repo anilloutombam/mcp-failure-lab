@@ -14,31 +14,67 @@ import { createServer } from "./server.js";
 
 export const DEFAULT_SCENARIO_TIMEOUT_MS = 30_000;
 
+const callSchema = z
+  .object({
+    tool: z.string().min(1),
+    args: z.record(z.string(), z.unknown()),
+  })
+  .strict();
+
+const resultExpectationSchema = z
+  .object({
+    isError: z.boolean().optional(),
+    textContains: z.string().optional(),
+  })
+  .strict();
+
+const expectationSchema = z
+  .object({
+    outcome: z.enum(["success", "error", "timeout"]),
+    maxDurationMs: z.number().nonnegative().optional(),
+    result: resultExpectationSchema.optional(),
+  })
+  .strict();
+
 const scenarioSchema = z
   .object({
     name: z.string().min(1),
-    call: z
-      .object({
-        tool: z.string().min(1),
-        args: z.record(z.string(), z.unknown()),
-      })
-      .strict(),
+    call: callSchema,
     timeoutMs: z.number().int().positive().optional(),
-    expect: z
+    expect: expectationSchema,
+    observe: z
       .object({
-        outcome: z.enum(["success", "error", "timeout"]),
-        maxDurationMs: z.number().nonnegative().optional(),
-        result: z
-          .object({
-            isError: z.boolean().optional(),
-            textContains: z.string().optional(),
-          })
-          .strict()
-          .optional(),
+        call: callSchema,
+        timeoutMs: z.number().int().positive().optional(),
+        expect: expectationSchema,
       })
-      .strict(),
+      .strict()
+      .optional(),
   })
   .strict();
+
+type ValidatedExpectation = z.infer<typeof expectationSchema>;
+
+function toScenarioExpectation(expectation: ValidatedExpectation): Scenario["expect"] {
+  return {
+    outcome: expectation.outcome,
+    ...(expectation.maxDurationMs === undefined
+      ? {}
+      : { maxDurationMs: expectation.maxDurationMs }),
+    ...(expectation.result === undefined
+      ? {}
+      : {
+          result: {
+            ...(expectation.result.isError === undefined
+              ? {}
+              : { isError: expectation.result.isError }),
+            ...(expectation.result.textContains === undefined
+              ? {}
+              : { textContains: expectation.result.textContains }),
+          },
+        }),
+  };
+}
 
 export type ReportFormat = "console" | "json";
 export type ScenarioCommandErrorCode =
@@ -105,25 +141,17 @@ export async function loadScenario(path: string): Promise<Scenario> {
   return {
     name: scenario.name,
     call: scenario.call,
-    expect: {
-      outcome: scenario.expect.outcome,
-      ...(scenario.expect.maxDurationMs === undefined
-        ? {}
-        : { maxDurationMs: scenario.expect.maxDurationMs }),
-      ...(scenario.expect.result === undefined
-        ? {}
-        : {
-            result: {
-              ...(scenario.expect.result.isError === undefined
-                ? {}
-                : { isError: scenario.expect.result.isError }),
-              ...(scenario.expect.result.textContains === undefined
-                ? {}
-                : { textContains: scenario.expect.result.textContains }),
-            },
-          }),
-    },
+    expect: toScenarioExpectation(scenario.expect),
     timeoutMs: scenario.timeoutMs ?? DEFAULT_SCENARIO_TIMEOUT_MS,
+    ...(scenario.observe === undefined
+      ? {}
+      : {
+          observe: {
+            call: scenario.observe.call,
+            timeoutMs: scenario.observe.timeoutMs ?? DEFAULT_SCENARIO_TIMEOUT_MS,
+            expect: toScenarioExpectation(scenario.observe.expect),
+          },
+        }),
   };
 }
 

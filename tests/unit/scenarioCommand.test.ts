@@ -102,6 +102,70 @@ describe("scenario files", () => {
     await expect(loadScenario(path)).rejects.toThrow(`scenario file ${path} is invalid`);
   });
 
+  it("loads an observer from a JSON scenario", async () => {
+    const path = await writeScenario(
+      JSON.stringify({
+        name: "server remains responsive",
+        call: { tool: "delay", args: { delayMs: 25 } },
+        expect: { outcome: "success" },
+        observe: {
+          call: { tool: "ping", args: {} },
+          timeoutMs: 1000,
+          expect: {
+            outcome: "success",
+            result: { isError: false, textContains: '"status":"ok"' },
+          },
+        },
+      }),
+    );
+
+    await expect(loadScenario(path)).resolves.toMatchObject({
+      observe: {
+        call: { tool: "ping", args: {} },
+        timeoutMs: 1000,
+        expect: {
+          outcome: "success",
+          result: { isError: false, textContains: '"status":"ok"' },
+        },
+      },
+    });
+  });
+
+  it("applies the default timeout to an observer", async () => {
+    const path = await writeScenario(
+      JSON.stringify({
+        name: "observer uses the default timeout",
+        call: { tool: "ping", args: {} },
+        expect: { outcome: "success" },
+        observe: {
+          call: { tool: "ping", args: {} },
+          expect: { outcome: "success" },
+        },
+      }),
+    );
+
+    await expect(loadScenario(path)).resolves.toMatchObject({
+      observe: { timeoutMs: 30_000 },
+    });
+  });
+
+  it("rejects observer fields outside the schema", async () => {
+    const path = await writeScenario(
+      JSON.stringify({
+        name: "invalid observer",
+        call: { tool: "ping", args: {} },
+        expect: { outcome: "success" },
+        observe: {
+          call: { tool: "ping", args: {} },
+          expect: { outcome: "success" },
+          retries: 2,
+        },
+      }),
+    );
+
+    await expect(loadScenario(path)).rejects.toThrow(`scenario file ${path} is invalid`);
+  });
+
   it("reports invalid JSON with the scenario path", async () => {
     const path = await writeScenario("{");
 

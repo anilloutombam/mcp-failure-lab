@@ -1,0 +1,27 @@
+{
+  "name": "server remains responsive after a delay",
+  "call": {
+    "tool": "delay",
+    "args": {
+      "delayMs": 250
+    }
+  },
+  "timeoutMs": 1000,
+  "expect": {
+    "outcome": "success"
+  },
+  "observe": {
+    "call": {
+      "tool": "ping",
+      "args": {}
+    },
+    "timeoutMs": 1000,
+    "expect": {
+      "outcome": "success",
+      "result": {
+        "isError": false,
+        "textContains": "\"status\":\"ok\""
+      }
+    }
+  }
+}

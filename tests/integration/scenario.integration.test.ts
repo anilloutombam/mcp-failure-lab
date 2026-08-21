@@ -1,4 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { z } from "zod";
 
 import { runScenario, type MonotonicClock, type Scenario } from "../../src/scenario.js";
 import { createServer } from "../../src/server.js";
@@ -58,6 +60,53 @@ describe("scenario runner MCP integration", () => {
         durationMs: 25,
         passed: true,
         failures: [],
+      });
+    } finally {
+      await connection.close();
+    }
+  });
+
+  it("verifies state through a separate observer tool", async () => {
+    let state = "initial";
+    const server = new McpServer({ name: "observer-test-server", version: "1.0.0" });
+    server.registerTool("write_state", { inputSchema: { value: z.string() } }, ({ value }) => {
+      state = value;
+      return { content: [{ type: "text", text: "written" }] };
+    });
+    server.registerTool("read_state", { inputSchema: {} }, () => ({
+      content: [{ type: "text", text: state }],
+    }));
+    const connection = await connectTestClient(server);
+    const scenario: Scenario = {
+      name: "written state is independently observable",
+      call: { tool: "write_state", args: { value: "ready" } },
+      expect: { outcome: "success" },
+      observe: {
+        call: { tool: "read_state", args: {} },
+        expect: {
+          outcome: "success",
+          result: { isError: false, textContains: "ready" },
+        },
+      },
+    };
+
+    try {
+      const recording = await runScenario(
+        connection.client,
+        scenario,
+        clockReturning(100, 105, 110, 112),
+      );
+
+      expect(recording).toMatchObject({
+        outcome: "success",
+        passed: true,
+        failures: [],
+        observer: {
+          outcome: "success",
+          durationMs: 2,
+          passed: true,
+          failures: [],
+        },
       });
     } finally {
       await connection.close();
