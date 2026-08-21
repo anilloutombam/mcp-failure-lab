@@ -10,6 +10,11 @@ import {
 
 export type ScenarioOutcome = "success" | "error" | "timeout";
 
+export interface ScenarioResultExpectation {
+  isError?: boolean;
+  textContains?: string;
+}
+
 export interface Scenario {
   name: string;
   call: {
@@ -20,6 +25,7 @@ export interface Scenario {
   expect: {
     outcome: ScenarioOutcome;
     maxDurationMs?: number;
+    result?: ScenarioResultExpectation;
   };
 }
 
@@ -43,6 +49,60 @@ const systemClock: MonotonicClock = performance;
 
 function classifyError(error: unknown): ScenarioOutcome {
   return error instanceof McpError && error.code === ErrorCode.RequestTimeout ? "timeout" : "error";
+}
+
+interface ScenarioObservation {
+  outcome: ScenarioOutcome;
+  durationMs: number;
+  result?: CallToolResult;
+}
+
+function evaluateScenario(scenario: Scenario, observation: ScenarioObservation): string[] {
+  const failures: string[] = [];
+
+  if (observation.outcome !== scenario.expect.outcome) {
+    failures.push(`expected outcome ${scenario.expect.outcome}, received ${observation.outcome}`);
+  }
+
+  if (
+    scenario.expect.maxDurationMs !== undefined &&
+    observation.durationMs > scenario.expect.maxDurationMs
+  ) {
+    failures.push(
+      `expected duration at most ${scenario.expect.maxDurationMs}ms, received ${observation.durationMs}ms`,
+    );
+  }
+
+  const resultExpectation = scenario.expect.result;
+  if (resultExpectation === undefined) {
+    return failures;
+  }
+
+  if (observation.result === undefined) {
+    failures.push("expected a result, but no result was received");
+    return failures;
+  }
+
+  if (
+    resultExpectation.isError !== undefined &&
+    Boolean(observation.result.isError) !== resultExpectation.isError
+  ) {
+    failures.push(
+      `expected result isError ${resultExpectation.isError}, received ${Boolean(observation.result.isError)}`,
+    );
+  }
+
+  const expectedText = resultExpectation.textContains;
+  if (
+    expectedText !== undefined &&
+    !observation.result.content.some(
+      (content) => content.type === "text" && content.text.includes(expectedText),
+    )
+  ) {
+    failures.push(`expected result text to contain "${expectedText}"`);
+  }
+
+  return failures;
 }
 
 export async function runScenario(
@@ -69,17 +129,11 @@ export async function runScenario(
   }
 
   const durationMs = clock.now() - startedAt;
-  const failures: string[] = [];
-
-  if (outcome !== scenario.expect.outcome) {
-    failures.push(`expected outcome ${scenario.expect.outcome}, received ${outcome}`);
-  }
-
-  if (scenario.expect.maxDurationMs !== undefined && durationMs > scenario.expect.maxDurationMs) {
-    failures.push(
-      `expected duration at most ${scenario.expect.maxDurationMs}ms, received ${durationMs}ms`,
-    );
-  }
+  const failures = evaluateScenario(scenario, {
+    outcome,
+    durationMs,
+    ...(result === undefined ? {} : { result }),
+  });
 
   return {
     name: scenario.name,

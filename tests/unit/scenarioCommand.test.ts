@@ -58,6 +58,50 @@ describe("scenario files", () => {
     await expect(loadScenario(path)).resolves.toMatchObject({ timeoutMs: 25 });
   });
 
+  it("loads result expectations from a JSON scenario", async () => {
+    const path = await writeScenario(
+      JSON.stringify({
+        name: "delay result matches",
+        call: { tool: "delay", args: { delayMs: 25 } },
+        expect: {
+          outcome: "success",
+          result: { isError: false, textContains: '"status":"delayed"' },
+        },
+      }),
+    );
+
+    await expect(loadScenario(path)).resolves.toMatchObject({
+      expect: {
+        outcome: "success",
+        result: { isError: false, textContains: '"status":"delayed"' },
+      },
+    });
+  });
+
+  it("rejects invalid result expectation fields", async () => {
+    const path = await writeScenario(
+      JSON.stringify({
+        name: "invalid result expectation",
+        call: { tool: "ping", args: {} },
+        expect: { outcome: "success", result: { textMatches: "ok" } },
+      }),
+    );
+
+    await expect(loadScenario(path)).rejects.toThrow(`scenario file ${path} is invalid`);
+  });
+
+  it("rejects invalid result expectation values", async () => {
+    const path = await writeScenario(
+      JSON.stringify({
+        name: "invalid result expectation value",
+        call: { tool: "ping", args: {} },
+        expect: { outcome: "success", result: { isError: "false" } },
+      }),
+    );
+
+    await expect(loadScenario(path)).rejects.toThrow(`scenario file ${path} is invalid`);
+  });
+
   it("reports invalid JSON with the scenario path", async () => {
     const path = await writeScenario("{");
 

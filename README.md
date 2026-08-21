@@ -73,7 +73,7 @@ Available now:
 - Dependency-injected time for deterministic testing
 - A code-first scenario model and in-process scenario runner
 - CLI-driven JSON scenario files
-- Outcome and maximum-duration assertions for scenario recordings
+- Outcome, maximum-duration, and MCP result assertions for scenario recordings
 - Console and JSON scenario reporters
 - Machine-readable JSON command errors
 - CI-friendly exit codes for passes, assertion failures, and execution errors
@@ -84,7 +84,6 @@ Available now:
 
 Planned, but not implemented:
 
-- Post-condition assertions
 - Independent observer/read-path verification
 - JUnit reports
 - Target-client adapters and external client orchestration
@@ -192,10 +191,10 @@ graph TD
     Reporters -. planned .-> JunitReport[JUnit Report]
 ```
 
-Console and JSON reporting are implemented. Target-client adapters and JUnit
-reporting are planned. Post-condition assertions and independent observer/read-path
-verification are also planned; current assertions cover only observed outcome and
-maximum duration.
+Console and JSON reporting are implemented. Scenario expectations can assert the
+observed outcome, maximum duration, MCP result error flag, and returned text
+content. Target-client adapters, JUnit reporting, and independent observer/read-path
+verification are planned.
 
 The architecture will evolve incrementally. New abstractions will be introduced only when supported by a concrete requirement and corresponding tests.
 
@@ -290,6 +289,40 @@ verifies that a hanging tool reaches its configured deadline:
 ```bash
 npx mcp-failure-lab run examples/scenarios/hang-timeout.json
 ```
+
+Result assertions are nested under `expect.result`. `isError` checks the MCP tool
+result error flag, while `textContains` searches only MCP content items whose type
+is `text`:
+
+```json
+{
+  "name": "delay returns expected result",
+  "call": {
+    "tool": "delay",
+    "args": {
+      "delayMs": 250
+    }
+  },
+  "timeoutMs": 1000,
+  "expect": {
+    "outcome": "success",
+    "maxDurationMs": 500,
+    "result": {
+      "isError": false,
+      "textContains": "\"status\":\"delayed\""
+    }
+  }
+}
+```
+
+Run the included result-assertion example with:
+
+```bash
+npx mcp-failure-lab run examples/scenarios/delay-result.json
+```
+
+Both result fields are optional. If `expect.result` is present but the tool call
+times out or throws before returning a result, the result assertion fails.
 
 Use `--report json` for machine-readable output:
 
@@ -463,6 +496,7 @@ mcp-failure-lab/
 │   │       ├── README.md
 │   │       └── hang_test.py
 │   └── scenarios/
+│       ├── delay-result.json
 │       ├── delay-success.json
 │       └── hang-timeout.json
 ├── README.md
