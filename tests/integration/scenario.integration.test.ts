@@ -17,7 +17,11 @@ describe("scenario runner MCP integration", () => {
     const scenario: Scenario = {
       name: "bounded delay succeeds",
       call: { tool: "delay", args: { delayMs: 250 } },
-      expect: { outcome: "success", maxDurationMs: 25 },
+      expect: {
+        outcome: "success",
+        maxDurationMs: 25,
+        result: { isError: false, textContains: '"status":"delayed"' },
+      },
     };
 
     try {

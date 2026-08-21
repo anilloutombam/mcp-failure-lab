@@ -1,0 +1,18 @@
+{
+  "name": "delay returns expected result",
+  "call": {
+    "tool": "delay",
+    "args": {
+      "delayMs": 250
+    }
+  },
+  "timeoutMs": 1000,
+  "expect": {
+    "outcome": "success",
+    "maxDurationMs": 500,
+    "result": {
+      "isError": false,
+      "textContains": "\"status\":\"delayed\""
+    }
+  }
+}

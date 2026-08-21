@@ -28,6 +28,13 @@ const scenarioSchema = z
       .object({
         outcome: z.enum(["success", "error", "timeout"]),
         maxDurationMs: z.number().nonnegative().optional(),
+        result: z
+          .object({
+            isError: z.boolean().optional(),
+            textContains: z.string().optional(),
+          })
+          .strict()
+          .optional(),
       })
       .strict(),
   })
@@ -103,6 +110,18 @@ export async function loadScenario(path: string): Promise<Scenario> {
       ...(scenario.expect.maxDurationMs === undefined
         ? {}
         : { maxDurationMs: scenario.expect.maxDurationMs }),
+      ...(scenario.expect.result === undefined
+        ? {}
+        : {
+            result: {
+              ...(scenario.expect.result.isError === undefined
+                ? {}
+                : { isError: scenario.expect.result.isError }),
+              ...(scenario.expect.result.textContains === undefined
+                ? {}
+                : { textContains: scenario.expect.result.textContains }),
+            },
+          }),
     },
     timeoutMs: scenario.timeoutMs ?? DEFAULT_SCENARIO_TIMEOUT_MS,
   };
