@@ -205,7 +205,9 @@ Do not share or commit temporary authentication tokens included in Inspector URL
 
 ## External integration validation
 
-MCP Failure Lab has been exercised with Future AGI through an independent Python MCP client. The experiment invoked the real `hang` tool over stdio and applied a client-side timeout before evaluating simulated agent responses.
+MCP Failure Lab was independently validated with a Future AGI simulation using an independent Python MCP client. The experiment invoked the real `hang` tool over stdio and applied a client-side timeout before evaluating simulated agent responses.
+
+This is an external validation example, not an official Future AGI integration or endorsement.
 
 See the [Future AGI example](https://mcplab.dev/docs/examples/#future-agi-experiment) for results and reproduction steps.
 
