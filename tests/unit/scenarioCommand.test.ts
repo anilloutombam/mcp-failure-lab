@@ -249,7 +249,7 @@ describe("scenario reports", () => {
 });
 
 describe("scenario command", () => {
-  it("runs a scenario through an in-memory MCP connection", async () => {
+  it("runs a scenario through the modern in-process HTTP handler", async () => {
     const path = await writeScenario(
       JSON.stringify({
         name: "ping succeeds",

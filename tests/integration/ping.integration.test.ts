@@ -1,4 +1,3 @@
-import { CallToolResultSchema } from "@modelcontextprotocol/sdk/types.js";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 
@@ -24,8 +23,7 @@ describe("ping MCP integration", () => {
       now: () => new Date(fixedTimestamp),
     };
 
-    const server = createServer(clock);
-    const connection = await connectTestClient(server);
+    const connection = await connectTestClient(() => createServer(clock));
 
     try {
       const { tools } = await connection.client.listTools();
@@ -47,13 +45,10 @@ describe("ping MCP integration", () => {
         ]),
       );
 
-      const rawResult = await connection.client.callTool(
-        {
-          name: "ping",
-          arguments: {},
-        },
-        CallToolResultSchema,
-      );
+      const rawResult = await connection.client.callTool({
+        name: "ping",
+        arguments: {},
+      });
 
       const result = pingToolResponseSchema.parse(rawResult);
 

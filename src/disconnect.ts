@@ -1,4 +1,5 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/server";
+import { z } from "zod";
 
 export type Disconnect = () => Promise<void>;
 
@@ -7,7 +8,7 @@ export function registerDisconnectTool(server: McpServer, disconnect: Disconnect
     "disconnect",
     {
       description: "Close the MCP transport before this request can receive a response.",
-      inputSchema: {},
+      inputSchema: z.object({}),
     },
     async () => {
       await disconnect();

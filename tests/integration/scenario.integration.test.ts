@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
 
 import { runScenario, type MonotonicClock, type Scenario } from "../../src/scenario.js";
@@ -14,8 +14,9 @@ function clockReturning(...values: number[]): MonotonicClock {
 
 describe("scenario runner MCP integration", () => {
   it("records a successful tool call and evaluates its expectations", async () => {
-    const server = createServer(undefined, { wait: async () => undefined });
-    const connection = await connectTestClient(server);
+    const connection = await connectTestClient(() =>
+      createServer(undefined, { wait: async () => undefined }),
+    );
     const scenario: Scenario = {
       name: "bounded delay succeeds",
       call: { tool: "delay", args: { delayMs: 250 } },
@@ -42,8 +43,7 @@ describe("scenario runner MCP integration", () => {
   });
 
   it("records an SDK request timeout as a timeout outcome", async () => {
-    const server = createServer();
-    const connection = await connectTestClient(server);
+    const connection = await connectTestClient(() => createServer());
     const scenario: Scenario = {
       name: "delay exceeds the client timeout",
       call: { tool: "delay", args: { delayMs: 100 } },
@@ -68,15 +68,21 @@ describe("scenario runner MCP integration", () => {
 
   it("verifies state through a separate observer tool", async () => {
     let state = "initial";
-    const server = new McpServer({ name: "observer-test-server", version: "1.0.0" });
-    server.registerTool("write_state", { inputSchema: { value: z.string() } }, ({ value }) => {
-      state = value;
-      return { content: [{ type: "text", text: "written" }] };
+    const connection = await connectTestClient(() => {
+      const server = new McpServer({ name: "observer-test-server", version: "1.0.0" });
+      server.registerTool(
+        "write_state",
+        { inputSchema: z.object({ value: z.string() }) },
+        ({ value }) => {
+          state = value;
+          return { content: [{ type: "text", text: "written" }] };
+        },
+      );
+      server.registerTool("read_state", { inputSchema: z.object({}) }, () => ({
+        content: [{ type: "text", text: state }],
+      }));
+      return server;
     });
-    server.registerTool("read_state", { inputSchema: {} }, () => ({
-      content: [{ type: "text", text: state }],
-    }));
-    const connection = await connectTestClient(server);
     const scenario: Scenario = {
       name: "written state is independently observable",
       call: { tool: "write_state", args: { value: "ready" } },

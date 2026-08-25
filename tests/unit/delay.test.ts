@@ -1,4 +1,3 @@
-import { CallToolResultSchema } from "@modelcontextprotocol/sdk/types.js";
 import { describe, expect, it, vi } from "vitest";
 
 import type { Sleeper } from "../../src/delay.js";
@@ -9,14 +8,13 @@ describe("delay tool", () => {
   it("waits for the requested duration before responding", async () => {
     const wait = vi.fn(async () => undefined);
     const sleeper: Sleeper = { wait };
-    const server = createServer(undefined, sleeper);
-    const connection = await connectTestClient(server);
+    const connection = await connectTestClient(() => createServer(undefined, sleeper));
 
     try {
-      const result = await connection.client.callTool(
-        { name: "delay", arguments: { delayMs: 250 } },
-        CallToolResultSchema,
-      );
+      const result = await connection.client.callTool({
+        name: "delay",
+        arguments: { delayMs: 250 },
+      });
 
       expect(wait).toHaveBeenCalledOnce();
       expect(wait).toHaveBeenCalledWith(250, expect.any(AbortSignal));
@@ -30,14 +28,13 @@ describe("delay tool", () => {
 
   it("rejects delays above the safety limit", async () => {
     const wait = vi.fn(async () => undefined);
-    const server = createServer(undefined, { wait });
-    const connection = await connectTestClient(server);
+    const connection = await connectTestClient(() => createServer(undefined, { wait }));
 
     try {
-      const result = await connection.client.callTool(
-        { name: "delay", arguments: { delayMs: 30_001 } },
-        CallToolResultSchema,
-      );
+      const result = await connection.client.callTool({
+        name: "delay",
+        arguments: { delayMs: 30_001 },
+      });
 
       expect(result.isError).toBe(true);
       expect(wait).not.toHaveBeenCalled();

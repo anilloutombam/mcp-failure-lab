@@ -1,7 +1,6 @@
 import { readFile } from "node:fs/promises";
-
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
+import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/client";
+import { createMcpHandler } from "@modelcontextprotocol/server";
 import { z } from "zod";
 
 import {
@@ -162,20 +161,26 @@ export function formatScenarioResult(result: ScenarioResult, format: ReportForma
 }
 
 export async function executeScenario(scenario: Scenario): Promise<ScenarioResult> {
-  const server = createServer();
-  const client = new Client({
-    name: "mcp-failure-lab-scenario-client",
-    version: "0.1.0",
+  const handler = createMcpHandler(() => createServer(), { legacy: "reject" });
+  const client = new Client(
+    {
+      name: "mcp-failure-lab-scenario-client",
+      version: "0.1.0",
+    },
+    {
+      versionNegotiation: { mode: { pin: "2026-07-28" } },
+    },
+  );
+  const transport = new StreamableHTTPClientTransport(new URL("http://mcp-failure-lab.local"), {
+    fetch: (input, init) => handler.fetch(new Request(input, init)),
   });
-  const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
 
   try {
-    await server.connect(serverTransport);
-    await client.connect(clientTransport);
+    await client.connect(transport);
     return await runScenario(client, scenario);
   } finally {
     await client.close();
-    await server.close();
+    await handler.close();
   }
 }
 

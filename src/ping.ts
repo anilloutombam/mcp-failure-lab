@@ -1,4 +1,5 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/server";
+import { z } from "zod";
 
 export interface Clock {
   now(): Date;
@@ -25,7 +26,7 @@ export function registerPingTool(server: McpServer, clock: Clock = systemClock):
     "ping",
     {
       description: "Check whether the MCP server is responsive.",
-      inputSchema: {},
+      inputSchema: z.object({}),
     },
     async () => {
       const result = createPingResult(clock);
