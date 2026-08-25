@@ -1,9 +1,9 @@
-import { InMemoryTransport } from "@modelcontextprotocol/server";
-import type { McpServer } from "@modelcontextprotocol/server";
-import { Client } from "@modelcontextprotocol/client";
-import { serveStdio } from "@modelcontextprotocol/server/stdio";
+import { createMcpHandler, InMemoryTransport } from "@modelcontextprotocol/server";
+import type { McpRequestContext, McpServer } from "@modelcontextprotocol/server";
+import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/client";
 
 export type TestProtocolVersion = "2025-11-25" | "2026-07-28";
+export type McpTestServerFactory = (context: McpRequestContext) => McpServer;
 
 export interface McpTestClient {
   client: Client;
@@ -11,7 +11,7 @@ export interface McpTestClient {
 }
 
 export async function connectTestClient(
-  server: McpServer,
+  createServer: McpTestServerFactory,
   protocolVersion: TestProtocolVersion = "2026-07-28",
 ): Promise<McpTestClient> {
   const client = new Client(
@@ -25,26 +25,32 @@ export async function connectTestClient(
         protocolVersion === "2026-07-28" ? { mode: { pin: protocolVersion } } : { mode: "legacy" },
     },
   );
-  const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
-
-  const serverHandle =
-    protocolVersion === "2026-07-28"
-      ? serveStdio(() => server, { transport: serverTransport })
-      : undefined;
-  if (serverHandle === undefined) {
+  if (protocolVersion === "2025-11-25") {
+    const server = createServer({ era: "legacy" });
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
     await server.connect(serverTransport);
+    await client.connect(clientTransport);
+
+    return {
+      client,
+      close: async () => {
+        await client.close();
+        await server.close();
+      },
+    };
   }
-  await client.connect(clientTransport);
+
+  const handler = createMcpHandler(createServer, { legacy: "reject" });
+  const transport = new StreamableHTTPClientTransport(new URL("http://mcp-test.local"), {
+    fetch: (input, init) => handler.fetch(new Request(input, init)),
+  });
+  await client.connect(transport);
 
   return {
     client,
     close: async () => {
       await client.close();
-      if (serverHandle === undefined) {
-        await server.close();
-      } else {
-        await serverHandle.close();
-      }
+      await handler.close();
     },
   };
 }

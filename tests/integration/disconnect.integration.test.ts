@@ -5,8 +5,7 @@ import { connectTestClient } from "../helpers/mcpTestClient.js";
 
 describe("disconnect MCP integration", () => {
   it("closes the transport before returning a tool response", async () => {
-    const server = createServer();
-    const connection = await connectTestClient(server);
+    const connection = await connectTestClient(() => createServer());
 
     try {
       await expect(

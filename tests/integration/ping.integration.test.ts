@@ -23,8 +23,7 @@ describe("ping MCP integration", () => {
       now: () => new Date(fixedTimestamp),
     };
 
-    const server = createServer(clock);
-    const connection = await connectTestClient(server);
+    const connection = await connectTestClient(() => createServer(clock));
 
     try {
       const { tools } = await connection.client.listTools();

@@ -8,8 +8,7 @@ describe("delay tool", () => {
   it("waits for the requested duration before responding", async () => {
     const wait = vi.fn(async () => undefined);
     const sleeper: Sleeper = { wait };
-    const server = createServer(undefined, sleeper);
-    const connection = await connectTestClient(server);
+    const connection = await connectTestClient(() => createServer(undefined, sleeper));
 
     try {
       const result = await connection.client.callTool({
@@ -29,8 +28,7 @@ describe("delay tool", () => {
 
   it("rejects delays above the safety limit", async () => {
     const wait = vi.fn(async () => undefined);
-    const server = createServer(undefined, { wait });
-    const connection = await connectTestClient(server);
+    const connection = await connectTestClient(() => createServer(undefined, { wait }));
 
     try {
       const result = await connection.client.callTool({
