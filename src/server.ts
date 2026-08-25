@@ -1,5 +1,4 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-
+import { McpServer } from "@modelcontextprotocol/server";
 import { registerDelayTool, type Sleeper } from "./delay.js";
 import { registerDisconnectTool } from "./disconnect.js";
 import { registerHangTool } from "./hang.js";

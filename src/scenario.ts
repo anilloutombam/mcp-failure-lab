@@ -1,12 +1,7 @@
 import { performance } from "node:perf_hooks";
-
-import type { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import {
-  CallToolResultSchema,
-  ErrorCode,
-  McpError,
-  type CallToolResult,
-} from "@modelcontextprotocol/sdk/types.js";
+import { CallToolResultSchema } from "@modelcontextprotocol/core";
+import { SdkErrorCode, SdkError } from "@modelcontextprotocol/client";
+import type { Client, CallToolResult } from "@modelcontextprotocol/client";
 
 export type ScenarioOutcome = "success" | "error" | "timeout";
 
@@ -69,7 +64,9 @@ type ScenarioClient = Pick<Client, "callTool">;
 const systemClock: MonotonicClock = performance;
 
 function classifyError(error: unknown): ScenarioOutcome {
-  return error instanceof McpError && error.code === ErrorCode.RequestTimeout ? "timeout" : "error";
+  return error instanceof SdkError && error.code === SdkErrorCode.RequestTimeout
+    ? "timeout"
+    : "error";
 }
 
 function errorMessage(error: unknown): string {
@@ -148,7 +145,6 @@ async function executeCall(
   try {
     const response = await client.callTool(
       { name: call.tool, arguments: call.args },
-      CallToolResultSchema,
       timeoutMs === undefined ? undefined : { timeout: timeoutMs },
     );
     result = CallToolResultSchema.parse(response);

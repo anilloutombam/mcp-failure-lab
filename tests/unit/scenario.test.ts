@@ -1,6 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
-
+import { SdkErrorCode, SdkError } from "@modelcontextprotocol/server";
 import { runScenario, type MonotonicClock, type Scenario } from "../../src/scenario.js";
 
 function clockReturning(...values: number[]): MonotonicClock {
@@ -234,7 +233,7 @@ describe("scenario observer", () => {
       callTool: vi
         .fn()
         .mockResolvedValueOnce({ content: [{ type: "text" as const, text: "written" }] })
-        .mockRejectedValueOnce(new McpError(ErrorCode.RequestTimeout, "observer timed out")),
+        .mockRejectedValueOnce(new SdkError(SdkErrorCode.RequestTimeout, "observer timed out")),
     };
     const observerTimeoutScenario: Scenario = {
       ...scenario,

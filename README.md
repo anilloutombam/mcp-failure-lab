@@ -103,6 +103,18 @@ Full guides and references are available at [mcplab.dev/docs](https://mcplab.dev
 - Node.js 22.19.0 or newer
 - npm
 
+## Protocol compatibility
+
+MCP Failure Lab targets MCP `2026-07-28` by default. Its CLI server uses the SDK v2
+era-aware stdio entry point, and its built-in scenario client pins `2026-07-28` so
+modern behavior is exercised explicitly.
+
+The server also accepts the `2025-11-25` initialization flow for compatibility.
+That legacy path remains covered by integration tests, but new development targets
+`2026-07-28`. The existing `ping`, `delay`, `hang`, and `disconnect` fault tools have
+the same user-facing behavior in both eras; protocol features that rely on
+server-initiated requests differ between eras and are outside these fault tools.
+
 ## Installation
 
 Run the package directly with `npx`:

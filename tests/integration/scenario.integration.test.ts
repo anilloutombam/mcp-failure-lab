@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
 
 import { runScenario, type MonotonicClock, type Scenario } from "../../src/scenario.js";
@@ -69,11 +69,15 @@ describe("scenario runner MCP integration", () => {
   it("verifies state through a separate observer tool", async () => {
     let state = "initial";
     const server = new McpServer({ name: "observer-test-server", version: "1.0.0" });
-    server.registerTool("write_state", { inputSchema: { value: z.string() } }, ({ value }) => {
-      state = value;
-      return { content: [{ type: "text", text: "written" }] };
-    });
-    server.registerTool("read_state", { inputSchema: {} }, () => ({
+    server.registerTool(
+      "write_state",
+      { inputSchema: z.object({ value: z.string() }) },
+      ({ value }) => {
+        state = value;
+        return { content: [{ type: "text", text: "written" }] };
+      },
+    );
+    server.registerTool("read_state", { inputSchema: z.object({}) }, () => ({
       content: [{ type: "text", text: state }],
     }));
     const connection = await connectTestClient(server);

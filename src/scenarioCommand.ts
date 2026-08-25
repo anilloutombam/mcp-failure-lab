@@ -1,7 +1,6 @@
 import { readFile } from "node:fs/promises";
-
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
+import { Client, InMemoryTransport } from "@modelcontextprotocol/client";
+import { serveStdio } from "@modelcontextprotocol/server/stdio";
 import { z } from "zod";
 
 import {
@@ -162,20 +161,24 @@ export function formatScenarioResult(result: ScenarioResult, format: ReportForma
 }
 
 export async function executeScenario(scenario: Scenario): Promise<ScenarioResult> {
-  const server = createServer();
-  const client = new Client({
-    name: "mcp-failure-lab-scenario-client",
-    version: "0.1.0",
-  });
+  const client = new Client(
+    {
+      name: "mcp-failure-lab-scenario-client",
+      version: "0.1.0",
+    },
+    {
+      versionNegotiation: { mode: { pin: "2026-07-28" } },
+    },
+  );
   const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+  const serverHandle = serveStdio(() => createServer(), { transport: serverTransport });
 
   try {
-    await server.connect(serverTransport);
     await client.connect(clientTransport);
     return await runScenario(client, scenario);
   } finally {
     await client.close();
-    await server.close();
+    await serverHandle.close();
   }
 }
 

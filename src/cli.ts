@@ -1,14 +1,12 @@
 #!/usr/bin/env node
 
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-
+import { serveStdio } from "@modelcontextprotocol/server/stdio";
 import { runCliCommand } from "./cliCommand.js";
 import { runDemoCommand } from "./demoCommand.js";
 import { createServer } from "./server.js";
 
 async function serve(): Promise<void> {
-  const server = createServer();
-  const transport = new StdioServerTransport();
+  const serverHandle = serveStdio(() => createServer(), { legacy: "serve" });
 
   let shuttingDown = false;
 
@@ -20,7 +18,7 @@ async function serve(): Promise<void> {
     shuttingDown = true;
     console.error(`Received ${signal}; shutting down.`);
 
-    await server.close();
+    await serverHandle.close();
     process.exitCode = 0;
   }
 
@@ -38,8 +36,6 @@ async function serve(): Promise<void> {
   process.once("SIGTERM", () => {
     requestShutdown("SIGTERM");
   });
-
-  await server.connect(transport);
 }
 
 const output = {

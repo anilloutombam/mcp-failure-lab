@@ -1,4 +1,5 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/server";
+import { z } from "zod";
 
 export function waitForCancellation(signal: AbortSignal): Promise<never> {
   return new Promise((_, reject) => {
@@ -20,8 +21,8 @@ export function registerHangTool(server: McpServer): void {
     "hang",
     {
       description: "Never respond unless the MCP request is cancelled.",
-      inputSchema: {},
+      inputSchema: z.object({}),
     },
-    async (_args, { signal }) => waitForCancellation(signal),
+    async (_args, context) => waitForCancellation(context.mcpReq.signal),
   );
 }

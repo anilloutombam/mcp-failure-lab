@@ -1,4 +1,3 @@
-import { CallToolResultSchema } from "@modelcontextprotocol/sdk/types.js";
 import { describe, expect, it, vi } from "vitest";
 
 import type { Sleeper } from "../../src/delay.js";
@@ -13,10 +12,10 @@ describe("delay tool", () => {
     const connection = await connectTestClient(server);
 
     try {
-      const result = await connection.client.callTool(
-        { name: "delay", arguments: { delayMs: 250 } },
-        CallToolResultSchema,
-      );
+      const result = await connection.client.callTool({
+        name: "delay",
+        arguments: { delayMs: 250 },
+      });
 
       expect(wait).toHaveBeenCalledOnce();
       expect(wait).toHaveBeenCalledWith(250, expect.any(AbortSignal));
@@ -34,10 +33,10 @@ describe("delay tool", () => {
     const connection = await connectTestClient(server);
 
     try {
-      const result = await connection.client.callTool(
-        { name: "delay", arguments: { delayMs: 30_001 } },
-        CallToolResultSchema,
-      );
+      const result = await connection.client.callTool({
+        name: "delay",
+        arguments: { delayMs: 30_001 },
+      });
 
       expect(result.isError).toBe(true);
       expect(wait).not.toHaveBeenCalled();

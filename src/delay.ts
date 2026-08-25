@@ -1,6 +1,5 @@
 import { setTimeout } from "node:timers/promises";
-
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
 
 export const MAX_DELAY_MS = 30_000;
@@ -20,17 +19,17 @@ export function registerDelayTool(server: McpServer, sleeper: Sleeper = systemSl
     "delay",
     {
       description: "Delay a successful MCP response to test client timeout behavior.",
-      inputSchema: {
+      inputSchema: z.object({
         delayMs: z
           .number()
           .int()
           .min(0)
           .max(MAX_DELAY_MS)
           .describe("Response delay in milliseconds."),
-      },
+      }),
     },
-    async ({ delayMs }, { signal }) => {
-      await sleeper.wait(delayMs, signal);
+    async ({ delayMs }, context) => {
+      await sleeper.wait(delayMs, context.mcpReq.signal);
 
       return {
         content: [
