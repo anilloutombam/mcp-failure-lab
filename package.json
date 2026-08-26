@@ -1,6 +1,7 @@
 {
   "name": "mcp-failure-lab",
-  "version": "0.5.0",
+  "version": "0.5.1",
+  "mcpName": "io.github.anilloutombam/mcp-failure-lab",
   "description": "A chaos-engineering and resilience testing toolkit for MCP servers.",
   "type": "module",
   "bin": {
