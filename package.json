@@ -30,6 +30,8 @@
     "start": "node dist/cli.js",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "registry:sync": "node scripts/sync-registry-version.mjs",
+    "registry:validate": "npm run registry:sync && mcp-publisher validate",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
