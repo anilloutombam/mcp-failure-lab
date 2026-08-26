@@ -1,4 +1,5 @@
 import { parseRunArguments } from "./runArguments.js";
+import { parseServeArguments, type ServeOptions } from "./serveArguments.js";
 import {
   runScenarioCommand,
   writeScenarioCommandError,
@@ -7,7 +8,7 @@ import {
 import { VERSION } from "./version.js";
 
 export interface CliDependencies {
-  serve(): Promise<void>;
+  serve(options: ServeOptions): Promise<void>;
   runDemo(output: ScenarioCommandOutput): Promise<number>;
 }
 
@@ -21,12 +22,16 @@ Usage:
 mcp-failure-lab <command> [options]
 
 Commands:
-  serve       Start the MCP server using stdio
+  serve       Start the MCP server (stdio by default)
   run <file>  Run a JSON scenario against MCP Failure Lab
   demo        Run a built-in deterministic delay scenario
   help        Show this help message
 
 Options:
+  --transport <type>  Transport for serve: stdio or http (default: stdio)
+  --host <host>       HTTP bind host (default: 127.0.0.1)
+  --port <port>       HTTP bind port (default: 3000)
+  --path <path>       HTTP endpoint path (default: /mcp)
   --report <format>  Report format for run: console or json (default: console)
   -h, --help         Show this help message
   -v, --version      Show the current version
@@ -53,9 +58,15 @@ export async function runCliCommand(
       output.write(VERSION);
       return 0;
 
-    case "serve":
-      await dependencies.serve();
+    case "serve": {
+      const parsed = parseServeArguments(commandArgs);
+      if (!parsed.ok) {
+        output.writeError(parsed.error);
+        return 1;
+      }
+      await dependencies.serve(parsed.options);
       return 0;
+    }
 
     case "demo":
       return dependencies.runDemo(output);
