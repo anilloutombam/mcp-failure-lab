@@ -3,10 +3,18 @@
 import { serveStdio } from "@modelcontextprotocol/server/stdio";
 import { runCliCommand } from "./cliCommand.js";
 import { runDemoCommand } from "./demoCommand.js";
+import { startHttpServer } from "./httpServer.js";
 import { createServer } from "./server.js";
+import type { ServeOptions } from "./serveArguments.js";
 
-async function serve(): Promise<void> {
-  const serverHandle = serveStdio(() => createServer(), { legacy: "serve" });
+async function serve(options: ServeOptions): Promise<void> {
+  const serverHandle =
+    options.transport === "stdio"
+      ? serveStdio(() => createServer(), { legacy: "serve" })
+      : await startHttpServer(options).then((handle) => {
+          console.error(`MCP Failure Lab listening at ${handle.url.toString()}`);
+          return handle;
+        });
 
   let shuttingDown = false;
 

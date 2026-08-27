@@ -4,7 +4,18 @@ const mocks = vi.hoisted(() => ({
   close: vi.fn(async () => undefined),
   createServer: vi.fn(() => ({ name: "test-server" })),
   runCliCommand: vi.fn(
-    async (_args: string[], _output: unknown, _dependencies: { serve: () => Promise<void> }) => 0,
+    async (
+      _args: string[],
+      _output: unknown,
+      _dependencies: {
+        serve: (options: {
+          transport: "stdio" | "http";
+          host: string;
+          port: number;
+          path: string;
+        }) => Promise<void>;
+      },
+    ) => 0,
   ),
   serveStdio: vi.fn((factory: () => unknown) => {
     factory();
@@ -40,7 +51,12 @@ describe("CLI stdio lifecycle", () => {
     const dependencies = mocks.runCliCommand.mock.calls[0]?.[2];
 
     expect(dependencies).toBeDefined();
-    await dependencies?.serve();
+    await dependencies?.serve({
+      transport: "stdio",
+      host: "127.0.0.1",
+      port: 3000,
+      path: "/mcp",
+    });
 
     expect(mocks.serveStdio).toHaveBeenCalledWith(expect.any(Function), { legacy: "serve" });
     expect(mocks.createServer).toHaveBeenCalledOnce();
