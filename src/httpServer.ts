@@ -1,4 +1,6 @@
+import { AsyncLocalStorage } from "node:async_hooks";
 import { createServer as createNodeServer, type Server as NodeServer } from "node:http";
+import type { ServerResponse } from "node:http";
 
 import {
   hostHeaderValidation,
@@ -53,10 +55,17 @@ async function listen(server: NodeServer, options: HttpServerOptions): Promise<n
 }
 
 export async function startHttpServer(options: HttpServerOptions): Promise<HttpServerHandle> {
-  const handler = createMcpHandler(() => createServer(), {
-    legacy: "stateless",
-    onerror: (error) => console.error("Streamable HTTP request failed:", error),
-  });
+  const activeResponse = new AsyncLocalStorage<ServerResponse>();
+  const handler = createMcpHandler(
+    () =>
+      createServer(undefined, undefined, async () => {
+        activeResponse.getStore()?.destroy();
+      }),
+    {
+      legacy: "stateless",
+      onerror: (error) => console.error("Streamable HTTP request failed:", error),
+    },
+  );
   const nodeHandler = toNodeHandler(handler, {
     onerror: (error) => console.error("Streamable HTTP adapter failed:", error),
   });
@@ -77,7 +86,9 @@ export async function startHttpServer(options: HttpServerOptions): Promise<HttpS
     }
 
     // The adapter's structural request type is stricter than Node's equivalent optional fields.
-    void nodeHandler(request as unknown as NodeIncomingMessageLike, response);
+    void activeResponse.run(response, () =>
+      nodeHandler(request as unknown as NodeIncomingMessageLike, response),
+    );
   });
 
   let port: number;

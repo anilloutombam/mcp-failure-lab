@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   close: vi.fn(async () => undefined),
@@ -21,6 +21,10 @@ const mocks = vi.hoisted(() => ({
     factory();
     return { close: mocks.close };
   }),
+  startHttpServer: vi.fn(async () => ({
+    url: new URL("http://127.0.0.1:3000/mcp"),
+    close: mocks.close,
+  })),
 }));
 
 vi.mock("@modelcontextprotocol/server/stdio", () => ({
@@ -31,6 +35,10 @@ vi.mock("../../src/server.js", () => ({
   createServer: mocks.createServer,
 }));
 
+vi.mock("../../src/httpServer.js", () => ({
+  startHttpServer: mocks.startHttpServer,
+}));
+
 vi.mock("../../src/demoCommand.js", () => ({
   runDemoCommand: vi.fn(),
 }));
@@ -39,11 +47,16 @@ vi.mock("../../src/cliCommand.js", () => ({
   runCliCommand: mocks.runCliCommand,
 }));
 
-describe("CLI stdio lifecycle", () => {
+describe("CLI server lifecycle", () => {
+  beforeEach(() => {
+    vi.resetModules();
+  });
+
   afterEach(() => {
     process.removeAllListeners("SIGINT");
     process.removeAllListeners("SIGTERM");
     vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it("creates an era-aware server and closes it on shutdown", async () => {
@@ -62,6 +75,29 @@ describe("CLI stdio lifecycle", () => {
     expect(mocks.createServer).toHaveBeenCalledOnce();
 
     process.emit("SIGINT");
+    await vi.waitFor(() => expect(mocks.close).toHaveBeenCalledOnce());
+  });
+
+  it("starts the Streamable HTTP server and closes it on shutdown", async () => {
+    const consoleError = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    await import("../../src/cli.js");
+    const dependencies = mocks.runCliCommand.mock.calls[0]?.[2];
+    const options = {
+      transport: "http" as const,
+      host: "127.0.0.1",
+      port: 3000,
+      path: "/mcp",
+    };
+
+    expect(dependencies).toBeDefined();
+    await dependencies?.serve(options);
+
+    expect(mocks.startHttpServer).toHaveBeenCalledWith(options);
+    expect(consoleError).toHaveBeenCalledWith(
+      "MCP Failure Lab listening at http://127.0.0.1:3000/mcp",
+    );
+
+    process.emit("SIGTERM");
     await vi.waitFor(() => expect(mocks.close).toHaveBeenCalledOnce());
   });
 });
