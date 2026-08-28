@@ -47,14 +47,21 @@ vi.mock("../../src/cliCommand.js", () => ({
   runCliCommand: mocks.runCliCommand,
 }));
 
+const originalSigintListeners = process.listeners("SIGINT");
+const originalSigtermListeners = process.listeners("SIGTERM");
+
 describe("CLI server lifecycle", () => {
   beforeEach(() => {
     vi.resetModules();
   });
 
   afterEach(() => {
-    process.removeAllListeners("SIGINT");
-    process.removeAllListeners("SIGTERM");
+    for (const listener of process.listeners("SIGINT")) {
+      if (!originalSigintListeners.includes(listener)) process.off("SIGINT", listener);
+    }
+    for (const listener of process.listeners("SIGTERM")) {
+      if (!originalSigtermListeners.includes(listener)) process.off("SIGTERM", listener);
+    }
     vi.clearAllMocks();
     vi.restoreAllMocks();
   });

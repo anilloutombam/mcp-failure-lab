@@ -24,6 +24,7 @@ function optionValue(args: string[], index: number): string | undefined {
 
 export function parseServeArguments(args: string[]): ServeArgumentsResult {
   const options = { ...DEFAULT_SERVE_OPTIONS };
+  const suppliedHttpOptions = new Set<string>();
 
   for (let index = 0; index < args.length; index += 1) {
     const argument = args[index];
@@ -45,7 +46,11 @@ export function parseServeArguments(args: string[]): ServeArgumentsResult {
       ) {
         return { ok: false, error: "--host must be a hostname or IP address without a port" };
       }
+      if (value === "0.0.0.0" || value === "::") {
+        return { ok: false, error: "--host must not be a wildcard address" };
+      }
       options.host = value;
+      suppliedHttpOptions.add(argument);
       index += 1;
       continue;
     }
@@ -56,6 +61,7 @@ export function parseServeArguments(args: string[]): ServeArgumentsResult {
         return { ok: false, error: "--port must be an integer between 1 and 65535" };
       }
       options.port = port;
+      suppliedHttpOptions.add(argument);
       index += 1;
       continue;
     }
@@ -74,6 +80,7 @@ export function parseServeArguments(args: string[]): ServeArgumentsResult {
         };
       }
       options.path = value;
+      suppliedHttpOptions.add(argument);
       index += 1;
       continue;
     }
@@ -81,12 +88,7 @@ export function parseServeArguments(args: string[]): ServeArgumentsResult {
     return { ok: false, error: `Unknown serve option: ${argument}` };
   }
 
-  if (
-    options.transport === "stdio" &&
-    (options.host !== DEFAULT_SERVE_OPTIONS.host ||
-      options.port !== DEFAULT_SERVE_OPTIONS.port ||
-      options.path !== DEFAULT_SERVE_OPTIONS.path)
-  ) {
+  if (options.transport === "stdio" && suppliedHttpOptions.size > 0) {
     return { ok: false, error: "--host, --port, and --path require --transport http" };
   }
 

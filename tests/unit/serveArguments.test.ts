@@ -42,6 +42,8 @@ describe("serve command arguments", () => {
     [["--transport", "websocket"], "--transport must be either stdio or http"],
     [["--transport"], "--transport must be either stdio or http"],
     [["--transport", "http", "--host", "http://localhost"], "--host must be"],
+    [["--transport", "http", "--host", "0.0.0.0"], "--host must not be a wildcard"],
+    [["--transport", "http", "--host", "::"], "--host must not be a wildcard"],
     [["--transport", "http", "--port", "0"], "--port must be"],
     [["--transport", "http", "--port", "65536"], "--port must be"],
     [["--transport", "http", "--path", "mcp"], "--path must be"],
@@ -54,8 +56,12 @@ describe("serve command arguments", () => {
     });
   });
 
-  it("rejects HTTP-only options in stdio mode", () => {
-    expect(parseServeArguments(["--port", "4000"])).toEqual({
+  it.each([
+    ["--host", "127.0.0.1"],
+    ["--port", "3000"],
+    ["--path", "/mcp"],
+  ])("rejects an explicit %s option in stdio mode", (option, value) => {
+    expect(parseServeArguments([option, value])).toEqual({
       ok: false,
       error: "--host, --port, and --path require --transport http",
     });

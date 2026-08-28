@@ -55,6 +55,10 @@ async function listen(server: NodeServer, options: HttpServerOptions): Promise<n
 }
 
 export async function startHttpServer(options: HttpServerOptions): Promise<HttpServerHandle> {
+  if (options.host === "0.0.0.0" || options.host === "::") {
+    throw new Error("Wildcard HTTP bind hosts require an explicit public allowlist");
+  }
+
   const activeResponse = new AsyncLocalStorage<ServerResponse>();
   const handler = createMcpHandler(
     () =>
