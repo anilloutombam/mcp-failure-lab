@@ -1,6 +1,6 @@
 import { isIP } from "node:net";
 
-import { isWildcardHost } from "./httpHost.js";
+import { isCanonicalHttpPath, isWildcardHost } from "./httpValidation.js";
 
 export type ServeTransport = "stdio" | "http";
 
@@ -82,6 +82,9 @@ export function parseServeArguments(args: string[]): ServeArgumentsResult {
           ok: false,
           error: "--path must be an absolute URL path without a query or fragment",
         };
+      }
+      if (!isCanonicalHttpPath(value)) {
+        return { ok: false, error: "--path must use its URL-encoded canonical form" };
       }
       options.path = value;
       suppliedHttpOptions.add(argument);

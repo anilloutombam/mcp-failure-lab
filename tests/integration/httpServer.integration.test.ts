@@ -13,7 +13,7 @@ function createClient(): Client {
 }
 
 describe("Streamable HTTP server", () => {
-  it.each(["0.0.0.0", "::", "::0", "0:0:0:0:0:0:0:0"])(
+  it.each(["0.0.0.0", "0", "0.0", "0.0.0.00", "::", "::0", "0:0:0:0:0:0:0:0"])(
     "rejects wildcard bind host %s without an allowlist",
     async (host) => {
       await expect(startHttpServer({ host, port: 0, path: "/mcp" })).rejects.toThrow(
@@ -21,6 +21,12 @@ describe("Streamable HTTP server", () => {
       );
     },
   );
+
+  it.each(["/mcp path", "/café"])("rejects non-canonical endpoint path %s", async (path) => {
+    await expect(startHttpServer({ host: "127.0.0.1", port: 0, path })).rejects.toThrow(
+      "HTTP endpoint path must use its URL-encoded canonical form",
+    );
+  });
 
   it("initializes, discovers tools, invokes ping, and shuts down", async () => {
     const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });

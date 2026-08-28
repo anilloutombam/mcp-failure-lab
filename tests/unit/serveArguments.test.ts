@@ -46,10 +46,15 @@ describe("serve command arguments", () => {
     [["--transport", "http", "--host", "::"], "--host must not be a wildcard"],
     [["--transport", "http", "--host", "::0"], "--host must not be a wildcard"],
     [["--transport", "http", "--host", "0:0:0:0:0:0:0:0"], "--host must not be a wildcard"],
+    [["--transport", "http", "--host", "0"], "--host must not be a wildcard"],
+    [["--transport", "http", "--host", "0.0"], "--host must not be a wildcard"],
+    [["--transport", "http", "--host", "0.0.0.00"], "--host must not be a wildcard"],
     [["--transport", "http", "--port", "0"], "--port must be"],
     [["--transport", "http", "--port", "65536"], "--port must be"],
     [["--transport", "http", "--path", "mcp"], "--path must be"],
     [["--transport", "http", "--path", "/mcp?token=x"], "--path must be"],
+    [["--transport", "http", "--path", "/mcp path"], "--path must use its URL-encoded"],
+    [["--transport", "http", "--path", "/café"], "--path must use its URL-encoded"],
     [["--unknown"], "Unknown serve option"],
   ])("rejects invalid arguments %j", (args, message) => {
     expect(parseServeArguments(args)).toEqual({
