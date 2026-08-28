@@ -88,6 +88,14 @@ describe("Streamable HTTP server", () => {
     }
   });
 
+  it("allows concurrent shutdown calls", async () => {
+    const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
+
+    await Promise.all([handle.close(), handle.close()]);
+
+    await expect(fetch(handle.url)).rejects.toThrow();
+  });
+
   it("reports a port conflict without leaking the MCP handler", async () => {
     const occupied = createNodeServer();
     await new Promise<void>((resolve) => occupied.listen(0, "127.0.0.1", resolve));

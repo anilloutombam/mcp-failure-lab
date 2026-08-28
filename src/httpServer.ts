@@ -107,17 +107,35 @@ export async function startHttpServer(options: HttpServerOptions): Promise<HttpS
     throw error;
   }
 
+  const reportServerError = (error: Error): void => {
+    console.error("HTTP server failed:", error);
+  };
+  server.on("error", reportServerError);
+
   let closed = false;
+  let closePromise: Promise<void> | undefined;
   return {
     url: new URL(`http://${displayHostname(options.host)}:${port}${options.path}`),
     close: async () => {
       if (closed) return;
-      closed = true;
-      await handler.close();
-      await new Promise<void>((resolve, reject) => {
-        server.close((error) => (error === undefined ? resolve() : reject(error)));
-        server.closeIdleConnections();
-      });
+      if (closePromise !== undefined) return closePromise;
+
+      closePromise = (async () => {
+        await handler.close();
+        await new Promise<void>((resolve, reject) => {
+          server.close((error) => (error === undefined ? resolve() : reject(error)));
+          server.closeIdleConnections();
+        });
+        server.off("error", reportServerError);
+        closed = true;
+      })();
+
+      try {
+        await closePromise;
+      } catch (error) {
+        closePromise = undefined;
+        throw error;
+      }
     },
   };
 }
