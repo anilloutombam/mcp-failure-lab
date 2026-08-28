@@ -1,3 +1,7 @@
+import { isIP } from "node:net";
+
+import { isWildcardHost } from "./httpHost.js";
+
 export type ServeTransport = "stdio" | "http";
 
 export interface ServeOptions {
@@ -46,7 +50,7 @@ export function parseServeArguments(args: string[]): ServeArgumentsResult {
       ) {
         return { ok: false, error: "--host must be a hostname or IP address without a port" };
       }
-      if (value === "0.0.0.0" || value === "::") {
+      if (isWildcardHost(value)) {
         return { ok: false, error: "--host must not be a wildcard address" };
       }
       options.host = value;
@@ -94,4 +98,3 @@ export function parseServeArguments(args: string[]): ServeArgumentsResult {
 
   return { ok: true, options };
 }
-import { isIP } from "node:net";

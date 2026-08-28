@@ -13,11 +13,14 @@ function createClient(): Client {
 }
 
 describe("Streamable HTTP server", () => {
-  it.each(["0.0.0.0", "::"])("rejects wildcard bind host %s without an allowlist", async (host) => {
-    await expect(startHttpServer({ host, port: 0, path: "/mcp" })).rejects.toThrow(
-      "Wildcard HTTP bind hosts require an explicit public allowlist",
-    );
-  });
+  it.each(["0.0.0.0", "::", "::0", "0:0:0:0:0:0:0:0"])(
+    "rejects wildcard bind host %s without an allowlist",
+    async (host) => {
+      await expect(startHttpServer({ host, port: 0, path: "/mcp" })).rejects.toThrow(
+        "Wildcard HTTP bind hosts require an explicit public allowlist",
+      );
+    },
+  );
 
   it("initializes, discovers tools, invokes ping, and shuts down", async () => {
     const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });

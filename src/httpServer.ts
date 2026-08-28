@@ -10,6 +10,7 @@ import {
 } from "@modelcontextprotocol/node";
 import { createMcpHandler } from "@modelcontextprotocol/server";
 
+import { isWildcardHost } from "./httpHost.js";
 import { createServer } from "./server.js";
 
 export interface HttpServerOptions {
@@ -55,7 +56,7 @@ async function listen(server: NodeServer, options: HttpServerOptions): Promise<n
 }
 
 export async function startHttpServer(options: HttpServerOptions): Promise<HttpServerHandle> {
-  if (options.host === "0.0.0.0" || options.host === "::") {
+  if (isWildcardHost(options.host)) {
     throw new Error("Wildcard HTTP bind hosts require an explicit public allowlist");
   }
 

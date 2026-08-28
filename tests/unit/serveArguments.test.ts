@@ -44,6 +44,8 @@ describe("serve command arguments", () => {
     [["--transport", "http", "--host", "http://localhost"], "--host must be"],
     [["--transport", "http", "--host", "0.0.0.0"], "--host must not be a wildcard"],
     [["--transport", "http", "--host", "::"], "--host must not be a wildcard"],
+    [["--transport", "http", "--host", "::0"], "--host must not be a wildcard"],
+    [["--transport", "http", "--host", "0:0:0:0:0:0:0:0"], "--host must not be a wildcard"],
     [["--transport", "http", "--port", "0"], "--port must be"],
     [["--transport", "http", "--port", "65536"], "--port must be"],
     [["--transport", "http", "--path", "mcp"], "--path must be"],
