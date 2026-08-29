@@ -44,6 +44,12 @@ Start the built-in MCP server over stdio:
 npx mcp-failure-lab serve
 ```
 
+Or start a local Streamable HTTP endpoint:
+
+```bash
+npx mcp-failure-lab serve --transport http
+```
+
 ## Purpose
 
 MCP Failure Lab helps server authors reproduce delays, hanging tools, cancellation, and transport loss in a deterministic way.
@@ -57,7 +63,7 @@ MCP Failure Lab runs deterministic JSON scenarios against its own built-in MCP s
 Available now:
 
 - `ping`, `delay`, `hang`, and `disconnect` tools
-- MCP communication over stdio
+- MCP communication over stdio and Streamable HTTP
 - Code-first and JSON scenario definitions
 - Outcome and maximum-duration assertions
 - MCP result assertions
@@ -71,7 +77,6 @@ Not implemented:
 
 - External MCP client orchestration
 - Target-client adapters
-- Streamable HTTP
 - JUnit reporting
 - Malformed-message, duplicate-response, and session-loss faults
 
@@ -106,14 +111,16 @@ Full guides and references are available at [mcplab.dev/docs](https://mcplab.dev
 ## Protocol compatibility
 
 MCP Failure Lab targets MCP `2026-07-28` by default. Its CLI server uses the SDK v2
-era-aware stdio entry point, and its built-in scenario client pins `2026-07-28` so
-modern behavior is exercised explicitly.
+era-aware serving entries, and its built-in scenario client pins `2026-07-28` so modern
+behavior is exercised explicitly.
 
-The server also accepts the `2025-11-25` initialization flow for compatibility.
-That legacy path remains covered by integration tests, but new development targets
-`2026-07-28`. The existing `ping`, `delay`, `hang`, and `disconnect` fault tools have
-the same user-facing behavior in both eras; protocol features that rely on
-server-initiated requests differ between eras and are outside these fault tools.
+The server also accepts the `2025-11-25` initialization flow for compatibility. HTTP
+compatibility is stateless: each request receives a fresh server instance, and legacy
+session GET and DELETE operations are not supported. That path remains covered by
+integration tests, but new development targets `2026-07-28`. The existing `ping`,
+`delay`, `hang`, and `disconnect` fault tools have the same user-facing behavior in both
+eras; protocol features that rely on server-initiated requests differ between eras and
+are outside these fault tools.
 
 ## Installation
 
@@ -145,9 +152,21 @@ npx mcp-failure-lab --version
 
 # Start the MCP server over stdio
 npx mcp-failure-lab serve
+
+# Start Streamable HTTP with local-safe defaults
+npx mcp-failure-lab serve --transport http
+
+# Override the HTTP endpoint explicitly
+npx mcp-failure-lab serve --transport http --host localhost --port 4000 --path /mcp
 ```
 
 The `serve` process waits for an MCP client. Press `Ctrl+C` to shut it down gracefully.
+
+Streamable HTTP listens on `http://127.0.0.1:3000/mcp` by default. The server validates
+the request path plus `Host` and `Origin` headers. Binding another host is an explicit
+choice; this mode does not provide authentication or TLS, so do not expose it to an
+untrusted network. Put authentication and TLS termination in a trusted front end if
+remote access is required.
 
 ## Run a scenario
 
@@ -212,6 +231,9 @@ npx @modelcontextprotocol/inspector npx mcp-failure-lab serve
 ```
 
 Connect over stdio, list the available tools, and invoke `ping`, `delay`, `hang`, or `disconnect`.
+
+For Streamable HTTP, start the server separately and connect Inspector to
+`http://127.0.0.1:3000/mcp`.
 
 Do not share or commit temporary authentication tokens included in Inspector URLs.
 

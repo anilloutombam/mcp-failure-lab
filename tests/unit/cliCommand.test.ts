@@ -57,7 +57,45 @@ describe("CLI command", () => {
     await expect(runCliCommand(["serve"], output, dependencies)).resolves.toBe(0);
 
     expect(dependencies.serve).toHaveBeenCalledOnce();
+    expect(dependencies.serve).toHaveBeenCalledWith({
+      transport: "stdio",
+      host: "127.0.0.1",
+      port: 3000,
+      path: "/mcp",
+    });
     expect(dependencies.runDemo).not.toHaveBeenCalled();
+  });
+
+  it("dispatches the serve command with HTTP options", async () => {
+    const output = createOutput();
+    const dependencies = createDependencies();
+
+    await expect(
+      runCliCommand(
+        ["serve", "--transport", "http", "--host", "localhost", "--port", "4000"],
+        output,
+        dependencies,
+      ),
+    ).resolves.toBe(0);
+
+    expect(dependencies.serve).toHaveBeenCalledWith({
+      transport: "http",
+      host: "localhost",
+      port: 4000,
+      path: "/mcp",
+    });
+  });
+
+  it("rejects invalid serve options without starting a server", async () => {
+    const output = createOutput();
+    const dependencies = createDependencies();
+
+    await expect(
+      runCliCommand(["serve", "--transport", "websocket"], output, dependencies),
+    ).resolves.toBe(1);
+
+    expect(output.writeError).toHaveBeenCalledWith("--transport must be either stdio or http");
+    expect(dependencies.serve).not.toHaveBeenCalled();
   });
 
   it("dispatches the demo command and returns its exit code", async () => {
