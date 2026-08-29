@@ -80,8 +80,18 @@ export async function startHttpServer(options: HttpServerOptions): Promise<HttpS
   const allowedHostname = validationHostname(options.host);
   const validateHost = hostHeaderValidation([allowedHostname]);
   const validateOrigin = originValidation([allowedHostname]);
+  let closing = false;
 
   const server = createNodeServer((request, response) => {
+    if (closing) {
+      response.writeHead(503, {
+        connection: "close",
+        "content-type": "text/plain; charset=utf-8",
+      });
+      response.end("Server shutting down");
+      return;
+    }
+
     const pathname = new URL(request.url ?? "/", "http://localhost").pathname;
     if (pathname !== options.path) {
       response.writeHead(404, { "content-type": "text/plain; charset=utf-8" });
@@ -113,6 +123,8 @@ export async function startHttpServer(options: HttpServerOptions): Promise<HttpS
   server.on("error", reportServerError);
 
   let closed = false;
+  let handlerClosed = false;
+  let listenerClosed = false;
   let closePromise: Promise<void> | undefined;
   return {
     url: new URL(`http://${displayHostname(options.host)}:${port}${options.path}`),
@@ -120,22 +132,33 @@ export async function startHttpServer(options: HttpServerOptions): Promise<HttpS
       if (closed) return;
       if (closePromise !== undefined) return closePromise;
 
-      closePromise = (async () => {
-        await handler.close();
-        await new Promise<void>((resolve, reject) => {
-          server.close((error) => (error === undefined ? resolve() : reject(error)));
-          server.closeIdleConnections();
-        });
-        server.off("error", reportServerError);
-        closed = true;
-      })();
+      closing = true;
+      const listenerCleanup = listenerClosed
+        ? Promise.resolve()
+        : new Promise<void>((resolve, reject) => {
+            server.close((error) => (error === undefined ? resolve() : reject(error)));
+            server.closeIdleConnections();
+          }).then(() => {
+            listenerClosed = true;
+          });
+      const handlerCleanup = handlerClosed
+        ? Promise.resolve()
+        : handler.close().then(() => {
+            handlerClosed = true;
+          });
 
-      try {
-        await closePromise;
-      } catch (error) {
-        closePromise = undefined;
-        throw error;
-      }
+      closePromise = Promise.all([listenerCleanup, handlerCleanup])
+        .then(() => {
+          server.off("error", reportServerError);
+          closed = true;
+        })
+        .catch((error: unknown) => {
+          closePromise = undefined;
+          closing = listenerClosed || handlerClosed;
+          throw error;
+        });
+
+      return closePromise;
     },
   };
 }

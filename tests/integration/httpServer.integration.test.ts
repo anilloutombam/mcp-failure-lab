@@ -91,8 +91,17 @@ describe("Streamable HTTP server", () => {
   it("allows concurrent shutdown calls", async () => {
     const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
 
-    await Promise.all([handle.close(), handle.close()]);
+    const firstClose = handle.close();
+    const requestDuringShutdown = fetch(handle.url).then(
+      (response) => response.status,
+      () => undefined,
+    );
 
+    await Promise.all([firstClose, handle.close()]);
+
+    expect(await requestDuringShutdown).toSatisfy(
+      (status: number | undefined) => status === undefined || status === 503,
+    );
     await expect(fetch(handle.url)).rejects.toThrow();
   });
 
