@@ -1,4 +1,6 @@
+import { once } from "node:events";
 import { createServer as createNodeServer } from "node:http";
+import { createConnection } from "node:net";
 
 import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/client";
 import { describe, expect, it } from "vitest";
@@ -88,20 +90,64 @@ describe("Streamable HTTP server", () => {
     }
   });
 
-  it("allows concurrent shutdown calls", async () => {
+  it("rejects requests already connected when shutdown starts", async () => {
     const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
+    const socket = createConnection(Number(handle.url.port), handle.url.hostname);
+    socket.setEncoding("utf8");
 
-    const firstClose = handle.close();
-    const requestDuringShutdown = fetch(handle.url).then(
-      (response) => response.status,
-      () => undefined,
-    );
+    try {
+      await once(socket, "connect");
+      const responseChunks: string[] = [];
+      const continueReceived = new Promise<void>((resolve, reject) => {
+        const onError = (error: Error): void => reject(error);
+        socket.once("error", onError);
+        socket.on("data", (chunk: string) => {
+          responseChunks.push(chunk);
+          if (responseChunks.join("").includes("HTTP/1.1 100 Continue")) {
+            socket.off("error", onError);
+            resolve();
+          }
+        });
+      });
+      const connectionEnded = once(socket, "end");
 
-    await Promise.all([firstClose, handle.close()]);
+      socket.write(
+        [
+          "POST /mcp HTTP/1.1",
+          `Host: ${handle.url.host}`,
+          "Content-Type: application/json",
+          "Content-Length: 2",
+          "Expect: 100-continue",
+          "Connection: keep-alive",
+          "",
+          "",
+        ].join("\r\n"),
+      );
+      await continueReceived;
 
-    expect(await requestDuringShutdown).toSatisfy(
-      (status: number | undefined) => status === undefined || status === 503,
-    );
+      const firstClose = handle.close();
+      socket.write(
+        [
+          "{}POST /mcp HTTP/1.1",
+          `Host: ${handle.url.host}`,
+          "Content-Type: application/json",
+          "Content-Length: 2",
+          "Connection: close",
+          "",
+          "{}",
+        ].join("\r\n"),
+      );
+      await connectionEnded;
+      await Promise.all([firstClose, handle.close()]);
+
+      const response = responseChunks.join("");
+      expect(response).toContain("HTTP/1.1 503 Service Unavailable");
+      expect(response).toContain("Server shutting down");
+    } finally {
+      socket.destroy();
+      await handle.close();
+    }
+
     await expect(fetch(handle.url)).rejects.toThrow();
   });
 
