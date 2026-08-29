@@ -112,4 +112,4 @@ jobs:
         run: ./mcp-publisher login github-oidc
 
       - name: Publish to MCP Registry
-        run: ./mcp-publisher publish server.json
+        run: node scripts/publish-registry.mjs
