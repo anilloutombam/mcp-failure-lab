@@ -30,6 +30,16 @@ describe("Streamable HTTP server", () => {
     );
   });
 
+  it("formats an IPv6 loopback endpoint", async () => {
+    const handle = await startHttpServer({ host: "::1", port: 0, path: "/mcp" });
+
+    try {
+      expect(handle.url.hostname).toBe("[::1]");
+    } finally {
+      await handle.close();
+    }
+  });
+
   it("initializes, discovers tools, invokes ping, and shuts down", async () => {
     const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
     const client = createClient();
