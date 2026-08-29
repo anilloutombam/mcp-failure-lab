@@ -10,17 +10,13 @@
     {
       "src": "https://mcplab.dev/brand/mcp-failure-lab-light-512.png",
       "mimeType": "image/png",
-      "sizes": [
-        "512x512"
-      ],
+      "sizes": ["512x512"],
       "theme": "light"
     },
     {
       "src": "https://mcplab.dev/brand/mcp-failure-lab-dark-512.png",
       "mimeType": "image/png",
-      "sizes": [
-        "512x512"
-      ],
+      "sizes": ["512x512"],
       "theme": "dark"
     }
   ],
