@@ -10,8 +10,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  publish:
-    name: Publish
+  publish-npm:
+    name: Publish to npm
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -56,6 +56,40 @@ jobs:
       - name: Verify package contents
         run: npm pack --dry-run
 
+      - name: Publish to npm
+        run: npm publish
+
+  publish-registry:
+    name: Publish to MCP Registry
+    needs: publish-npm
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    permissions:
+      contents: read
+      id-token: write # Required for MCP Registry authentication via OIDC
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: 22.19.0
+          package-manager-cache: false
+
+      - name: Verify release version
+        run: |
+          PACKAGE_VERSION="v$(node -p "require('./package.json').version")"
+
+          if [ "$GITHUB_REF_NAME" != "$PACKAGE_VERSION" ]; then
+            echo "Release tag $GITHUB_REF_NAME does not match package version $PACKAGE_VERSION"
+            exit 1
+          fi
+
       - name: Sync MCP Registry version
         run: npm run registry:sync
 
@@ -73,9 +107,6 @@ jobs:
 
       - name: Validate MCP Registry metadata
         run: ./mcp-publisher validate server.json
-
-      - name: Publish to npm
-        run: npm publish
 
       - name: Authenticate to MCP Registry
         run: ./mcp-publisher login github-oidc
