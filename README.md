@@ -1,3 +1,5 @@
+# MCP Failure Lab
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://mcplab.dev/brand/mcp-failure-lab-logo-dark.svg">
@@ -5,8 +7,6 @@
     <img src="https://mcplab.dev/brand/mcp-failure-lab-logo-light.svg" alt="MCP Failure Lab — Break it here. Trust it everywhere." width="720">
   </picture>
 </p>
-
-# MCP Failure Lab
 
 [![npm version](https://img.shields.io/npm/v/mcp-failure-lab)](https://www.npmjs.com/package/mcp-failure-lab)
 [![CI](https://github.com/anilloutombam/mcp-failure-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/anilloutombam/mcp-failure-lab/actions/workflows/ci.yml)
