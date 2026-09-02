@@ -118,4 +118,96 @@ describe("target-client adapter contract", () => {
       failure: { code: "deadline_exceeded" },
     });
   });
+
+  it("returns a structured error when an execution or observation plan is exhausted", async () => {
+    const adapter = fake();
+    const setup = await adapter.setup({
+      operationId: "setup-1",
+      config: { endpoint: "in-memory" },
+      timeoutMs: boundedTimeoutMs(10),
+    });
+    if (setup.outcome !== "success") throw new Error("expected fake setup to succeed");
+
+    const execution = await setup.value.execute({
+      operationId: "run-1",
+      scenario: { action: "exercise" },
+      timeoutMs: boundedTimeoutMs(10),
+    });
+    const observation = await setup.value.observe({
+      operationId: "observe-1",
+      observation: { probe: "state" },
+      timeoutMs: boundedTimeoutMs(10),
+    });
+
+    expect(execution).toMatchObject({
+      outcome: "error",
+      failure: { code: "fake_plan_exhausted" },
+    });
+    expect(observation).toMatchObject({
+      outcome: "error",
+      failure: { code: "fake_plan_exhausted" },
+    });
+  });
+
+  it("uses planned cancellation behavior and applies budgets to setup and cleanup", async () => {
+    const setupTimeout = await fake({ setupDurationMs: 20 }).setup({
+      operationId: "setup-timeout",
+      config: { endpoint: "in-memory" },
+      timeoutMs: boundedTimeoutMs(5),
+    });
+    expect(setupTimeout).toMatchObject({ outcome: "timeout", durationMs: 5 });
+
+    const adapter = fake({
+      cancellations: [
+        {
+          outcome: "cancelled",
+          durationMs: 2,
+          failure: { code: "cancel_acknowledged", message: "cancelled by target" },
+        },
+      ],
+      cleanupDurationMs: 20,
+    });
+    const setup = await adapter.setup({
+      operationId: "setup-1",
+      config: { endpoint: "in-memory" },
+      timeoutMs: boundedTimeoutMs(10),
+    });
+    if (setup.outcome !== "success") throw new Error("expected fake setup to succeed");
+
+    const cancellation = await setup.value.cancel({
+      operationId: "run-1",
+      reason: "test complete",
+      timeoutMs: boundedTimeoutMs(10),
+    });
+    const cleanup = await setup.value.cleanup({
+      operationId: "cleanup-1",
+      timeoutMs: boundedTimeoutMs(5),
+    });
+
+    expect(cancellation).toMatchObject({
+      outcome: "cancelled",
+      failure: { code: "cancel_acknowledged" },
+    });
+    expect(cleanup).toMatchObject({ outcome: "timeout", durationMs: 5 });
+  });
+
+  it("rejects invalid scripted durations", async () => {
+    const adapter = fake({
+      executions: [{ outcome: "success", durationMs: -1, value: "invalid" }],
+    });
+    const setup = await adapter.setup({
+      operationId: "setup-1",
+      config: { endpoint: "in-memory" },
+      timeoutMs: boundedTimeoutMs(10),
+    });
+    if (setup.outcome !== "success") throw new Error("expected fake setup to succeed");
+
+    await expect(
+      setup.value.execute({
+        operationId: "run-1",
+        scenario: { action: "exercise" },
+        timeoutMs: boundedTimeoutMs(10),
+      }),
+    ).rejects.toThrow("deterministic fake durationMs must be finite and non-negative");
+  });
 });
