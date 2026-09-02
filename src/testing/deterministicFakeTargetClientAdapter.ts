@@ -70,11 +70,16 @@ export class DeterministicFakeTargetClientAdapter<
     TargetClientObservation<TargetClientSession<TScenario, TResult, TObservation, TObserved>>
   > {
     this.record("setup", request.operationId, request, request.config);
+    let cleanupResult: Promise<TargetClientObservation<void>> | undefined;
     const session: TargetClientSession<TScenario, TResult, TObservation, TObserved> = {
       execute: (execution) => this.execute(execution),
       observe: (observation) => this.observe(observation),
       cancel: (cancellation) => this.cancel(cancellation),
-      cleanup: (cleanup) => this.cleanup(cleanup),
+      cleanup: (cleanup) => {
+        this.record("cleanup", cleanup.operationId, cleanup);
+        cleanupResult ??= this.cleanup(cleanup);
+        return cleanupResult;
+      },
     };
 
     return this.complete("setup", request.operationId, request, {
@@ -123,8 +128,7 @@ export class DeterministicFakeTargetClientAdapter<
   private async cleanup(
     request: TargetClientCleanupRequest,
   ): Promise<TargetClientObservation<void>> {
-    this.record("cleanup", request.operationId, request);
-    this.cleanupCount = 1;
+    this.cleanupCount += 1;
     return this.complete("cleanup", request.operationId, request, {
       outcome: "success",
       durationMs: this.plan.cleanupDurationMs ?? 0,

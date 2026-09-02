@@ -22,8 +22,9 @@ function fake(plan: DeterministicFakePlan<string, string> = {}) {
 
 describe("target-client adapter contract", () => {
   it("requires a positive finite integer timeout", () => {
-    expect(() => boundedTimeoutMs(0)).toThrow(RangeError);
-    expect(() => boundedTimeoutMs(Number.POSITIVE_INFINITY)).toThrow(RangeError);
+    for (const timeoutMs of [-1, 0, 1.5, Number.NaN, Number.POSITIVE_INFINITY]) {
+      expect(() => boundedTimeoutMs(timeoutMs)).toThrow(RangeError);
+    }
     expect(boundedTimeoutMs(25)).toBe(25);
   });
 
@@ -52,8 +53,10 @@ describe("target-client adapter contract", () => {
       timeoutMs: boundedTimeoutMs(10),
     });
     await session.cancel({ operationId: "run-1", timeoutMs: boundedTimeoutMs(10) });
-    await session.cleanup({ operationId: "cleanup-1", timeoutMs: boundedTimeoutMs(10) });
-    await session.cleanup({ operationId: "cleanup-2", timeoutMs: boundedTimeoutMs(10) });
+    const [firstCleanup, secondCleanup] = await Promise.all([
+      session.cleanup({ operationId: "cleanup-1", timeoutMs: boundedTimeoutMs(10) }),
+      session.cleanup({ operationId: "cleanup-2", timeoutMs: boundedTimeoutMs(10) }),
+    ]);
 
     expect(adapter.calls.map(({ operation }) => operation)).toEqual([
       "setup",
@@ -64,6 +67,7 @@ describe("target-client adapter contract", () => {
       "cleanup",
     ]);
     expect(adapter.cleanupCount).toBe(1);
+    expect(secondCleanup).toBe(firstCleanup);
   });
 
   it.each(["error", "cancelled", "transport_loss"] as const)(
@@ -191,23 +195,26 @@ describe("target-client adapter contract", () => {
     expect(cleanup).toMatchObject({ outcome: "timeout", durationMs: 5 });
   });
 
-  it("rejects invalid scripted durations", async () => {
-    const adapter = fake({
-      executions: [{ outcome: "success", durationMs: -1, value: "invalid" }],
-    });
-    const setup = await adapter.setup({
-      operationId: "setup-1",
-      config: { endpoint: "in-memory" },
-      timeoutMs: boundedTimeoutMs(10),
-    });
-    if (setup.outcome !== "success") throw new Error("expected fake setup to succeed");
-
-    await expect(
-      setup.value.execute({
-        operationId: "run-1",
-        scenario: { action: "exercise" },
+  it.each([-1, Number.NaN, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY])(
+    "rejects the invalid scripted duration %s",
+    async (durationMs) => {
+      const adapter = fake({
+        executions: [{ outcome: "success", durationMs, value: "invalid" }],
+      });
+      const setup = await adapter.setup({
+        operationId: "setup-1",
+        config: { endpoint: "in-memory" },
         timeoutMs: boundedTimeoutMs(10),
-      }),
-    ).rejects.toThrow("deterministic fake durationMs must be finite and non-negative");
-  });
+      });
+      if (setup.outcome !== "success") throw new Error("expected fake setup to succeed");
+
+      await expect(
+        setup.value.execute({
+          operationId: "run-1",
+          scenario: { action: "exercise" },
+          timeoutMs: boundedTimeoutMs(10),
+        }),
+      ).rejects.toThrow("deterministic fake durationMs must be finite and non-negative");
+    },
+  );
 });
