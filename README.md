@@ -85,12 +85,18 @@ Available now:
 
 Not implemented:
 
-- External MCP client orchestration
-- Target-client adapters
+- External MCP client orchestration (the adapter contract is available; orchestration is not)
 - JUnit reporting
 - Malformed-message, duplicate-response, and session-loss faults
 
 MCP Failure Lab is not currently a general-purpose proxy or an external MCP client test orchestrator.
+
+## Target-client adapter contract
+
+The generic adapter contract and deterministic test adapter provide the foundation for future
+external-client orchestration. See the
+[architecture documentation](https://mcplab.dev/docs/architecture/#target-client-adapter-boundary)
+for lifecycle, ownership, timeout, and observation details.
 
 ## How it works
 
