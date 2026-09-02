@@ -10,6 +10,8 @@
 
 [![npm version](https://img.shields.io/npm/v/mcp-failure-lab)](https://www.npmjs.com/package/mcp-failure-lab)
 [![CI](https://github.com/anilloutombam/mcp-failure-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/anilloutombam/mcp-failure-lab/actions/workflows/ci.yml)
+[![MCP Registry](https://img.shields.io/badge/MCP_Registry-Official-blue)](https://registry.modelcontextprotocol.io/)
+[![GitHub MCP Registry](https://img.shields.io/badge/GitHub_MCP_Registry-Listed-181717?logo=github)](https://github.com/mcp/anilloutombam/mcp-failure-lab)
 
 A chaos-engineering and resilience-testing toolkit for Model Context Protocol servers.
 
