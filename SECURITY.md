@@ -2,56 +2,55 @@
 
 ## Supported versions
 
-MCP Failure Lab is in early development and has not published its first npm
-prerelease. Security fixes currently target the latest commit on `main` only.
-Older commits and unmerged branches are not supported.
+MCP Failure Lab is under active development. Security fixes are provided for the latest published release only.
 
-This policy will be updated with a version-support table when releases begin.
+Older releases, historical commits, and unmerged branches are not supported.
 
-## Report a vulnerability privately
+## Reporting a vulnerability
 
-Do not report suspected vulnerabilities in a public issue, discussion, pull
-request, or social-media post.
+Report suspected security vulnerabilities privately using [GitHub Private Vulnerability Reporting](https://github.com/anilloutombam/mcp-failure-lab/security/advisories/new).
 
-Use GitHub's private vulnerability reporting form:
+Do not open a public issue, discussion, or pull request for an undisclosed vulnerability.
 
-<https://github.com/anilloutombam/mcp-failure-lab/security/advisories/new>
+When reporting an issue, include where possible:
 
-Include, when available:
+- Affected version, command, tool, or transport
+- Steps to reproduce
+- A minimal proof of concept
+- Expected and observed behavior
+- Security impact
+- Required permissions or environment
 
-- The affected version, commit, command, tool, or transport.
-- Reproduction steps or a minimal proof of concept.
-- The expected and observed security impact.
-- Required permissions and environmental conditions.
-- Suggested mitigations or fixes.
-- Whether the vulnerability has been disclosed elsewhere.
+Do not include real credentials, access tokens, personal data, or unrelated private protocol data. Use placeholders or isolated test credentials where possible.
 
-Remove real credentials, MCP Inspector tokens, personal data, and unrelated
-private protocol content. Use placeholders or isolated test credentials in
-proofs of concept.
+## Response
 
-## What to expect
+Security reports will normally be acknowledged within seven days.
 
-The maintainer will aim to acknowledge a report within seven days. After initial
-assessment, the reporter will receive a status update and may be asked for more
-information. Resolution time depends on severity and complexity.
+Fix and disclosure timelines depend on the severity and complexity of the issue. Please allow reasonable time for investigation and remediation before public disclosure.
 
-Please allow a reasonable remediation period before public disclosure. The
-maintainer will coordinate disclosure and credit with the reporter when
-practical. Reports made in good faith will not result in legal action from this
-project for accidental, limited interaction needed to demonstrate the issue.
+When appropriate, fixes will be released in a new package version and documented through a GitHub Security Advisory.
 
 ## Testing boundaries
 
-Test only systems you own or are explicitly authorized to assess. Do not use MCP
-Failure Lab to disrupt third-party services, access data without permission, or
-generate uncontrolled load.
+MCP Failure Lab intentionally introduces failure conditions such as delays, hangs, cancellations, and transport failures. These tests can disrupt the system being tested.
 
-Keep demonstrations bounded and local. Stop testing if it could damage data,
-affect availability, expose secrets, or impact other users.
+Only test systems you own or have explicit permission to assess.
 
-## Non-security reports
+Do not use MCP Failure Lab to:
 
-Use the public bug-report form for ordinary defects without a confidentiality or
-security impact. Use the process in [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)
-for community conduct concerns.
+- Disrupt third-party services without authorization
+- Access data without authorization
+- Collect or expose credentials or private data
+- Generate uncontrolled or excessive traffic
+- Circumvent access controls on systems you are not authorized to test
+
+Prefer local, development, staging, or otherwise isolated environments.
+
+Stop testing if it risks data loss, service disruption, credential exposure, or impact to other users.
+
+## Non-security issues
+
+For ordinary bugs and feature requests, use the [public issue tracker](https://github.com/anilloutombam/mcp-failure-lab/issues).
+
+For community conduct concerns, see [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md).
