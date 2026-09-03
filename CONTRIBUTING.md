@@ -1,8 +1,8 @@
 # Contributing to MCP Failure Lab
 
-Thank you for helping make MCP implementations more reliable. Contributions
-should keep failures deterministic, protocol behavior explicit, and test runs
-safe and reproducible.
+Thanks for your interest in contributing to MCP Failure Lab.
+
+Contributions should keep failure behavior deterministic, MCP protocol behavior explicit, and tests safe and reproducible.
 
 ## Development setup
 
@@ -21,110 +21,60 @@ npm test
 npm run build
 ```
 
-## Choose a focused change
+## Before you start
 
-Keep each pull request limited to one feature, fix, or refactor. Before adding a
-new abstraction, connect it to a concrete scenario and corresponding tests.
+Keep pull requests focused on one feature, fix, refactor, or documentation change.
 
-For roadmap work, implement fault primitives before orchestration and reporting:
+Open an issue before starting:
 
-1. Fault behavior
-2. Deterministic tests
-3. Scenario-runner integration
-4. Assertions and reproduction metadata
-5. Reports
+- New features
+- Architectural changes
+- New runtime dependencies
+- Changes that affect multiple parts of the project
 
-Open an issue before making a large architectural change or introducing a new
-runtime dependency.
+Small bug fixes and documentation corrections may be submitted directly.
 
-## Working on issues
+For an existing issue, check that it is open and unassigned before starting substantial work. Comment with your intended approach and wait for assignment or maintainer confirmation.
 
-Issues available for community contributions will normally have the
-`help wanted` or `good first issue` label.
+Issues suitable for community contributions will normally have the `help wanted` or `good first issue` label.
 
-Before starting substantial work:
+## Engineering guidelines
 
-1. Confirm that the issue is open and unassigned.
-2. Comment with a short explanation of your intended approach.
-3. Ask a maintainer to assign the issue to you.
-4. Wait for confirmation before beginning the implementation.
+### MCP protocol safety
 
-External contributors cannot assign issues to themselves. A maintainer will
-assign an issue after confirming that it is ready and that the proposed approach
-fits the project. Do not open a competing pull request for assigned work unless
-the assignee or a maintainer approves collaboration.
+- Never write logs or diagnostics to stdout while serving MCP over stdio. Stdout is reserved for protocol messages.
+- Treat tool arguments, scenario definitions, and protocol data as untrusted input.
+- Handle cancellation, timeouts, signals, transport closure, and cleanup explicitly.
+- Bound user-controlled durations, retries, buffers, and resource usage.
+- Do not leave timers, listeners, child processes, or connections running after a test finishes.
 
-Post a progress update if the work takes longer than expected. After 14 days
-without an update, a maintainer may remove the assignment so another contributor
-can work on it. You may ask for more time before then.
+### Deterministic failures
 
-For work without an existing issue, open one and discuss the proposal before
-starting a large feature, dependency, or architectural change. Small typo and
-documentation corrections may be submitted directly.
+Failure scenarios should have clear activation conditions and observable outcomes.
 
-## Community expectations
+Avoid arbitrary sleeps in tests. Prefer observable events, injected clocks, test doubles, or other deterministic synchronization.
 
-- Be respectful, constructive, and patient in issues and reviews.
-- Keep technical disagreement focused on the change, not the contributor.
-- Assume good intent, but support claims with code, tests, or documentation.
-- Do not pressure maintainers or repeatedly request immediate reviews.
-- Harassment, discrimination, spam, and abusive behavior are not accepted.
+A failure should be reproducible without depending on timing luck or a particular machine.
 
-## Engineering rules
+### Keep changes maintainable
 
-### Preserve MCP protocol safety
+Reuse existing helpers before adding new abstractions. Avoid duplicating connection, cleanup, validation, or lifecycle behavior.
 
-- Never write logs or diagnostics to stdout while serving MCP over stdio. Stdout
-  is reserved for protocol messages; use stderr for operational diagnostics.
-- Treat tool arguments, scenario definitions, and protocol data as untrusted.
-  Validate inputs at the boundary.
-- Handle cancellation, timeouts, signals, transport closure, and cleanup
-  explicitly.
-- Bound durations, retries, buffers, and other user-controlled resource usage.
-- Do not allow a fault scenario to leave timers, listeners, processes, or
-  connections running after a test finishes.
+Keep responsibilities separated between CLI handling, server construction, tools, transports, scenario orchestration, and reporting.
 
-### Keep behavior deterministic
+Avoid unrelated refactoring or formatting changes in the same pull request.
 
-- Inject clocks, sleepers, randomness, process control, and transport operations
-  when tests need to control them.
-- Do not use arbitrary sleeps in tests. Synchronize on observable events or use
-  injected test doubles.
-- Every failure must have clear activation conditions and an observable outcome.
-- Include enough information to reproduce failures without relying on timing
-  luck or a particular machine.
+## Testing
 
-### Avoid repeated code
+Behavior changes require appropriate test coverage.
 
-- Search for an existing helper or abstraction before adding one.
-- Reuse shared MCP connection and cleanup helpers in integration tests.
-- Extract common behavior only when at least two real call sites need it; avoid
-  speculative frameworks.
-- Keep fault-specific behavior isolated. Shared registration, validation, and
-  lifecycle logic should have one source of truth.
-- Do not copy tests merely to vary input. Use focused cases or table-driven tests
-  when the setup and assertions are the same.
+Use:
 
-### Keep responsibilities separate
+- Unit tests for isolated validation, state, timing, and cancellation behavior
+- Integration tests for MCP discovery, invocation, responses, and transports
+- End-to-end tests when real CLI or process behavior is required
 
-- CLI code parses commands and manages process lifecycle.
-- Server construction registers MCP capabilities without starting I/O.
-- Tool modules own tool validation and behavior.
-- Transports own message delivery and connection lifecycle.
-- Scenario orchestration and reporting must not be embedded in individual tools.
-
-## Testing requirements
-
-Every behavior change requires test coverage at the lowest useful level:
-
-- **Unit tests** for isolated validation, state, timing, and cancellation logic.
-- **Integration tests** for MCP discovery, invocation, responses, and transport
-  behavior.
-- **End-to-end tests** only when real CLI or process behavior is required.
-
-Regression fixes must include a test that fails without the fix. Tests must clean
-up clients, servers, timers, listeners, and child processes in `finally` blocks
-or shared lifecycle helpers.
+Regression fixes should include a test that fails without the fix.
 
 Before requesting review, run:
 
@@ -135,106 +85,61 @@ npm test
 npm run build
 ```
 
-Do not merge with skipped tests, focused test markers, formatting failures,
-TypeScript errors, or unreviewed generated output.
+## Documentation
 
-## Documentation requirements
+Update documentation when a change affects:
 
-Update `README.md` in the same pull request when a change affects:
+- Commands or MCP tools
+- Inputs, outputs, limits, or failure behavior
+- Setup or operational behavior
+- Public architecture or interfaces
 
-- Available commands or MCP tools
-- Inputs, limits, outputs, or failure semantics
-- Current or planned architecture
-- Setup, inspection, or operational behavior
-
-Architecture diagrams and responsibility lists must match the implemented server
-surface. Document what exists today separately from planned capabilities.
+Documentation should describe implemented behavior separately from planned capabilities.
 
 ## Branches and commits
 
 Create branches from the latest `main` using a descriptive prefix:
 
-- `feat/transport-interruption`
-- `fix/cancellation-cleanup`
-- `test/session-loss-regression`
-- `docs/scenario-format`
+```text
+feat/transport-interruption
+fix/cancellation-cleanup
+test/session-loss-regression
+docs/security-policy
+```
 
-Use concise imperative commit messages, preferably following Conventional
-Commits:
+Prefer Conventional Commits:
 
 ```text
 feat: add deterministic transport interruption
 fix: remove duplicate shutdown handlers
 test: cover cancellation race
-docs: update fault tool architecture
+docs: update security policy
 ```
-
-Do not mix unrelated formatting or refactoring with a behavior change.
-
-By submitting a contribution, you agree that it may be distributed under the
-project's MIT License and that you have the right to submit it.
 
 ## Pull requests
 
-A pull request description should explain:
+Pull requests should explain:
 
-- The problem and intended behavior
-- The implementation approach
-- Tests and verification performed
+- The problem or reason for the change
+- What changed
+- Tests performed
 - Documentation changes
-- Known limitations or follow-up work
+- Known limitations, if applicable
 
-Write the description in your own words, even if an AI coding assistant helped
-with the implementation. Do not paste an AI-generated summary without reviewing
-and rewriting it. You are responsible for understanding the change, verifying
-every claim in the description, and explaining the design decisions to reviewers.
+You are responsible for understanding and verifying everything you submit, including code produced with coding assistants.
 
-Before merging, confirm that:
+Before requesting review, make sure automated checks pass, documentation matches the implementation, and no credentials, tokens, secrets, or machine-specific files are included.
 
-- The branch is current with `main` and has no conflicts.
-- Automated checks pass.
-- New behavior has appropriate tests.
-- The README reflects the implemented architecture and behavior.
-- No secrets, Inspector tokens, credentials, or machine-specific files are
-  included.
-- The author understands the submitted code and described it in their own words.
-- All actionable review comments are resolved.
+## Security
 
-Maintainers may close pull requests that ignore the contribution process, remain
-inactive after follow-up, duplicate existing work, or do not align with the
-project roadmap. Closing a pull request is not a judgment of the contributor.
+Do not report suspected security vulnerabilities publicly.
 
-## CodeRabbit reviews
+Follow [`SECURITY.md`](./SECURITY.md) for private vulnerability reporting and responsible testing requirements.
 
-CodeRabbit is configured through `.coderabbit.yaml`. Automatic review may be
-unavailable for repositories below CodeRabbit's eligibility threshold. When a
-review is not started automatically, comment on the pull request:
+## Code of Conduct
 
-```text
-@coderabbitai review
-```
+Contributors must follow [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md).
 
-Request a complete re-review after significant changes with:
+## License
 
-```text
-@coderabbitai full review
-```
-
-Evaluate each suggestion against the code and project rules. Apply valid
-findings, explain rejected findings in the discussion, and resolve the thread
-only after the code and documentation are consistent.
-
-## Security and responsible testing
-
-Do not report suspected security vulnerabilities in a public issue. Use GitHub's
-private vulnerability reporting feature when it is available, or contact the
-repository owner privately.
-
-Run fault scenarios only against systems you own or are authorized to test. Do
-not include production credentials, private protocol transcripts, or temporary
-MCP Inspector authentication tokens in issues, tests, fixtures, commits, or pull
-requests.
-
-Faults must default to bounded, local behavior. Any future capability that can
-terminate external processes, interrupt remote services, or generate substantial
-load requires explicit targeting and safeguards.
+By submitting a contribution, you agree that it may be distributed under the project's MIT License and that you have the right to submit it.
