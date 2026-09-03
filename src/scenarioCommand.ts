@@ -8,10 +8,21 @@ import {
   JsonScenarioReporter,
   type ScenarioReporter,
 } from "./reporter.js";
-import { runScenario, type Scenario, type ScenarioResult } from "./scenario.js";
+import {
+  DEFAULT_SCENARIO_TIMEOUT_MS,
+  runScenario,
+  type Scenario,
+  type ScenarioResult,
+} from "./scenario.js";
 import { createServer } from "./server.js";
+import { McpTargetClientAdapterProvider } from "./mcpTargetClientAdapter.js";
+import {
+  loadTargetClient,
+  TargetClientAdapterRegistry,
+  type ResolvedTargetClient,
+} from "./targetClientRegistry.js";
 
-export const DEFAULT_SCENARIO_TIMEOUT_MS = 30_000;
+export { DEFAULT_SCENARIO_TIMEOUT_MS } from "./scenario.js";
 
 const callSchema = z
   .object({
@@ -77,7 +88,7 @@ function toScenarioExpectation(expectation: ValidatedExpectation): Scenario["exp
 
 export type ReportFormat = "console" | "json";
 export type ScenarioCommandErrorCode =
-  "invalid_arguments" | "scenario_load_failed" | "scenario_execution_failed";
+  "invalid_arguments" | "scenario_load_failed" | "target_load_failed" | "scenario_execution_failed";
 
 export interface ScenarioCommandOutput {
   write(message: string): void;
@@ -188,6 +199,8 @@ export async function runScenarioCommand(
   path: string,
   format: ReportFormat,
   output: ScenarioCommandOutput,
+  targetPath?: string,
+  registry: TargetClientAdapterRegistry = createDefaultTargetClientRegistry(),
 ): Promise<number> {
   let scenario: Scenario;
 
@@ -203,8 +216,24 @@ export async function runScenarioCommand(
     return 1;
   }
 
+  let target: ResolvedTargetClient | undefined;
+  if (targetPath !== undefined) {
+    try {
+      target = await loadTargetClient(targetPath, registry);
+    } catch (error) {
+      writeScenarioCommandError(
+        "target_load_failed",
+        `Failed to run scenario: ${errorMessage(error)}`,
+        format,
+        output,
+      );
+      return 1;
+    }
+  }
+
   try {
-    const result = await executeScenario(scenario);
+    const result =
+      target === undefined ? await executeScenario(scenario) : await target.run(scenario);
     output.write(formatScenarioResult(result, format));
     return result.passed ? 0 : 2;
   } catch (error) {
@@ -216,4 +245,8 @@ export async function runScenarioCommand(
     );
     return 1;
   }
+}
+
+export function createDefaultTargetClientRegistry(): TargetClientAdapterRegistry {
+  return new TargetClientAdapterRegistry([new McpTargetClientAdapterProvider()]);
 }

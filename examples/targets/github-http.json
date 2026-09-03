@@ -1,0 +1,13 @@
+{
+  "adapter": "mcp",
+  "config": {
+    "transport": "http",
+    "url": "https://api.githubcopilot.com/mcp/",
+    "headers": {
+      "X-MCP-Tools": "get_me"
+    },
+    "headerEnv": {
+      "Authorization": "GITHUB_MCP_AUTHORIZATION"
+    }
+  }
+}
