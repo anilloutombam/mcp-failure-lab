@@ -36,7 +36,24 @@ const httpConfigSchema = z
     headers: z.record(z.string(), z.string()).optional(),
     headerEnv: z.record(z.string(), z.string()).optional(),
   })
-  .strict();
+  .strict()
+  .superRefine((config, context) => {
+    const url = new URL(config.url);
+    const hasHeaders =
+      Object.keys(config.headers ?? {}).length > 0 ||
+      Object.keys(config.headerEnv ?? {}).length > 0;
+
+    if (url.protocol === "https:") return;
+    if (url.protocol === "http:" && isLoopbackHost(url.hostname) && !hasHeaders) return;
+
+    context.addIssue({
+      code: "custom",
+      path: ["url"],
+      message: hasHeaders
+        ? "HTTP targets with headers must use HTTPS"
+        : "cleartext HTTP is allowed only for loopback targets",
+    });
+  });
 
 const stdioConfigSchema = z
   .object({
@@ -62,7 +79,10 @@ export class DefaultMcpTransportFactory implements McpTransportFactory {
   create(config: McpTargetConfig): StreamableHTTPClientTransport | StdioClientTransport {
     if (config.transport === "http") {
       return new StreamableHTTPClientTransport(new URL(config.url), {
-        requestInit: { headers: resolveHeaders(config.headers, config.headerEnv) },
+        requestInit: {
+          headers: resolveHeaders(config.headers, config.headerEnv),
+          redirect: "error",
+        },
       });
     }
     return new StdioClientTransport({
@@ -206,6 +226,18 @@ function resolveHeaders(
     resolved[header] = value;
   }
   return resolved;
+}
+
+function isLoopbackHost(hostname: string): boolean {
+  if (hostname === "localhost" || hostname === "::1" || hostname === "[::1]") return true;
+  const octets = hostname.split(".");
+  return octets.length === 4 && octets[0] === "127" && octets.every(isIpv4Octet);
+}
+
+function isIpv4Octet(value: string): boolean {
+  if (!/^\d{1,3}$/.test(value)) return false;
+  const number = Number(value);
+  return number >= 0 && number <= 255;
 }
 
 function errorMessage(error: unknown): string {

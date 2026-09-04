@@ -1,3 +1,4 @@
+import { performance } from "node:perf_hooks";
 import { SdkError, SdkErrorCode, type CallToolResult } from "@modelcontextprotocol/client";
 import type {
   ExternalExecutionDiagnostic,
@@ -38,13 +39,12 @@ export async function runExternalScenario<TConfig>(
 ): Promise<ScenarioResult> {
   const diagnostics: ExternalExecutionDiagnostic[] = [];
   const primaryTimeout = boundedTimeoutMs(scenario.timeoutMs ?? DEFAULT_SCENARIO_TIMEOUT_MS);
+  const setupOperationId = operationIds.next("setup");
   const setup = record(
     diagnostics,
-    await adapter.setup({
-      operationId: operationIds.next("setup"),
-      config,
-      timeoutMs: primaryTimeout,
-    }),
+    await captureAdapterOperation("setup", setupOperationId, () =>
+      adapter.setup({ operationId: setupOperationId, config, timeoutMs: primaryTimeout }),
+    ),
   );
 
   if (setup.outcome !== "success") {
@@ -60,32 +60,39 @@ export async function runExternalScenario<TConfig>(
       {
         callTool: async () => {
           const isObserver = callIndex++ > 0;
+          const operation = isObserver ? "observe" : "execute";
+          const operationId = operationIds.next(operation);
           const observation = record(
             diagnostics,
-            isObserver && scenario.observe !== undefined
-              ? await session.observe({
-                  operationId: operationIds.next("observe"),
-                  observation: scenario.observe.call,
-                  timeoutMs: boundedTimeoutMs(
-                    scenario.observe.timeoutMs ?? DEFAULT_SCENARIO_TIMEOUT_MS,
-                  ),
-                })
-              : await session.execute({
-                  operationId: operationIds.next("execute"),
-                  scenario: scenario.call,
-                  timeoutMs: primaryTimeout,
-                }),
+            await captureAdapterOperation(operation, operationId, () =>
+              isObserver && scenario.observe !== undefined
+                ? session.observe({
+                    operationId,
+                    observation: scenario.observe.call,
+                    timeoutMs: boundedTimeoutMs(
+                      scenario.observe.timeoutMs ?? DEFAULT_SCENARIO_TIMEOUT_MS,
+                    ),
+                  })
+                : session.execute({
+                    operationId,
+                    scenario: scenario.call,
+                    timeoutMs: primaryTimeout,
+                  }),
+            ),
           );
 
           if (observation.outcome === "success") return observation.value;
           if (observation.outcome === "timeout") {
+            const cancellationOperationId = operationIds.next("cancel");
             record(
               diagnostics,
-              await session.cancel({
-                operationId: operationIds.next("cancel"),
-                timeoutMs: primaryTimeout,
-                reason: `${observation.operation} timed out`,
-              }),
+              await captureAdapterOperation("cancel", cancellationOperationId, () =>
+                session.cancel({
+                  operationId: cancellationOperationId,
+                  timeoutMs: primaryTimeout,
+                  reason: `${observation.operation} timed out`,
+                }),
+              ),
             );
             throw new SdkError(SdkErrorCode.RequestTimeout, observation.failure.message);
           }
@@ -99,12 +106,12 @@ export async function runExternalScenario<TConfig>(
       scenario,
     );
   } finally {
+    const cleanupOperationId = operationIds.next("cleanup");
     record(
       diagnostics,
-      await session.cleanup({
-        operationId: operationIds.next("cleanup"),
-        timeoutMs: primaryTimeout,
-      }),
+      await captureAdapterOperation("cleanup", cleanupOperationId, () =>
+        session.cleanup({ operationId: cleanupOperationId, timeoutMs: primaryTimeout }),
+      ),
     );
   }
 
@@ -114,6 +121,32 @@ export async function runExternalScenario<TConfig>(
     passed: result.passed && adapterPassed,
     execution: { mode: "external", adapter: adapterName, passed: adapterPassed, diagnostics },
   };
+}
+
+async function captureAdapterOperation<T>(
+  operation: TargetClientOperation,
+  operationId: string,
+  execute: () => Promise<TargetClientObservation<T>>,
+): Promise<TargetClientObservation<T>> {
+  const startedAtMs = performance.now();
+  try {
+    return await execute();
+  } catch (error) {
+    const endedAtMs = performance.now();
+    return {
+      operation,
+      operationId,
+      startedAtMs,
+      endedAtMs,
+      durationMs: endedAtMs - startedAtMs,
+      outcome: "error",
+      failure: {
+        code: "adapter_operation_rejected",
+        message: error instanceof Error ? error.message : String(error),
+        cause: error,
+      },
+    };
+  }
 }
 
 export class TargetClientOperationError extends Error {

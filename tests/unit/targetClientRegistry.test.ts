@@ -53,4 +53,26 @@ describe("MCP target configuration", () => {
       }),
     ).toThrow();
   });
+
+  it("rejects unsafe HTTP targets and credential transmission", () => {
+    expect(() =>
+      mcpTargetConfigSchema.parse({ transport: "http", url: "http://example.com/mcp" }),
+    ).toThrow("cleartext HTTP is allowed only for loopback targets");
+    expect(() =>
+      mcpTargetConfigSchema.parse({
+        transport: "http",
+        url: "http://127.0.0.1:3000/mcp",
+        headerEnv: { Authorization: "TOKEN" },
+      }),
+    ).toThrow("HTTP targets with headers must use HTTPS");
+  });
+
+  it("allows credential-free loopback HTTP targets", () => {
+    expect(
+      mcpTargetConfigSchema.parse({ transport: "http", url: "http://127.0.0.1:3000/mcp" }),
+    ).toMatchObject({ transport: "http" });
+    expect(
+      mcpTargetConfigSchema.parse({ transport: "http", url: "http://[::1]:3000/mcp" }),
+    ).toMatchObject({ transport: "http" });
+  });
 });
