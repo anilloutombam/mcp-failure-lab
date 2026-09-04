@@ -80,9 +80,15 @@ describe("console scenario reporter", () => {
             adapter: "mcp",
             passed: false,
             diagnostics: [
-              { operation: "setup", outcome: "success", durationMs: 1.25 },
+              {
+                operation: "setup",
+                operationId: "setup",
+                outcome: "success",
+                durationMs: 1.25,
+              },
               {
                 operation: "cleanup",
+                operationId: "cleanup",
                 outcome: "error",
                 durationMs: 2.5,
                 message: "connection closed",
@@ -162,7 +168,14 @@ describe("JSON scenario reporter", () => {
       mode: "external" as const,
       adapter: "mcp",
       passed: true,
-      diagnostics: [{ operation: "setup" as const, outcome: "success" as const, durationMs: 1 }],
+      diagnostics: [
+        {
+          operation: "setup" as const,
+          operationId: "setup",
+          outcome: "success" as const,
+          durationMs: 1,
+        },
+      ],
     };
 
     expect(JSON.parse(jsonReporter.report(result({ execution })))).toMatchObject({ execution });
