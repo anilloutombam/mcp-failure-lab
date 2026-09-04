@@ -37,6 +37,7 @@ describe("CLI command", () => {
     expect(output.write).toHaveBeenCalledWith(
       expect.stringContaining("mcp-failure-lab <command> [options]"),
     );
+    expect(output.write).toHaveBeenCalledWith(expect.stringContaining("--target <file>"));
     expect(output.writeError).not.toHaveBeenCalled();
   });
 
