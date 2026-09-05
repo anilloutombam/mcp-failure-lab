@@ -122,33 +122,56 @@ export class McpTargetClientAdapter implements McpScenarioAdapter {
     client: Client,
   ): TargetClientSession<ScenarioCall, CallToolResult, ScenarioCall, CallToolResult> {
     let cleanup: Promise<TargetClientObservation<void>> | undefined;
+    const activeRequests = new Set<AbortController>();
     return {
       execute: (request) =>
-        this.call(client, "execute", request.operationId, request.scenario, request.timeoutMs),
+        this.call(
+          client,
+          activeRequests,
+          "execute",
+          request.operationId,
+          request.scenario,
+          request.timeoutMs,
+        ),
       observe: (request) =>
-        this.call(client, "observe", request.operationId, request.observation, request.timeoutMs),
-      cancel: (request) =>
-        Promise.resolve(this.success("cancel", request.operationId, this.clock.now(), undefined)),
+        this.call(
+          client,
+          activeRequests,
+          "observe",
+          request.operationId,
+          request.observation,
+          request.timeoutMs,
+        ),
+      cancel: (request) => {
+        const startedAtMs = this.clock.now();
+        for (const controller of activeRequests) controller.abort();
+        return Promise.resolve(this.success("cancel", request.operationId, startedAtMs, undefined));
+      },
       cleanup: (request) => (cleanup ??= this.close(client, request.operationId)),
     };
   }
 
   private async call(
     client: Client,
+    activeRequests: Set<AbortController>,
     operation: "execute" | "observe",
     operationId: string,
     call: ScenarioCall,
     timeoutMs: number,
   ): Promise<TargetClientObservation<CallToolResult>> {
     const startedAtMs = this.clock.now();
+    const controller = new AbortController();
+    activeRequests.add(controller);
     try {
       const result = await client.callTool(
         { name: call.tool, arguments: call.args },
-        { timeout: timeoutMs },
+        { timeout: timeoutMs, signal: controller.signal },
       );
       return this.success(operation, operationId, startedAtMs, result);
     } catch (error) {
-      return this.failure(operation, operationId, startedAtMs, error);
+      return this.failure(operation, operationId, startedAtMs, error, controller.signal.aborted);
+    } finally {
+      activeRequests.delete(controller);
     }
   }
 
@@ -185,10 +208,14 @@ export class McpTargetClientAdapter implements McpScenarioAdapter {
     operationId: string,
     startedAtMs: number,
     error: unknown,
+    wasCancelled = false,
   ): TargetClientObservation<never> {
     const endedAtMs = this.clock.now();
-    const outcome =
-      error instanceof SdkError && error.code === SdkErrorCode.RequestTimeout ? "timeout" : "error";
+    const outcome = wasCancelled
+      ? "cancelled"
+      : error instanceof SdkError && error.code === SdkErrorCode.RequestTimeout
+        ? "timeout"
+        : "error";
     return {
       operation,
       operationId,

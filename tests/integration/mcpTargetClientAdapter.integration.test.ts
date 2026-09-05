@@ -18,8 +18,25 @@ async function connectedAdapter() {
   return { server, session: setup.value };
 }
 
+async function settlesWithin<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<never>((_, reject) => {
+        timer = setTimeout(
+          () => reject(new Error(`operation did not settle within ${timeoutMs}ms`)),
+          timeoutMs,
+        );
+      }),
+    ]);
+  } finally {
+    if (timer !== undefined) clearTimeout(timer);
+  }
+}
+
 describe("MCP target-client adapter integration", () => {
-  it("executes, observes, cancels, and cleans up an HTTP session", async () => {
+  it("executes, observes, and cleans up an HTTP session", async () => {
     const { server, session } = await connectedAdapter();
     try {
       const execution = await session.execute({
@@ -30,10 +47,6 @@ describe("MCP target-client adapter integration", () => {
       const observation = await session.observe({
         operationId: "observe",
         observation: { tool: "ping", args: {} },
-        timeoutMs: boundedTimeoutMs(1_000),
-      });
-      const cancellation = await session.cancel({
-        operationId: "cancel",
         timeoutMs: boundedTimeoutMs(1_000),
       });
       const firstCleanup = await session.cleanup({
@@ -47,10 +60,34 @@ describe("MCP target-client adapter integration", () => {
 
       expect(execution).toMatchObject({ operation: "execute", outcome: "success" });
       expect(observation).toMatchObject({ operation: "observe", outcome: "success" });
-      expect(cancellation).toMatchObject({ operation: "cancel", outcome: "success" });
       expect(firstCleanup).toMatchObject({ operation: "cleanup", outcome: "success" });
       expect(secondCleanup).toBe(firstCleanup);
     } finally {
+      await server.close();
+    }
+  });
+
+  it("cancels a pending MCP call", async () => {
+    const { server, session } = await connectedAdapter();
+    try {
+      const execution = session.execute({
+        operationId: "execute-hang",
+        scenario: { tool: "hang", args: {} },
+        timeoutMs: boundedTimeoutMs(5_000),
+      });
+      const cancellation = await session.cancel({
+        operationId: "cancel",
+        timeoutMs: boundedTimeoutMs(1_000),
+      });
+      const settledExecution = await settlesWithin(execution, 250);
+
+      expect(cancellation).toMatchObject({ operation: "cancel", outcome: "success" });
+      expect(settledExecution).toMatchObject({ operation: "execute", outcome: "cancelled" });
+    } finally {
+      await session.cleanup({
+        operationId: "cleanup",
+        timeoutMs: boundedTimeoutMs(1_000),
+      });
       await server.close();
     }
   });
