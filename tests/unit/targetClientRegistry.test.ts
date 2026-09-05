@@ -3,7 +3,11 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { mcpTargetConfigSchema } from "../../src/mcpTargetClientAdapter.js";
+import { StdioClientTransport } from "@modelcontextprotocol/client/stdio";
+import {
+  DefaultMcpTransportFactory,
+  mcpTargetConfigSchema,
+} from "../../src/mcpTargetClientAdapter.js";
 import {
   TargetClientAdapterRegistry,
   loadTargetClient,
@@ -21,6 +25,7 @@ async function writeTarget(contents: string): Promise<string> {
 }
 
 afterEach(async () => {
+  vi.unstubAllEnvs();
   await Promise.all(
     temporaryDirectories.splice(0).map((directory) => rm(directory, { recursive: true })),
   );
@@ -124,5 +129,40 @@ describe("MCP target configuration", () => {
     expect(
       mcpTargetConfigSchema.parse({ transport: "http", url: "http://[::1]:3000/mcp" }),
     ).toMatchObject({ transport: "http" });
+  });
+
+  it("creates a stdio transport with process options", () => {
+    const factory = new DefaultMcpTransportFactory();
+    const transport = factory.create({
+      transport: "stdio",
+      command: "server",
+      args: ["--stdio"],
+      cwd: tmpdir(),
+      env: { LOG_LEVEL: "debug" },
+    });
+
+    expect(transport).toBeInstanceOf(StdioClientTransport);
+    expect(factory.create({ transport: "stdio", command: "server" })).toBeInstanceOf(
+      StdioClientTransport,
+    );
+  });
+
+  it("requires configured header environment variables", () => {
+    expect(() =>
+      new DefaultMcpTransportFactory().create({
+        transport: "http",
+        url: "https://example.com/mcp",
+        headerEnv: { Authorization: "MISSING_MCP_TEST_TOKEN" },
+      }),
+    ).toThrow("environment variable MISSING_MCP_TEST_TOKEN is required for header Authorization");
+
+    vi.stubEnv("MCP_TEST_TOKEN", "Bearer test-token");
+    expect(
+      new DefaultMcpTransportFactory().create({
+        transport: "http",
+        url: "https://example.com/mcp",
+        headerEnv: { Authorization: "MCP_TEST_TOKEN" },
+      }),
+    ).toBeDefined();
   });
 });
