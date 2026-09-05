@@ -24,10 +24,30 @@ describe("run command arguments", () => {
     });
   });
 
+  it("accepts an external MCP target configuration", () => {
+    expect(parseRunArguments(["scenario.json", "--target", "target.json"])).toEqual({
+      ok: true,
+      path: "scenario.json",
+      format: "console",
+      target: "target.json",
+    });
+  });
+
+  it("rejects missing and duplicate external target values", () => {
+    expect(parseRunArguments(["scenario.json", "--target"])).toMatchObject({ ok: false });
+    expect(parseRunArguments(["scenario.json", "--target", "--report", "json"])).toMatchObject({
+      ok: false,
+    });
+    expect(
+      parseRunArguments(["scenario.json", "--target", "one.json", "--target", "two.json"]),
+    ).toMatchObject({ ok: false });
+  });
+
   it("reports a missing scenario file", () => {
     expect(parseRunArguments([])).toEqual({
       ok: false,
-      error: "Missing scenario file. Usage: mcp-failure-lab run <file> [--report console|json]",
+      error:
+        "Missing scenario file. Usage: mcp-failure-lab run <file> [--report console|json] [--target file]",
       format: "console",
     });
   });
@@ -67,7 +87,8 @@ describe("run command arguments", () => {
   it("reports a missing file in JSON mode when only the format is provided", () => {
     expect(parseRunArguments(["--report", "json"])).toEqual({
       ok: false,
-      error: "Missing scenario file. Usage: mcp-failure-lab run <file> [--report console|json]",
+      error:
+        "Missing scenario file. Usage: mcp-failure-lab run <file> [--report console|json] [--target file]",
       format: "json",
     });
   });

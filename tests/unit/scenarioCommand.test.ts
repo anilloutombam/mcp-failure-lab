@@ -10,6 +10,7 @@ import {
   runScenarioCommand,
   writeScenarioCommandError,
 } from "../../src/scenarioCommand.js";
+import { TargetClientAdapterRegistry } from "../../src/targetClientRegistry.js";
 
 const temporaryDirectories: string[] = [];
 
@@ -301,5 +302,83 @@ describe("scenario command", () => {
       passed: false,
       error: { code: "scenario_load_failed" },
     });
+  });
+
+  it("runs a scenario through a configured external target", async () => {
+    const scenarioPath = await writeScenario(
+      JSON.stringify({
+        name: "external ping",
+        call: { tool: "ping", args: {} },
+        expect: { outcome: "success" },
+      }),
+    );
+    const targetPath = await writeScenario(JSON.stringify({ adapter: "custom", config: {} }));
+    const run = vi.fn().mockResolvedValue({
+      name: "external ping",
+      outcome: "success",
+      durationMs: 1,
+      passed: true,
+      failures: [],
+    });
+    const registry = new TargetClientAdapterRegistry([
+      { name: "custom", resolve: () => ({ name: "custom", run }) },
+    ]);
+    const output = { write: vi.fn(), writeError: vi.fn() };
+
+    await expect(
+      runScenarioCommand(scenarioPath, "json", output, targetPath, registry),
+    ).resolves.toBe(0);
+    expect(run).toHaveBeenCalledOnce();
+    expect(output.writeError).not.toHaveBeenCalled();
+  });
+
+  it("reports target configuration failures", async () => {
+    const scenarioPath = await writeScenario(
+      JSON.stringify({
+        name: "external ping",
+        call: { tool: "ping", args: {} },
+        expect: { outcome: "success" },
+      }),
+    );
+    const output = { write: vi.fn(), writeError: vi.fn() };
+
+    await expect(
+      runScenarioCommand(
+        scenarioPath,
+        "json",
+        output,
+        "missing-target.json",
+        new TargetClientAdapterRegistry(),
+      ),
+    ).resolves.toBe(1);
+    expect(JSON.parse(output.write.mock.calls[0]?.[0] as string)).toMatchObject({
+      error: { code: "target_load_failed" },
+    });
+  });
+
+  it("reports external target execution failures", async () => {
+    const scenarioPath = await writeScenario(
+      JSON.stringify({
+        name: "external ping",
+        call: { tool: "ping", args: {} },
+        expect: { outcome: "success" },
+      }),
+    );
+    const targetPath = await writeScenario(JSON.stringify({ adapter: "custom", config: {} }));
+    const registry = new TargetClientAdapterRegistry([
+      {
+        name: "custom",
+        resolve: () => ({
+          name: "custom",
+          run: vi.fn().mockRejectedValue(new Error("target disconnected")),
+        }),
+      },
+    ]);
+    const output = { write: vi.fn(), writeError: vi.fn() };
+
+    await expect(
+      runScenarioCommand(scenarioPath, "console", output, targetPath, registry),
+    ).resolves.toBe(1);
+    expect(output.writeError).toHaveBeenCalledWith("Failed to run scenario: target disconnected");
   });
 });

@@ -1,0 +1,16 @@
+{
+  "name": "GitLab MCP searches projects",
+  "call": {
+    "tool": "search",
+    "args": {
+      "scope": "projects",
+      "search": "mcp-failure-lab",
+      "per_page": 5
+    }
+  },
+  "timeoutMs": 30000,
+  "expect": {
+    "outcome": "success",
+    "maxDurationMs": 30000
+  }
+}

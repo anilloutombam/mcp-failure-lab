@@ -1,0 +1,8 @@
+{
+  "adapter": "mcp",
+  "config": {
+    "transport": "stdio",
+    "command": "npx",
+    "args": ["your-mcp-server"]
+  }
+}

@@ -1,7 +1,7 @@
 import type { ReportFormat } from "./scenarioCommand.js";
 
 export type RunArguments =
-  | { ok: true; path: string; format: ReportFormat }
+  | { ok: true; path: string; format: ReportFormat; target?: string }
   | { ok: false; error: string; format: ReportFormat };
 
 export function parseRunArguments(args: string[]): RunArguments {
@@ -9,6 +9,7 @@ export function parseRunArguments(args: string[]): RunArguments {
   const selectedReport = reportIndex === -1 ? undefined : args[reportIndex + 1];
   let format: ReportFormat = selectedReport === "json" ? "json" : "console";
   let path: string | undefined;
+  let target: string | undefined;
 
   for (let index = 0; index < args.length; index += 1) {
     const argument = args[index];
@@ -19,6 +20,18 @@ export function parseRunArguments(args: string[]): RunArguments {
       }
 
       format = value;
+      index += 1;
+      continue;
+    }
+    if (argument === "--target") {
+      if (target !== undefined) {
+        return { ok: false, error: "--target may only be specified once", format };
+      }
+      const value = args[index + 1];
+      if (value === undefined || value.startsWith("-")) {
+        return { ok: false, error: "--target requires a configuration file", format };
+      }
+      target = value;
       index += 1;
       continue;
     }
@@ -37,10 +50,11 @@ export function parseRunArguments(args: string[]): RunArguments {
   if (!path) {
     return {
       ok: false,
-      error: "Missing scenario file. Usage: mcp-failure-lab run <file> [--report console|json]",
+      error:
+        "Missing scenario file. Usage: mcp-failure-lab run <file> [--report console|json] [--target file]",
       format,
     };
   }
 
-  return { ok: true, path, format };
+  return { ok: true, path, format, ...(target === undefined ? {} : { target }) };
 }

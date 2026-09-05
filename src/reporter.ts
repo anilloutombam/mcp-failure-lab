@@ -20,6 +20,7 @@ export interface JsonScenarioReport {
     result?: ScenarioResult["result"];
     error?: string;
   };
+  execution?: ScenarioResult["execution"];
 }
 
 function errorMessage(error: unknown): string {
@@ -41,6 +42,17 @@ export class ConsoleScenarioReporter implements ScenarioReporter {
         `Observer assertions: ${result.observer.passed ? "passed" : "failed"}`,
       );
     }
+    if (result.execution !== undefined)
+      lines.push(
+        `Execution: external (${result.execution.adapter})`,
+        `Adapter lifecycle: ${result.execution.passed ? "passed" : "failed"}`,
+        ...result.execution.diagnostics.map(
+          (item) =>
+            `Adapter ${item.operation}: ${item.outcome} (${item.durationMs.toFixed(2)} ms)${
+              item.message === undefined ? "" : ` - ${item.message}`
+            }`,
+        ),
+      );
 
     lines.push(`Assertions: ${result.passed ? "passed" : "failed"}`);
 
@@ -60,6 +72,7 @@ export class JsonScenarioReporter implements ScenarioReporter {
       durationMs: result.durationMs,
       passed: result.passed,
       failures: [...result.failures],
+      ...(result.execution === undefined ? {} : { execution: result.execution }),
       ...(result.result === undefined ? {} : { result: result.result }),
       ...(result.error === undefined ? {} : { error: errorMessage(result.error) }),
       ...(result.observer === undefined

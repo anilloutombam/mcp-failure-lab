@@ -70,6 +70,42 @@ describe("console scenario reporter", () => {
       ].join("\n"),
     );
   });
+
+  it("reports external adapter lifecycle diagnostics", () => {
+    expect(
+      consoleReporter.report(
+        result({
+          execution: {
+            mode: "external",
+            adapter: "mcp",
+            passed: false,
+            diagnostics: [
+              {
+                operation: "setup",
+                operationId: "setup",
+                outcome: "success",
+                durationMs: 1.25,
+              },
+              {
+                operation: "cleanup",
+                operationId: "cleanup",
+                outcome: "error",
+                durationMs: 2.5,
+                message: "connection closed",
+              },
+            ],
+          },
+        }),
+      ),
+    ).toContain(
+      [
+        "Execution: external (mcp)",
+        "Adapter lifecycle: failed",
+        "Adapter setup: success (1.25 ms)",
+        "Adapter cleanup: error (2.50 ms) - connection closed",
+      ].join("\n"),
+    );
+  });
 });
 
 describe("JSON scenario reporter", () => {
@@ -125,5 +161,23 @@ describe("JSON scenario reporter", () => {
         error: "observer unavailable",
       },
     });
+  });
+
+  it("serializes external execution metadata", () => {
+    const execution = {
+      mode: "external" as const,
+      adapter: "mcp",
+      passed: true,
+      diagnostics: [
+        {
+          operation: "setup" as const,
+          operationId: "setup",
+          outcome: "success" as const,
+          durationMs: 1,
+        },
+      ],
+    };
+
+    expect(JSON.parse(jsonReporter.report(result({ execution })))).toMatchObject({ execution });
   });
 });

@@ -1,0 +1,12 @@
+{
+  "name": "GitHub MCP returns the authenticated user",
+  "call": {
+    "tool": "get_me",
+    "args": {}
+  },
+  "timeoutMs": 10000,
+  "expect": {
+    "outcome": "success",
+    "maxDurationMs": 10000
+  }
+}

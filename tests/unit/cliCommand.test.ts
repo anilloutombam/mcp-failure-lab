@@ -37,6 +37,7 @@ describe("CLI command", () => {
     expect(output.write).toHaveBeenCalledWith(
       expect.stringContaining("mcp-failure-lab <command> [options]"),
     );
+    expect(output.write).toHaveBeenCalledWith(expect.stringContaining("--target <file>"));
     expect(output.writeError).not.toHaveBeenCalled();
   });
 
@@ -136,6 +137,19 @@ describe("CLI command", () => {
     expect(output.write).not.toHaveBeenCalled();
     expect(output.writeError).toHaveBeenCalledWith(
       expect.stringContaining("Missing scenario file"),
+    );
+  });
+
+  it("dispatches valid run arguments", async () => {
+    const output = createOutput();
+    const dependencies = createDependencies();
+
+    await expect(
+      runCliCommand(["run", "missing.json", "--target", "target.json"], output, dependencies),
+    ).resolves.toBe(1);
+
+    expect(output.writeError).toHaveBeenCalledWith(
+      expect.stringContaining("cannot read scenario file missing.json"),
     );
   });
 });

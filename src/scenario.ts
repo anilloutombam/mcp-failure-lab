@@ -4,6 +4,7 @@ import { SdkErrorCode, SdkError } from "@modelcontextprotocol/client";
 import type { Client, CallToolResult } from "@modelcontextprotocol/client";
 
 export type ScenarioOutcome = "success" | "error" | "timeout";
+export const DEFAULT_SCENARIO_TIMEOUT_MS = 30_000;
 
 export interface ScenarioResultExpectation {
   isError?: boolean;
@@ -44,6 +45,21 @@ export interface ScenarioObservationResult {
   error?: unknown;
 }
 
+export interface ExternalExecutionDiagnostic {
+  operation: string;
+  operationId: string;
+  outcome: string;
+  durationMs: number;
+  message?: string;
+}
+
+export interface ExternalExecutionResult {
+  mode: "external";
+  adapter: string;
+  passed: boolean;
+  diagnostics: ExternalExecutionDiagnostic[];
+}
+
 export interface ScenarioResult {
   name: string;
   outcome: ScenarioOutcome;
@@ -53,6 +69,7 @@ export interface ScenarioResult {
   result?: CallToolResult;
   error?: unknown;
   observer?: ScenarioObservationResult;
+  execution?: ExternalExecutionResult;
 }
 
 export interface MonotonicClock {
