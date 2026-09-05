@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { startHttpServer } from "../../src/httpServer.js";
-import { McpTargetClientAdapter } from "../../src/mcpTargetClientAdapter.js";
+import {
+  DefaultMcpTransportFactory,
+  McpTargetClientAdapter,
+  type McpClient,
+} from "../../src/mcpTargetClientAdapter.js";
 import { boundedTimeoutMs } from "../../src/targetClientAdapter.js";
 
 async function connectedAdapter() {
@@ -119,5 +123,62 @@ describe("MCP target-client adapter integration", () => {
     });
 
     expect(setup).toMatchObject({ operation: "setup", outcome: "error" });
+  });
+
+  it("bounds cleanup when the MCP client does not close", async () => {
+    const client: McpClient = {
+      connect: () => Promise.resolve(),
+      callTool: () => Promise.reject(new Error("not used")),
+      close: () => new Promise<void>(() => undefined),
+    };
+    const adapter = new McpTargetClientAdapter(
+      new DefaultMcpTransportFactory(),
+      performance,
+      () => client,
+    );
+    const setup = await adapter.setup({
+      operationId: "setup",
+      config: { transport: "http", url: "http://127.0.0.1:1/mcp" },
+      timeoutMs: boundedTimeoutMs(100),
+    });
+    if (setup.outcome !== "success") throw new Error(setup.failure.message);
+
+    const cleanup = await settlesWithin(
+      setup.value.cleanup({
+        operationId: "cleanup-timeout",
+        timeoutMs: boundedTimeoutMs(10),
+      }),
+      250,
+    );
+
+    expect(cleanup).toMatchObject({ operation: "cleanup", outcome: "timeout" });
+  });
+
+  it("bounds client close after setup fails", async () => {
+    const client: McpClient = {
+      connect: () => Promise.reject(new Error("connection failed")),
+      callTool: () => Promise.reject(new Error("not used")),
+      close: () => new Promise<void>(() => undefined),
+    };
+    const adapter = new McpTargetClientAdapter(
+      new DefaultMcpTransportFactory(),
+      performance,
+      () => client,
+    );
+
+    const setup = await settlesWithin(
+      adapter.setup({
+        operationId: "setup-failed",
+        config: { transport: "http", url: "http://127.0.0.1:1/mcp" },
+        timeoutMs: boundedTimeoutMs(10),
+      }),
+      250,
+    );
+
+    expect(setup).toMatchObject({
+      operation: "setup",
+      outcome: "error",
+      failure: { message: "connection failed" },
+    });
   });
 });

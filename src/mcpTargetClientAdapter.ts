@@ -75,6 +75,18 @@ export interface McpTransportFactory {
   create(config: McpTargetConfig): StreamableHTTPClientTransport | StdioClientTransport;
 }
 
+export interface McpClient {
+  connect(
+    transport: StreamableHTTPClientTransport | StdioClientTransport,
+    options: { timeout: number },
+  ): Promise<void>;
+  callTool(
+    params: { name: string; arguments: Record<string, unknown> },
+    options: { timeout: number; signal: AbortSignal },
+  ): Promise<CallToolResult>;
+  close(): Promise<void>;
+}
+
 export class DefaultMcpTransportFactory implements McpTransportFactory {
   create(config: McpTargetConfig): StreamableHTTPClientTransport | StdioClientTransport {
     if (config.transport === "http") {
@@ -98,6 +110,7 @@ export class McpTargetClientAdapter implements McpScenarioAdapter {
   constructor(
     private readonly transports: McpTransportFactory = new DefaultMcpTransportFactory(),
     private readonly clock: MonotonicClock = performance,
+    private readonly createClient: () => McpClient = () => new Client(CLIENT_INFO),
   ) {}
 
   async setup(
@@ -108,18 +121,18 @@ export class McpTargetClientAdapter implements McpScenarioAdapter {
     >
   > {
     const startedAtMs = this.clock.now();
-    const client = new Client(CLIENT_INFO);
+    const client = this.createClient();
     try {
       await client.connect(this.transports.create(request.config), { timeout: request.timeoutMs });
       return this.success("setup", request.operationId, startedAtMs, this.createSession(client));
     } catch (error) {
-      await client.close().catch(() => undefined);
+      await this.closeClient(client, request.timeoutMs).catch(() => undefined);
       return this.failure("setup", request.operationId, startedAtMs, error);
     }
   }
 
   private createSession(
-    client: Client,
+    client: McpClient,
   ): TargetClientSession<ScenarioCall, CallToolResult, ScenarioCall, CallToolResult> {
     let cleanup: Promise<TargetClientObservation<void>> | undefined;
     const activeRequests = new Set<AbortController>();
@@ -147,12 +160,13 @@ export class McpTargetClientAdapter implements McpScenarioAdapter {
         for (const controller of activeRequests) controller.abort();
         return Promise.resolve(this.success("cancel", request.operationId, startedAtMs, undefined));
       },
-      cleanup: (request) => (cleanup ??= this.close(client, request.operationId)),
+      cleanup: (request) =>
+        (cleanup ??= this.close(client, request.operationId, request.timeoutMs)),
     };
   }
 
   private async call(
-    client: Client,
+    client: McpClient,
     activeRequests: Set<AbortController>,
     operation: "execute" | "observe",
     operationId: string,
@@ -175,13 +189,37 @@ export class McpTargetClientAdapter implements McpScenarioAdapter {
     }
   }
 
-  private async close(client: Client, operationId: string): Promise<TargetClientObservation<void>> {
+  private async close(
+    client: McpClient,
+    operationId: string,
+    timeoutMs: number,
+  ): Promise<TargetClientObservation<void>> {
     const startedAtMs = this.clock.now();
     try {
-      await client.close();
+      await this.closeClient(client, timeoutMs);
       return this.success("cleanup", operationId, startedAtMs, undefined);
     } catch (error) {
       return this.failure("cleanup", operationId, startedAtMs, error);
+    }
+  }
+
+  private async closeClient(client: McpClient, timeoutMs: number): Promise<void> {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    try {
+      await Promise.race([
+        client.close(),
+        new Promise<never>((_, reject) => {
+          timer = setTimeout(
+            () =>
+              reject(
+                new SdkError(SdkErrorCode.RequestTimeout, "Client close timed out", { timeoutMs }),
+              ),
+            timeoutMs,
+          );
+        }),
+      ]);
+    } finally {
+      if (timer !== undefined) clearTimeout(timer);
     }
   }
 
