@@ -1,8 +1,10 @@
-import { describe, expect, it } from "vitest";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/client";
+import { describe, expect, it, vi } from "vitest";
 import { startHttpServer } from "../../src/httpServer.js";
 import {
   DefaultMcpTransportFactory,
   McpTargetClientAdapter,
+  McpTargetClientAdapterProvider,
   type McpClient,
 } from "../../src/mcpTargetClientAdapter.js";
 import { boundedTimeoutMs } from "../../src/targetClientAdapter.js";
@@ -40,6 +42,31 @@ async function settlesWithin<T>(promise: Promise<T>, timeoutMs: number): Promise
 }
 
 describe("MCP target-client adapter integration", () => {
+  it("runs a scenario through the MCP provider", async () => {
+    const server = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
+    try {
+      const target = new McpTargetClientAdapterProvider().resolve({
+        transport: "http",
+        url: server.url.toString(),
+      });
+
+      const result = await target.run({
+        name: "provider ping",
+        call: { tool: "ping", args: {} },
+        timeoutMs: 1_000,
+        expect: { outcome: "success" },
+      });
+
+      expect(result).toMatchObject({
+        name: "provider ping",
+        passed: true,
+        execution: { mode: "external", adapter: "mcp", passed: true },
+      });
+    } finally {
+      await server.close();
+    }
+  });
+
   it("executes, observes, and cleans up an HTTP session", async () => {
     const { server, session } = await connectedAdapter();
     try {
@@ -66,6 +93,31 @@ describe("MCP target-client adapter integration", () => {
       expect(observation).toMatchObject({ operation: "observe", outcome: "success" });
       expect(firstCleanup).toMatchObject({ operation: "cleanup", outcome: "success" });
       expect(secondCleanup).toBe(firstCleanup);
+    } finally {
+      await server.close();
+    }
+  });
+
+  it("terminates an HTTP session before closing the client", async () => {
+    const server = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
+    const transport = new StreamableHTTPClientTransport(server.url);
+    const terminateSession = vi.spyOn(transport, "terminateSession");
+    const adapter = new McpTargetClientAdapter({ create: () => transport });
+    try {
+      const setup = await adapter.setup({
+        operationId: "setup",
+        config: { transport: "http", url: server.url.toString() },
+        timeoutMs: boundedTimeoutMs(1_000),
+      });
+      if (setup.outcome !== "success") throw new Error(setup.failure.message);
+
+      const cleanup = await setup.value.cleanup({
+        operationId: "cleanup",
+        timeoutMs: boundedTimeoutMs(1_000),
+      });
+
+      expect(cleanup).toMatchObject({ operation: "cleanup", outcome: "success" });
+      expect(terminateSession).toHaveBeenCalledOnce();
     } finally {
       await server.close();
     }

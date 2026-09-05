@@ -26,6 +26,7 @@ type McpScenarioAdapter = TargetClientAdapter<
   ScenarioCall,
   CallToolResult
 >;
+export type McpTransport = StreamableHTTPClientTransport | StdioClientTransport;
 
 const CLIENT_INFO = { name: "mcp-failure-lab-external-runner", version: "0.1.0" } as const;
 
@@ -72,14 +73,11 @@ export const mcpTargetConfigSchema = z.discriminatedUnion("transport", [
 export type McpTargetConfig = z.infer<typeof mcpTargetConfigSchema>;
 
 export interface McpTransportFactory {
-  create(config: McpTargetConfig): StreamableHTTPClientTransport | StdioClientTransport;
+  create(config: McpTargetConfig): McpTransport;
 }
 
 export interface McpClient {
-  connect(
-    transport: StreamableHTTPClientTransport | StdioClientTransport,
-    options: { timeout: number },
-  ): Promise<void>;
+  connect(transport: McpTransport, options: { timeout: number }): Promise<void>;
   callTool(
     params: { name: string; arguments: Record<string, unknown> },
     options: { timeout: number; signal: AbortSignal },
@@ -122,17 +120,25 @@ export class McpTargetClientAdapter implements McpScenarioAdapter {
   > {
     const startedAtMs = this.clock.now();
     const client = this.createClient();
+    let transport: McpTransport | undefined;
     try {
-      await client.connect(this.transports.create(request.config), { timeout: request.timeoutMs });
-      return this.success("setup", request.operationId, startedAtMs, this.createSession(client));
+      transport = this.transports.create(request.config);
+      await client.connect(transport, { timeout: request.timeoutMs });
+      return this.success(
+        "setup",
+        request.operationId,
+        startedAtMs,
+        this.createSession(client, transport),
+      );
     } catch (error) {
-      await this.closeClient(client, request.timeoutMs).catch(() => undefined);
+      await this.closeClient(client, transport, request.timeoutMs).catch(() => undefined);
       return this.failure("setup", request.operationId, startedAtMs, error);
     }
   }
 
   private createSession(
     client: McpClient,
+    transport: McpTransport,
   ): TargetClientSession<ScenarioCall, CallToolResult, ScenarioCall, CallToolResult> {
     let cleanup: Promise<TargetClientObservation<void>> | undefined;
     const activeRequests = new Set<AbortController>();
@@ -161,7 +167,7 @@ export class McpTargetClientAdapter implements McpScenarioAdapter {
         return Promise.resolve(this.success("cancel", request.operationId, startedAtMs, undefined));
       },
       cleanup: (request) =>
-        (cleanup ??= this.close(client, request.operationId, request.timeoutMs)),
+        (cleanup ??= this.close(client, transport, request.operationId, request.timeoutMs)),
     };
   }
 
@@ -191,30 +197,53 @@ export class McpTargetClientAdapter implements McpScenarioAdapter {
 
   private async close(
     client: McpClient,
+    transport: McpTransport,
     operationId: string,
     timeoutMs: number,
   ): Promise<TargetClientObservation<void>> {
     const startedAtMs = this.clock.now();
     try {
-      await this.closeClient(client, timeoutMs);
+      await this.closeClient(client, transport, timeoutMs);
       return this.success("cleanup", operationId, startedAtMs, undefined);
     } catch (error) {
       return this.failure("cleanup", operationId, startedAtMs, error);
     }
   }
 
-  private async closeClient(client: McpClient, timeoutMs: number): Promise<void> {
+  private async closeClient(
+    client: McpClient,
+    transport: McpTransport | undefined,
+    timeoutMs: number,
+  ): Promise<void> {
+    const deadlineAt = Date.now() + timeoutMs;
+    let firstError: unknown;
+
+    if (transport instanceof StreamableHTTPClientTransport) {
+      try {
+        await this.beforeDeadline(transport.terminateSession(), deadlineAt);
+      } catch (error) {
+        firstError = error;
+      }
+    }
+
+    try {
+      await this.beforeDeadline(client.close(), deadlineAt);
+    } catch (error) {
+      firstError ??= error;
+    }
+
+    if (firstError !== undefined) throw firstError;
+  }
+
+  private async beforeDeadline(operation: Promise<void>, deadlineAt: number): Promise<void> {
     let timer: ReturnType<typeof setTimeout> | undefined;
     try {
       await Promise.race([
-        client.close(),
+        operation,
         new Promise<never>((_, reject) => {
           timer = setTimeout(
-            () =>
-              reject(
-                new SdkError(SdkErrorCode.RequestTimeout, "Client close timed out", { timeoutMs }),
-              ),
-            timeoutMs,
+            () => reject(new SdkError(SdkErrorCode.RequestTimeout, "Client cleanup timed out")),
+            Math.max(0, deadlineAt - Date.now()),
           );
         }),
       ]);
