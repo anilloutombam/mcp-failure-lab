@@ -103,11 +103,15 @@ Pass a target configuration to execute the same scenario against a Streamable HT
 server:
 
 ```bash
+# From a repository checkout
 npm run dev -- run path/to/scenario.json --target path/to/target.json
+
+# With the published package and your own scenario and target files
+npx mcp-failure-lab run path/to/scenario.json --target path/to/target.json
 ```
 
 See the [external MCP targets guide](https://mcplab.dev/docs/external-targets/) for complete HTTP
-and stdio configuration, GitLab and Stripe integration guidance, browser-based MCP Inspector
+and stdio configuration, verified GitHub and GitLab workflows, browser-based MCP Inspector
 validation, lifecycle diagnostics, credential handling, and troubleshooting.
 
 The repository also includes a safe, read-only GitHub MCP example using the official remote server:
@@ -126,7 +130,7 @@ npm run dev -- run examples/scenarios/gitlab-search-projects.json \
 ```
 
 The first connection can open a browser for GitLab authorization. See the external-target guide
-for prerequisites and the difference between GitLab OAuth and GitHub token authentication.
+for GitLab prerequisites and the difference between GitLab OAuth and GitHub token authentication.
 
 ## Target-client adapter contract
 
