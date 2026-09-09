@@ -5,9 +5,11 @@ import { z } from "zod";
 
 import {
   ConsoleScenarioReporter,
+  JUnitScenarioReporter,
   JsonScenarioReporter,
   type ScenarioReporter,
 } from "./reporter.js";
+import { serializeJUnitReport } from "./junitXml.js";
 import {
   DEFAULT_SCENARIO_TIMEOUT_MS,
   runScenario,
@@ -86,7 +88,7 @@ function toScenarioExpectation(expectation: ValidatedExpectation): Scenario["exp
   };
 }
 
-export type ReportFormat = "console" | "json";
+export type ReportFormat = "console" | "json" | "junit";
 export type ScenarioCommandErrorCode =
   "invalid_arguments" | "scenario_load_failed" | "target_load_failed" | "scenario_execution_failed";
 
@@ -115,6 +117,26 @@ export function writeScenarioCommandError(
         null,
         2,
       ),
+    );
+    return;
+  }
+
+  if (format === "junit") {
+    output.write(
+      serializeJUnitReport({
+        name: code,
+        durationMs: 0,
+        testCases: [
+          {
+            name: code,
+            source: "execution",
+            durationMs: 0,
+            outcome: { status: "errored", message },
+            diagnostics: [],
+          },
+        ],
+        executionDiagnostics: [],
+      }),
     );
     return;
   }
@@ -166,8 +188,17 @@ export async function loadScenario(path: string): Promise<Scenario> {
 }
 
 export function formatScenarioResult(result: ScenarioResult, format: ReportFormat): string {
-  const reporter: ScenarioReporter =
-    format === "json" ? new JsonScenarioReporter() : new ConsoleScenarioReporter();
+  let reporter: ScenarioReporter;
+  switch (format) {
+    case "json":
+      reporter = new JsonScenarioReporter();
+      break;
+    case "junit":
+      reporter = new JUnitScenarioReporter();
+      break;
+    default:
+      reporter = new ConsoleScenarioReporter();
+  }
   return reporter.report(result);
 }
 

@@ -32,7 +32,7 @@ Options:
   --host <host>       HTTP bind host (default: 127.0.0.1)
   --port <port>       HTTP bind port (default: 3000)
   --path <path>       HTTP endpoint path (default: /mcp)
-  --report <format>   Report format for run: console or json (default: console)
+  --report <format>   Report format for run: console, json, or junit (default: console)
   --target <file>     Run against an HTTP or stdio MCP target configuration
   -h, --help         Show this help message
   -v, --version      Show the current version
