@@ -28,7 +28,6 @@ describe("JUnit scenario report mapping", () => {
           diagnostics: [],
         },
       ],
-      executionDiagnostics: [],
     });
   });
 
@@ -122,6 +121,11 @@ describe("JUnit scenario report mapping", () => {
       source: "execution",
       durationMs: 10,
       outcome: { status: "passed" },
+      diagnostics: [
+        "setup: success (2.00 ms)",
+        "execute: success (5.00 ms)",
+        "cleanup: success (3.00 ms)",
+      ],
     });
   });
 
@@ -148,8 +152,8 @@ describe("JUnit scenario report mapping", () => {
 
     expect(report.testCases[1]).toMatchObject({
       source: "execution",
-      outcome: { status: "errored", message: "cleanup: error - connection closed" },
-      diagnostics: ["cleanup: error - connection closed"],
+      outcome: { status: "errored", message: "cleanup: error (3.00 ms) - connection closed" },
+      diagnostics: ["cleanup: error (3.00 ms) - connection closed"],
     });
   });
 });

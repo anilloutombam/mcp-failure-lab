@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { JUnitScenarioReport } from "../../src/junitReport.js";
-import { escapeXml, serializeJUnitReport } from "../../src/junitXml.js";
+import { escapeXml, escapeXmlAttribute, serializeJUnitReport } from "../../src/junitXml.js";
 
 function report(overrides: Partial<JUnitScenarioReport> = {}): JUnitScenarioReport {
   return {
@@ -16,7 +16,6 @@ function report(overrides: Partial<JUnitScenarioReport> = {}): JUnitScenarioRepo
         diagnostics: [],
       },
     ],
-    executionDiagnostics: [],
     ...overrides,
   };
 }
@@ -106,26 +105,27 @@ describe("JUnit XML serialization", () => {
 
   it("escapes XML-sensitive content and replaces invalid characters", () => {
     expect(escapeXml(`<&>"'\u0000🚀`)).toBe("&lt;&amp;&gt;&quot;&apos;�🚀");
+    expect(escapeXmlAttribute("first\nsecond\t\r")).toBe("first&#xA;second&#x9;&#xD;");
 
     const xml = serializeJUnitReport(
       report({
-        name: `scenario <&>"'`,
+        name: `scenario <&>"'\nnext`,
         testCases: [
           {
             name: `case <&>"'`,
             source: "primary",
             durationMs: 1,
-            outcome: { status: "failed", failures: [`failure <&>"'`] },
+            outcome: { status: "failed", failures: [`failure <&>"'\nnext`] },
             diagnostics: [],
           },
         ],
       }),
     );
 
-    expect(xml).toContain('name="scenario &lt;&amp;&gt;&quot;&apos;"');
+    expect(xml).toContain('name="scenario &lt;&amp;&gt;&quot;&apos;&#xA;next"');
     expect(xml).toContain('name="case &lt;&amp;&gt;&quot;&apos;"');
     expect(xml).toContain(
-      '<failure message="failure &lt;&amp;&gt;&quot;&apos;">failure &lt;&amp;&gt;&quot;&apos;</failure>',
+      '<failure message="failure &lt;&amp;&gt;&quot;&apos;&#xA;next">failure &lt;&amp;&gt;&quot;&apos;\nnext</failure>',
     );
   });
 });

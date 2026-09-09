@@ -23,7 +23,6 @@ export interface JUnitScenarioReport {
   name: string;
   durationMs: number;
   testCases: readonly JUnitTestCaseReport[];
-  executionDiagnostics: readonly ExternalExecutionDiagnostic[];
 }
 
 export const JUNIT_XML_OUTCOME_ELEMENTS = {
@@ -62,15 +61,14 @@ function observerTestCase(
 function executionTestCase(result: ScenarioResult): JUnitTestCaseReport | undefined {
   if (result.execution === undefined) return undefined;
 
-  const failedDiagnostics = result.execution.diagnostics.filter(
-    (diagnostic) => diagnostic.outcome !== "success",
-  );
-  const diagnostics = failedDiagnostics.map(
-    (diagnostic) =>
-      `${diagnostic.operation}: ${diagnostic.outcome}${
-        diagnostic.message === undefined ? "" : ` - ${diagnostic.message}`
-      }`,
-  );
+  const formatDiagnostic = (diagnostic: ExternalExecutionDiagnostic): string =>
+    `${diagnostic.operation}: ${diagnostic.outcome} (${diagnostic.durationMs.toFixed(2)} ms)${
+      diagnostic.message === undefined ? "" : ` - ${diagnostic.message}`
+    }`;
+  const diagnostics = result.execution.diagnostics.map(formatDiagnostic);
+  const failures = result.execution.diagnostics
+    .filter((diagnostic) => diagnostic.outcome !== "success")
+    .map(formatDiagnostic);
 
   return {
     name: `${result.name} (execution)`,
@@ -81,7 +79,7 @@ function executionTestCase(result: ScenarioResult): JUnitTestCaseReport | undefi
     ),
     outcome: result.execution.passed
       ? { status: "passed" }
-      : { status: "errored", message: diagnostics.join("\n") || "adapter lifecycle failed" },
+      : { status: "errored", message: failures.join("\n") || "adapter lifecycle failed" },
     diagnostics,
   };
 }
@@ -110,6 +108,5 @@ export function createJUnitScenarioReport(result: ScenarioResult): JUnitScenario
       ...(observer === undefined ? [] : [observer]),
       ...(execution === undefined ? [] : [execution]),
     ],
-    executionDiagnostics: result.execution?.diagnostics ?? [],
   };
 }

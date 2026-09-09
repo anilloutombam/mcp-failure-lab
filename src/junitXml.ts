@@ -26,6 +26,13 @@ export function escapeXml(value: string): string {
     .replaceAll("'", "&apos;");
 }
 
+export function escapeXmlAttribute(value: string): string {
+  return escapeXml(value)
+    .replaceAll("\t", "&#x9;")
+    .replaceAll("\n", "&#xA;")
+    .replaceAll("\r", "&#xD;");
+}
+
 function seconds(durationMs: number): string {
   return (durationMs / 1000).toFixed(6);
 }
@@ -37,7 +44,7 @@ function outcomeElement(testCase: JUnitTestCaseReport): string | undefined {
   const element = JUNIT_XML_OUTCOME_ELEMENTS[outcome.status];
   const messages = outcome.status === "failed" ? outcome.failures : [outcome.message];
   const message = messages[0] ?? "scenario failed";
-  return `    <${element} message="${escapeXml(message)}">${escapeXml(messages.join("\n"))}</${element}>`;
+  return `    <${element} message="${escapeXmlAttribute(message)}">${escapeXml(messages.join("\n"))}</${element}>`;
 }
 
 function serializeTestCase(testCase: JUnitTestCaseReport): string {
@@ -48,7 +55,7 @@ function serializeTestCase(testCase: JUnitTestCaseReport): string {
       : `    <system-out>${escapeXml(testCase.diagnostics.join("\n"))}</system-out>`,
   ].filter((child): child is string => child !== undefined);
   const attributes =
-    `name="${escapeXml(testCase.name)}" ` +
+    `name="${escapeXmlAttribute(testCase.name)}" ` +
     `classname="mcp-failure-lab.${testCase.source}" ` +
     `time="${seconds(testCase.durationMs)}"`;
 
@@ -64,7 +71,7 @@ export function serializeJUnitReport(report: JUnitScenarioReport): string {
     (testCase) => testCase.outcome.status === "errored",
   ).length;
   const attributes =
-    `name="${escapeXml(report.name)}" ` +
+    `name="${escapeXmlAttribute(report.name)}" ` +
     `tests="${report.testCases.length}" ` +
     `failures="${failures}" ` +
     `errors="${errors}" ` +

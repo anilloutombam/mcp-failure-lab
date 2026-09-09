@@ -135,7 +135,6 @@ export function writeScenarioCommandError(
             diagnostics: [],
           },
         ],
-        executionDiagnostics: [],
       }),
     );
     return;
