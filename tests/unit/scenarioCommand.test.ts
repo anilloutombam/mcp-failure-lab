@@ -247,6 +247,40 @@ describe("scenario reports", () => {
     });
     expect(output.writeError).not.toHaveBeenCalled();
   });
+
+  it("emits JUnit XML", () => {
+    const report = formatScenarioResult(
+      {
+        name: "ping succeeds",
+        outcome: "success",
+        durationMs: 5,
+        passed: true,
+        failures: [],
+      },
+      "junit",
+    );
+
+    expect(report).toContain('<testsuite name="ping succeeds"');
+    expect(report).toContain('tests="1" failures="0" errors="0"');
+    expect(report).toContain('classname="mcp-failure-lab.primary"');
+  });
+
+  it("emits command failures as JUnit errors", () => {
+    const output = { write: vi.fn(), writeError: vi.fn() };
+
+    writeScenarioCommandError(
+      "scenario_load_failed",
+      "Failed to run scenario: missing <file>",
+      "junit",
+      output,
+    );
+
+    expect(output.write).toHaveBeenCalledWith(expect.stringContaining('errors="1"'));
+    expect(output.write).toHaveBeenCalledWith(
+      expect.stringContaining("Failed to run scenario: missing &lt;file&gt;"),
+    );
+    expect(output.writeError).not.toHaveBeenCalled();
+  });
 });
 
 describe("scenario command", () => {

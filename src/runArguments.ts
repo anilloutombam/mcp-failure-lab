@@ -7,7 +7,8 @@ export type RunArguments =
 export function parseRunArguments(args: string[]): RunArguments {
   const reportIndex = args.lastIndexOf("--report");
   const selectedReport = reportIndex === -1 ? undefined : args[reportIndex + 1];
-  let format: ReportFormat = selectedReport === "json" ? "json" : "console";
+  let format: ReportFormat =
+    selectedReport === "json" || selectedReport === "junit" ? selectedReport : "console";
   let path: string | undefined;
   let target: string | undefined;
 
@@ -15,8 +16,8 @@ export function parseRunArguments(args: string[]): RunArguments {
     const argument = args[index];
     if (argument === "--report") {
       const value = args[index + 1];
-      if (value !== "console" && value !== "json") {
-        return { ok: false, error: "--report must be either console or json", format };
+      if (value !== "console" && value !== "json" && value !== "junit") {
+        return { ok: false, error: "--report must be console, json, or junit", format };
       }
 
       format = value;
@@ -51,7 +52,7 @@ export function parseRunArguments(args: string[]): RunArguments {
     return {
       ok: false,
       error:
-        "Missing scenario file. Usage: mcp-failure-lab run <file> [--report console|json] [--target file]",
+        "Missing scenario file. Usage: mcp-failure-lab run <file> [--report console|json|junit] [--target file]",
       format,
     };
   }

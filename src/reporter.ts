@@ -1,4 +1,6 @@
 import type { ScenarioResult } from "./scenario.js";
+import { createJUnitScenarioReport } from "./junitReport.js";
+import { serializeJUnitReport } from "./junitXml.js";
 
 export interface ScenarioReporter {
   report(result: ScenarioResult): string;
@@ -92,5 +94,11 @@ export class JsonScenarioReporter implements ScenarioReporter {
     };
 
     return JSON.stringify(report, null, 2);
+  }
+}
+
+export class JUnitScenarioReporter implements ScenarioReporter {
+  report(result: ScenarioResult): string {
+    return serializeJUnitReport(createJUnitScenarioReport(result));
   }
 }

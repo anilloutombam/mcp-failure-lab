@@ -83,7 +83,7 @@ Available now:
 - Streamable HTTP and stdio target configurations
 - Bounded adapter setup, execution, observation, cancellation, and cleanup
 - Separate scenario-assertion and adapter-lifecycle diagnostics
-- Console and JSON reporting
+- Console, JSON, and JUnit XML reporting
 - Machine-readable command errors
 - CI-friendly exit codes
 - Unit, integration, and end-to-end tests
@@ -91,7 +91,6 @@ Available now:
 Not implemented:
 
 - Provider-specific adapters and recovery policies
-- JUnit reporting
 - Malformed-message, duplicate-response, and session-loss faults
 
 MCP Failure Lab is not a general-purpose proxy. External targets are exercised through the same
@@ -252,6 +251,12 @@ Generate machine-readable output:
 
 ```bash
 npm run dev -- run examples/scenarios/delay-success.json --report json
+```
+
+Generate JUnit XML for CI systems:
+
+```bash
+npm run --silent dev -- run examples/scenarios/delay-success.json --report junit > junit.xml
 ```
 
 The command exits with:

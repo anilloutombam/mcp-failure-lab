@@ -11,7 +11,7 @@ describe("run command arguments", () => {
     });
   });
 
-  it("accepts explicit console and JSON report formats", () => {
+  it("accepts supported report formats", () => {
     expect(parseRunArguments(["scenario.json", "--report", "console"])).toEqual({
       ok: true,
       path: "scenario.json",
@@ -21,6 +21,11 @@ describe("run command arguments", () => {
       ok: true,
       path: "scenario.json",
       format: "json",
+    });
+    expect(parseRunArguments(["scenario.json", "--report", "junit"])).toEqual({
+      ok: true,
+      path: "scenario.json",
+      format: "junit",
     });
   });
 
@@ -47,7 +52,7 @@ describe("run command arguments", () => {
     expect(parseRunArguments([])).toEqual({
       ok: false,
       error:
-        "Missing scenario file. Usage: mcp-failure-lab run <file> [--report console|json] [--target file]",
+        "Missing scenario file. Usage: mcp-failure-lab run <file> [--report console|json|junit] [--target file]",
       format: "console",
     });
   });
@@ -55,7 +60,7 @@ describe("run command arguments", () => {
   it("rejects an unsupported report format", () => {
     expect(parseRunArguments(["scenario.json", "--report", "yaml"])).toEqual({
       ok: false,
-      error: "--report must be either console or json",
+      error: "--report must be console, json, or junit",
       format: "console",
     });
   });
@@ -88,8 +93,16 @@ describe("run command arguments", () => {
     expect(parseRunArguments(["--report", "json"])).toEqual({
       ok: false,
       error:
-        "Missing scenario file. Usage: mcp-failure-lab run <file> [--report console|json] [--target file]",
+        "Missing scenario file. Usage: mcp-failure-lab run <file> [--report console|json|junit] [--target file]",
       format: "json",
+    });
+  });
+
+  it("preserves a selected JUnit format for earlier argument errors", () => {
+    expect(parseRunArguments(["--unknown", "--report", "junit"])).toEqual({
+      ok: false,
+      error: "Unknown run option: --unknown",
+      format: "junit",
     });
   });
 });
