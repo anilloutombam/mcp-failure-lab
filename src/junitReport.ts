@@ -104,8 +104,7 @@ export function createJUnitScenarioReport(result: ScenarioResult): JUnitScenario
 
   return {
     name: result.name,
-    durationMs:
-      result.durationMs + (result.observer?.durationMs ?? 0) + (execution?.durationMs ?? 0),
+    durationMs: execution?.durationMs ?? result.durationMs + (result.observer?.durationMs ?? 0),
     testCases: [
       primary,
       ...(observer === undefined ? [] : [observer]),
