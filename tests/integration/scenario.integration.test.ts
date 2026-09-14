@@ -15,7 +15,7 @@ function clockReturning(...values: number[]): MonotonicClock {
 describe("scenario runner MCP integration", () => {
   it("records a successful tool call and evaluates its expectations", async () => {
     const connection = await connectTestClient(() =>
-      createServer(undefined, { wait: async () => undefined }),
+      createServer({ sleeper: { wait: async () => undefined } }),
     );
     const scenario: Scenario = {
       name: "bounded delay succeeds",

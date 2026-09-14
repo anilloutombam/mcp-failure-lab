@@ -8,9 +8,8 @@ import {
   toNodeHandler,
   type NodeIncomingMessageLike,
 } from "@modelcontextprotocol/node";
-import { createMcpHandler } from "@modelcontextprotocol/server";
-
 import { isCanonicalHttpPath, isWildcardHost } from "./httpValidation.js";
+import { createMalformedMessageHttpHandler } from "./malformedMessageHttp.js";
 import { createServer } from "./server.js";
 
 export interface HttpServerOptions {
@@ -64,10 +63,13 @@ export async function startHttpServer(options: HttpServerOptions): Promise<HttpS
   }
 
   const activeResponse = new AsyncLocalStorage<ServerResponse>();
-  const handler = createMcpHandler(
-    () =>
-      createServer(undefined, undefined, async () => {
-        activeResponse.getStore()?.destroy();
+  const handler = createMalformedMessageHttpHandler(
+    (malformedMessageFaults) =>
+      createServer({
+        disconnect: async () => {
+          activeResponse.getStore()?.destroy();
+        },
+        malformedMessageFaults,
       }),
     {
       legacy: "stateless",

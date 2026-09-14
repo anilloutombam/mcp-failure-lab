@@ -50,7 +50,7 @@ describe("Streamable HTTP server", () => {
       expect(client.getNegotiatedProtocolVersion()).toBe("2026-07-28");
       const { tools } = await client.listTools();
       expect(tools.map((tool) => tool.name)).toEqual(
-        expect.arrayContaining(["ping", "delay", "hang", "disconnect"]),
+        expect.arrayContaining(["ping", "delay", "hang", "disconnect", "malformed_message"]),
       );
 
       const result = await client.callTool({ name: "ping", arguments: {} });
@@ -61,6 +61,31 @@ describe("Streamable HTTP server", () => {
     }
 
     await expect(fetch(handle.url)).rejects.toThrow();
+  });
+
+  it("limits a malformed response to its activating HTTP request", async () => {
+    const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
+    const client = createClient();
+
+    try {
+      await client.connect(new StreamableHTTPClientTransport(handle.url));
+      await expect(
+        client.callTool(
+          {
+            name: "malformed_message",
+            arguments: { variant: "invalid-jsonrpc-version" },
+          },
+          { timeout: 500 },
+        ),
+      ).rejects.toThrow();
+
+      await expect(client.callTool({ name: "ping", arguments: {} })).resolves.toMatchObject({
+        content: [{ type: "text" }],
+      });
+    } finally {
+      await client.close();
+      await handle.close();
+    }
   });
 
   it("routes only the configured endpoint and rejects an untrusted Origin", async () => {

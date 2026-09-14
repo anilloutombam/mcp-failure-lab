@@ -1,6 +1,5 @@
 import { readFile } from "node:fs/promises";
 import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/client";
-import { createMcpHandler } from "@modelcontextprotocol/server";
 import { z } from "zod";
 
 import {
@@ -10,6 +9,7 @@ import {
   type ScenarioReporter,
 } from "./reporter.js";
 import { serializeJUnitReport } from "./junitXml.js";
+import { createMalformedMessageHttpHandler } from "./malformedMessageHttp.js";
 import {
   DEFAULT_SCENARIO_TIMEOUT_MS,
   runScenario,
@@ -202,7 +202,10 @@ export function formatScenarioResult(result: ScenarioResult, format: ReportForma
 }
 
 export async function executeScenario(scenario: Scenario): Promise<ScenarioResult> {
-  const handler = createMcpHandler(() => createServer(), { legacy: "reject" });
+  const handler = createMalformedMessageHttpHandler(
+    (malformedMessageFaults) => createServer({ malformedMessageFaults }),
+    { legacy: "reject" },
+  );
   const client = new Client(
     {
       name: "mcp-failure-lab-scenario-client",

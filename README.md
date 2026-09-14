@@ -62,7 +62,7 @@ npx mcp-failure-lab serve --transport http
 
 ## Purpose
 
-MCP Failure Lab helps server authors reproduce delays, hanging tools, cancellation, and transport loss in a deterministic way.
+MCP Failure Lab helps server authors reproduce delays, hanging tools, cancellation, transport loss, and malformed responses in a deterministic way.
 
 It provides controlled failure behavior for testing timeout handling, cancellation cleanup, transport-loss recovery, assertions, and CI outcomes.
 
@@ -73,7 +73,7 @@ external HTTP or stdio MCP target from the command line.
 
 Available now:
 
-- `ping`, `delay`, `hang`, and `disconnect` tools
+- `ping`, `delay`, `hang`, `disconnect`, and `malformed_message` tools
 - MCP communication over stdio and Streamable HTTP
 - Code-first and JSON scenario definitions
 - Outcome and maximum-duration assertions
@@ -91,7 +91,7 @@ Available now:
 Not implemented:
 
 - Provider-specific adapters and recovery policies
-- Malformed-message, duplicate-response, and session-loss faults
+- Duplicate-response and session-loss faults
 
 MCP Failure Lab is not a general-purpose proxy. External targets are exercised through the same
 scenario calls and expectations as the built-in server.
@@ -143,7 +143,8 @@ for lifecycle, ownership, timeout, and observation details.
 MCP Failure Lab runs deterministic scenarios through its built-in MCP client and server or through
 a configured external HTTP or stdio target. A scenario invokes a tool, records the observed outcome
 and duration, and evaluates the declared expectations. Built-in scenarios use `ping`, `delay`,
-`hang`, or `disconnect`; external scenarios use tools exposed by their target server.
+`hang`, `disconnect`, or `malformed_message`; external scenarios use tools exposed by their target
+server.
 
 Optional observer calls run sequentially on the same MCP client connection to verify post-conditions through a separate tool path.
 
@@ -271,12 +272,24 @@ For result assertions, observer calls, reporting formats, and timeout behavior, 
 
 ## Fault tools
 
-| Tool         | Behavior                                                     |
-| ------------ | ------------------------------------------------------------ |
-| `ping`       | Returns a deterministic health response                      |
-| `delay`      | Waits for a bounded duration before returning                |
-| `hang`       | Remains pending until the client cancels                     |
-| `disconnect` | Interrupts the active transport while a request is in flight |
+| Tool                | Behavior                                                     |
+| ------------------- | ------------------------------------------------------------ |
+| `ping`              | Returns a deterministic health response                      |
+| `delay`             | Waits for a bounded duration before returning                |
+| `hang`              | Remains pending until the client cancels                     |
+| `disconnect`        | Interrupts the active transport while a request is in flight |
+| `malformed_message` | Violates one selected JSON-RPC response rule exactly once    |
+
+`malformed_message` accepts one of three variants:
+
+| Variant                   | Protocol violation                                       |
+| ------------------------- | -------------------------------------------------------- |
+| `missing-jsonrpc`         | Omits the required `jsonrpc` member                      |
+| `invalid-jsonrpc-version` | Sets `jsonrpc` to `"1.0"` instead of `"2.0"`             |
+| `result-with-error`       | Includes mutually exclusive `result` and `error` members |
+
+Each invocation affects only its own response. The fault is consumed before the response is sent,
+so later requests on the same connection are unaffected.
 
 See the [fault tools reference](https://mcplab.dev/docs/fault-tools/) for arguments and behavior.
 
