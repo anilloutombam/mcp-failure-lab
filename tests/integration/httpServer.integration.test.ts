@@ -63,30 +63,40 @@ describe("Streamable HTTP server", () => {
     await expect(fetch(handle.url)).rejects.toThrow();
   });
 
-  it("limits a malformed response to its activating HTTP request", async () => {
-    const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
-    const client = createClient();
+  it.each(["2026-07-28", "2025-11-25"] as const)(
+    "limits a malformed response to its activating HTTP request (%s)",
+    async (version) => {
+      const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
+      const client = new Client(
+        { name: "http-malformed-test", version: "0.1.0" },
+        {
+          supportedProtocolVersions: [version],
+          versionNegotiation:
+            version === "2025-11-25" ? { mode: "legacy" } : { mode: { pin: version } },
+        },
+      );
 
-    try {
-      await client.connect(new StreamableHTTPClientTransport(handle.url));
-      await expect(
-        client.callTool(
-          {
-            name: "malformed_message",
-            arguments: { variant: "invalid-jsonrpc-version" },
-          },
-          { timeout: 500 },
-        ),
-      ).rejects.toThrow();
+      try {
+        await client.connect(new StreamableHTTPClientTransport(handle.url));
+        await expect(
+          client.callTool(
+            {
+              name: "malformed_message",
+              arguments: { variant: "invalid-jsonrpc-version" },
+            },
+            { timeout: 500 },
+          ),
+        ).rejects.toThrow();
 
-      await expect(client.callTool({ name: "ping", arguments: {} })).resolves.toMatchObject({
-        content: [{ type: "text" }],
-      });
-    } finally {
-      await client.close();
-      await handle.close();
-    }
-  });
+        await expect(client.callTool({ name: "ping", arguments: {} })).resolves.toMatchObject({
+          content: [{ type: "text" }],
+        });
+      } finally {
+        await client.close();
+        await handle.close();
+      }
+    },
+  );
 
   it("routes only the configured endpoint and rejects an untrusted Origin", async () => {
     const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/custom" });
