@@ -29,6 +29,7 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock("@modelcontextprotocol/server/stdio", () => ({
   serveStdio: mocks.serveStdio,
+  StdioServerTransport: class {},
 }));
 
 vi.mock("../../src/server.js", () => ({
@@ -78,7 +79,10 @@ describe("CLI server lifecycle", () => {
       path: "/mcp",
     });
 
-    expect(mocks.serveStdio).toHaveBeenCalledWith(expect.any(Function), { legacy: "serve" });
+    expect(mocks.serveStdio).toHaveBeenCalledWith(
+      expect.any(Function),
+      expect.objectContaining({ legacy: "serve", transport: expect.anything() }),
+    );
     expect(mocks.createServer).toHaveBeenCalledOnce();
 
     process.emit("SIGINT");

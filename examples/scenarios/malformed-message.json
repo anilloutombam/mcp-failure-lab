@@ -1,0 +1,24 @@
+{
+  "name": "missing JSON-RPC version is rejected",
+  "call": {
+    "tool": "malformed_message",
+    "args": {
+      "variant": "missing-jsonrpc"
+    }
+  },
+  "timeoutMs": 1000,
+  "expect": {
+    "outcome": "error",
+    "maxDurationMs": 1000
+  },
+  "observe": {
+    "call": {
+      "tool": "ping",
+      "args": {}
+    },
+    "timeoutMs": 1000,
+    "expect": {
+      "outcome": "success"
+    }
+  }
+}
