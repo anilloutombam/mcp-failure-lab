@@ -16,6 +16,7 @@
 A chaos-engineering and resilience-testing toolkit for Model Context Protocol servers.
 
 [Documentation](https://mcplab.dev/docs/) ·
+[Compatibility](https://mcplab.dev/docs/compatibility/) ·
 [Project page](https://mcplab.dev/failure)
 
 ![MCP Failure Lab demonstrating a bounded delay and an expected timeout](docs/demo.gif)
@@ -163,6 +164,7 @@ Full guides and references are available at [mcplab.dev/docs](https://mcplab.dev
 - [Architecture](https://mcplab.dev/docs/architecture/)
 - [Examples](https://mcplab.dev/docs/examples/)
 - [Troubleshooting](https://mcplab.dev/docs/troubleshooting/)
+- [External compatibility](docs/compatibility/README.md)
 
 ## Requirements
 
