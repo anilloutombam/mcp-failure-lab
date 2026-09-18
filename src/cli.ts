@@ -5,6 +5,10 @@ import { runCliCommand } from "./cliCommand.js";
 import { runDemoCommand } from "./demoCommand.js";
 import { startHttpServer } from "./httpServer.js";
 import {
+  DuplicateResponseTransport,
+  RequestScopedDuplicateResponseFaults,
+} from "./duplicateResponse.js";
+import {
   MalformedMessageTransport,
   RequestScopedMalformedMessageFaults,
 } from "./malformedMessage.js";
@@ -13,12 +17,13 @@ import type { ServeOptions } from "./serveArguments.js";
 
 async function serve(options: ServeOptions): Promise<void> {
   const malformedMessageFaults = new RequestScopedMalformedMessageFaults();
+  const duplicateResponseFaults = new RequestScopedDuplicateResponseFaults();
   const serverHandle =
     options.transport === "stdio"
-      ? serveStdio(() => createServer({ malformedMessageFaults }), {
+      ? serveStdio(() => createServer({ malformedMessageFaults, duplicateResponseFaults }), {
           legacy: "serve",
           transport: new MalformedMessageTransport(
-            new StdioServerTransport(),
+            new DuplicateResponseTransport(new StdioServerTransport(), duplicateResponseFaults),
             malformedMessageFaults,
           ),
         })

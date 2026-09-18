@@ -50,7 +50,14 @@ describe("Streamable HTTP server", () => {
       expect(client.getNegotiatedProtocolVersion()).toBe("2026-07-28");
       const { tools } = await client.listTools();
       expect(tools.map((tool) => tool.name)).toEqual(
-        expect.arrayContaining(["ping", "delay", "hang", "disconnect", "malformed_message"]),
+        expect.arrayContaining([
+          "ping",
+          "delay",
+          "hang",
+          "disconnect",
+          "malformed_message",
+          "duplicate_response",
+        ]),
       );
 
       const result = await client.callTool({ name: "ping", arguments: {} });
@@ -97,6 +104,24 @@ describe("Streamable HTTP server", () => {
       }
     },
   );
+
+  it("returns a duplicate response without breaking the next HTTP request", async () => {
+    const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
+    const client = createClient();
+
+    try {
+      await client.connect(new StreamableHTTPClientTransport(handle.url));
+      await expect(
+        client.callTool({ name: "duplicate_response", arguments: {} }),
+      ).resolves.toMatchObject({ content: [{ type: "text" }] });
+      await expect(client.callTool({ name: "ping", arguments: {} })).resolves.toMatchObject({
+        content: [{ type: "text" }],
+      });
+    } finally {
+      await client.close();
+      await handle.close();
+    }
+  });
 
   it("routes only the configured endpoint and rejects an untrusted Origin", async () => {
     const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/custom" });

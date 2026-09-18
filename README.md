@@ -74,7 +74,7 @@ external HTTP or stdio MCP target from the command line.
 
 Available now:
 
-- `ping`, `delay`, `hang`, `disconnect`, and `malformed_message` tools
+- `ping`, `delay`, `hang`, `disconnect`, `malformed_message`, and `duplicate_response` tools
 - MCP communication over stdio and Streamable HTTP
 - Code-first and JSON scenario definitions
 - Outcome and maximum-duration assertions
@@ -92,7 +92,7 @@ Available now:
 Not implemented:
 
 - Provider-specific adapters and recovery policies
-- Duplicate-response and session-loss faults
+- Session-loss faults
 
 MCP Failure Lab is not a general-purpose proxy. External targets are exercised through the same
 scenario calls and expectations as the built-in server.
@@ -144,8 +144,8 @@ for lifecycle, ownership, timeout, and observation details.
 MCP Failure Lab runs deterministic scenarios through its built-in MCP client and server or through
 a configured external HTTP or stdio target. A scenario invokes a tool, records the observed outcome
 and duration, and evaluates the declared expectations. Built-in scenarios use `ping`, `delay`,
-`hang`, `disconnect`, or `malformed_message`; external scenarios use tools exposed by their target
-server.
+`hang`, `disconnect`, `malformed_message`, or `duplicate_response`; external scenarios use tools
+exposed by their target server.
 
 Optional observer calls run sequentially on the same MCP client connection to verify post-conditions through a separate tool path.
 
@@ -274,13 +274,14 @@ For result assertions, observer calls, reporting formats, and timeout behavior, 
 
 ## Fault tools
 
-| Tool                | Behavior                                                     |
-| ------------------- | ------------------------------------------------------------ |
-| `ping`              | Returns a deterministic health response                      |
-| `delay`             | Waits for a bounded duration before returning                |
-| `hang`              | Remains pending until the client cancels                     |
-| `disconnect`        | Interrupts the active transport while a request is in flight |
-| `malformed_message` | Violates one selected JSON-RPC response rule exactly once    |
+| Tool                 | Behavior                                                     |
+| -------------------- | ------------------------------------------------------------ |
+| `ping`               | Returns a deterministic health response                      |
+| `delay`              | Waits for a bounded duration before returning                |
+| `hang`               | Remains pending until the client cancels                     |
+| `disconnect`         | Interrupts the active transport while a request is in flight |
+| `malformed_message`  | Violates one selected JSON-RPC response rule exactly once    |
+| `duplicate_response` | Sends the same JSON-RPC response twice for one request       |
 
 `malformed_message` accepts one of three variants:
 
@@ -292,6 +293,9 @@ For result assertions, observer calls, reporting formats, and timeout behavior, 
 
 Each invocation affects only its own response. The fault is consumed before the response is sent,
 so later requests on the same connection are unaffected.
+
+`duplicate_response` accepts no arguments. It preserves the request ID and emits exactly one
+additional response. A following observer call can verify that the client remains usable.
 
 See the [fault tools reference](https://mcplab.dev/docs/fault-tools/) for arguments and behavior.
 

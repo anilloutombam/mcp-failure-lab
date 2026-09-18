@@ -1,0 +1,21 @@
+{
+  "name": "duplicate response leaves the client usable",
+  "call": {
+    "tool": "duplicate_response",
+    "args": {}
+  },
+  "timeoutMs": 1000,
+  "expect": {
+    "outcome": "success"
+  },
+  "observe": {
+    "call": {
+      "tool": "ping",
+      "args": {}
+    },
+    "timeoutMs": 1000,
+    "expect": {
+      "outcome": "success"
+    }
+  }
+}

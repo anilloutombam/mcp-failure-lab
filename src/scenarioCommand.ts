@@ -9,7 +9,7 @@ import {
   type ScenarioReporter,
 } from "./reporter.js";
 import { serializeJUnitReport } from "./junitXml.js";
-import { createMalformedMessageHttpHandler } from "./malformedMessageHttp.js";
+import { createResponseFaultHttpHandler } from "./malformedMessageHttp.js";
 import {
   DEFAULT_SCENARIO_TIMEOUT_MS,
   runScenario,
@@ -202,8 +202,12 @@ export function formatScenarioResult(result: ScenarioResult, format: ReportForma
 }
 
 export async function executeScenario(scenario: Scenario): Promise<ScenarioResult> {
-  const handler = createMalformedMessageHttpHandler(
-    (malformedMessageFaults) => createServer({ malformedMessageFaults }),
+  const handler = createResponseFaultHttpHandler(
+    (responseFaults) =>
+      createServer({
+        malformedMessageFaults: responseFaults.malformedMessage,
+        duplicateResponseFaults: responseFaults.duplicateResponse,
+      }),
     { legacy: "reject" },
   );
   const client = new Client(
