@@ -93,6 +93,25 @@ jobs:
       - name: Sync MCP Registry version
         run: npm run registry:sync
 
+      - name: Wait for npm package availability
+        run: |
+          PACKAGE_NAME="$(node -p "require('./package.json').name")"
+          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
+
+          for attempt in $(seq 1 18); do
+            if PUBLISHED_VERSION="$(npm view "${PACKAGE_NAME}@${PACKAGE_VERSION}" version 2>/dev/null)" && \
+              [ "$PUBLISHED_VERSION" = "$PACKAGE_VERSION" ]; then
+              echo "${PACKAGE_NAME}@${PACKAGE_VERSION} is available on npm"
+              exit 0
+            fi
+
+            echo "Waiting for ${PACKAGE_NAME}@${PACKAGE_VERSION} to become available on npm (${attempt}/18)"
+            sleep 10
+          done
+
+          echo "${PACKAGE_NAME}@${PACKAGE_VERSION} was not available on npm after 3 minutes"
+          exit 1
+
       - name: Install MCP Publisher
         env:
           MCP_PUBLISHER_VERSION: 1.8.1
