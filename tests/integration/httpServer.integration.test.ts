@@ -146,14 +146,13 @@ describe("Streamable HTTP server", () => {
 
       expect(response.headers.get("content-type")).toContain("text/event-stream");
       expect(events).toHaveLength(2);
-      for (const event of events) {
+      const payloads = events.map((event) => {
         const data = event.split(/\r\n|\n|\r/).find((line) => line.startsWith("data:"));
         expect(data).toBeDefined();
-        expect(JSON.parse(data?.slice(5).trimStart() ?? "")).toMatchObject({
-          jsonrpc: "2.0",
-          id: 77,
-        });
-      }
+        return JSON.parse(data?.slice(5).trimStart() ?? "") as unknown;
+      });
+      expect(payloads[0]).toMatchObject({ jsonrpc: "2.0", id: 77 });
+      expect(payloads[1]).toEqual(payloads[0]);
     } finally {
       await handle.close();
     }

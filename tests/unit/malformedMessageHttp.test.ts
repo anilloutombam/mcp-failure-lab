@@ -71,12 +71,14 @@ function expectDuplicateResponseEvents(body: string, requestId: number): void {
   const events = body.split(/\r\n\r\n|\n\n|\r\r/).filter((event) => event.trim() !== "");
   expect(events).toHaveLength(2);
 
-  for (const event of events) {
+  const payloads = events.map((event) => {
     const data = event
       .split(/\r\n|\n|\r/)
       .filter((line) => line.startsWith("data:"))
       .map((line) => line.slice(5).trimStart())
       .join("\n");
-    expect(JSON.parse(data)).toMatchObject({ jsonrpc: "2.0", id: requestId });
-  }
+    return JSON.parse(data) as unknown;
+  });
+  expect(payloads[0]).toMatchObject({ jsonrpc: "2.0", id: requestId });
+  expect(payloads[1]).toEqual(payloads[0]);
 }
