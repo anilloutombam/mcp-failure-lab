@@ -1,5 +1,10 @@
-import type { JSONRPCMessage, Transport, TransportSendOptions } from "@modelcontextprotocol/server";
-import { describe, expect, it } from "vitest";
+import type {
+  JSONRPCMessage,
+  MessageExtraInfo,
+  Transport,
+  TransportSendOptions,
+} from "@modelcontextprotocol/server";
+import { describe, expect, it, vi } from "vitest";
 
 import {
   DuplicateResponseTransport,
@@ -48,13 +53,56 @@ describe("duplicate-response faults", () => {
     await transport.send(RESPONSE, { relatedRequestId: 7 });
     expect(delegate.sent).toEqual([RESPONSE, RESPONSE]);
   });
+
+  it("forwards lifecycle callbacks and protocol versions", async () => {
+    const delegate = new RecordingTransport();
+    const faults = new RequestScopedDuplicateResponseFaults();
+    const transport = new DuplicateResponseTransport(delegate, faults);
+    const onClose = vi.fn();
+    const onError = vi.fn();
+    const onMessage = vi.fn();
+    transport.onclose = onClose;
+    transport.onerror = onError;
+    transport.onmessage = onMessage;
+
+    await transport.start();
+    delegate.onmessage?.(RESPONSE);
+    delegate.onerror?.(new Error("transport failure"));
+    delegate.onclose?.();
+    transport.setProtocolVersion("2025-11-25");
+    transport.setSupportedProtocolVersions(["2025-11-25"]);
+    faults.activate(7);
+    await transport.close();
+
+    expect(onMessage).toHaveBeenCalledWith(RESPONSE, undefined);
+    expect(onError).toHaveBeenCalledWith(expect.objectContaining({ message: "transport failure" }));
+    expect(onClose).toHaveBeenCalledOnce();
+    expect(delegate.protocolVersion).toBe("2025-11-25");
+    expect(delegate.supportedProtocolVersions).toEqual(["2025-11-25"]);
+    expect(faults.apply(RESPONSE)).toEqual([RESPONSE]);
+    expect(delegate.closed).toBe(true);
+  });
 });
 
 class RecordingTransport implements Transport {
   readonly sent: JSONRPCMessage[] = [];
+  closed = false;
+  protocolVersion?: string;
+  supportedProtocolVersions?: string[];
+  onclose?: () => void;
+  onerror?: (error: Error) => void;
+  onmessage?: <T extends JSONRPCMessage>(message: T, extra?: MessageExtraInfo) => void;
   async start(): Promise<void> {}
   async send(message: JSONRPCMessage, _options?: TransportSendOptions): Promise<void> {
     this.sent.push(message);
   }
-  async close(): Promise<void> {}
+  async close(): Promise<void> {
+    this.closed = true;
+  }
+  setProtocolVersion(version: string): void {
+    this.protocolVersion = version;
+  }
+  setSupportedProtocolVersions(versions: string[]): void {
+    this.supportedProtocolVersions = versions;
+  }
 }

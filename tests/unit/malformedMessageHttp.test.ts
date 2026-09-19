@@ -48,7 +48,7 @@ describe("duplicate HTTP responses", () => {
     );
 
     expect(response.headers.get("content-type")).toBe("text/event-stream");
-    expect((await response.text()).match(/"id":7/g)).toHaveLength(2);
+    expectDuplicateResponseEvents(await response.text(), 7);
   });
 
   it("duplicates a matching SSE response event", async () => {
@@ -63,6 +63,20 @@ describe("duplicate HTTP responses", () => {
       duplicate,
     );
 
-    expect((await response.text()).match(/"id":7/g)).toHaveLength(2);
+    expectDuplicateResponseEvents(await response.text(), 7);
   });
 });
+
+function expectDuplicateResponseEvents(body: string, requestId: number): void {
+  const events = body.split(/\r\n\r\n|\n\n|\r\r/).filter((event) => event.trim() !== "");
+  expect(events).toHaveLength(2);
+
+  for (const event of events) {
+    const data = event
+      .split(/\r\n|\n|\r/)
+      .filter((line) => line.startsWith("data:"))
+      .map((line) => line.slice(5).trimStart())
+      .join("\n");
+    expect(JSON.parse(data)).toMatchObject({ jsonrpc: "2.0", id: requestId });
+  }
+}

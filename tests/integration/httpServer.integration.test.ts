@@ -123,6 +123,42 @@ describe("Streamable HTTP server", () => {
     }
   });
 
+  it("emits two SSE events with the same request ID", async () => {
+    const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
+
+    try {
+      const response = await fetch(handle.url, {
+        method: "POST",
+        headers: {
+          accept: "application/json, text/event-stream",
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          jsonrpc: "2.0",
+          id: 77,
+          method: "tools/call",
+          params: { name: "duplicate_response", arguments: {} },
+        }),
+      });
+      const events = (await response.text())
+        .split(/\r\n\r\n|\n\n|\r\r/)
+        .filter((event) => event.trim() !== "");
+
+      expect(response.headers.get("content-type")).toContain("text/event-stream");
+      expect(events).toHaveLength(2);
+      for (const event of events) {
+        const data = event.split(/\r\n|\n|\r/).find((line) => line.startsWith("data:"));
+        expect(data).toBeDefined();
+        expect(JSON.parse(data?.slice(5).trimStart() ?? "")).toMatchObject({
+          jsonrpc: "2.0",
+          id: 77,
+        });
+      }
+    } finally {
+      await handle.close();
+    }
+  });
+
   it("routes only the configured endpoint and rejects an untrusted Origin", async () => {
     const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/custom" });
 
