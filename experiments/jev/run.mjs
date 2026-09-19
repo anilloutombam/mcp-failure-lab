@@ -8,6 +8,49 @@ const runs = Math.max(1, Number.parseInt(process.env.RUNS ?? "20", 10));
 const model = "typesafe/jev-1.13";
 const packageVersion = "0.10.0";
 
+function assertEvidence(condition, message) {
+  if (!condition) throw new Error(`MCP evidence validation failed: ${message}`);
+}
+
+function validateReport(report, { name, outcome }) {
+  assertEvidence(report && typeof report === "object", `${name}: report is missing`);
+  assertEvidence(report.name === name, `${name}: unexpected report name`);
+  assertEvidence(report.outcome === outcome, `${name}: expected ${outcome}, got ${report.outcome}`);
+  assertEvidence(report.passed === true, `${name}: scenario assertions did not pass`);
+  assertEvidence(
+    Array.isArray(report.failures) && report.failures.length === 0,
+    `${name}: scenario reported failures`,
+  );
+}
+
+function resultText(report) {
+  return report.result?.content?.find((item) => item.type === "text")?.text;
+}
+
+function parseSuccessfulPing(report, name) {
+  const text = resultText(report);
+  assertEvidence(typeof text === "string", `${name}: ping result text is missing`);
+  let ping;
+  try {
+    ping = JSON.parse(text);
+  } catch {
+    throw new Error(`MCP evidence validation failed: ${name}: ping result is not valid JSON`);
+  }
+  assertEvidence(ping.status === "ok", `${name}: ping status is not ok`);
+}
+
+function validateRecovery(report, name) {
+  const observer = report.observer;
+  assertEvidence(observer && typeof observer === "object", `${name}: recovery observer is missing`);
+  assertEvidence(observer.outcome === "success", `${name}: recovery observer did not succeed`);
+  assertEvidence(observer.passed === true, `${name}: recovery assertions did not pass`);
+  assertEvidence(
+    Array.isArray(observer.failures) && observer.failures.length === 0,
+    `${name}: recovery observer reported failures`,
+  );
+  parseSuccessfulPing(observer, `${name} recovery`);
+}
+
 const cases = [
   {
     name: "clean",
@@ -18,8 +61,10 @@ const cases = [
       expect: { outcome: "success" },
     },
     normalize(report) {
+      validateReport(report, { name: "clean ping", outcome: "success" });
+      parseSuccessfulPing(report, "clean ping");
       return {
-        observed: { outcome: report?.outcome ?? "success", fault: null },
+        observed: { outcome: report.outcome, fault: null },
         recovery: null,
       };
     },
@@ -33,8 +78,9 @@ const cases = [
       expect: { outcome: "timeout" },
     },
     normalize(report) {
+      validateReport(report, { name: "hang timeout", outcome: "timeout" });
       return {
-        observed: { outcome: "timeout", fault: "hang", usable_result: false },
+        observed: { outcome: report.outcome, fault: "hang", usable_result: false },
         recovery: null,
       };
     },
@@ -48,6 +94,11 @@ const cases = [
       expect: { outcome: "success" },
     },
     normalize(report) {
+      validateReport(report, { name: "duplicate response", outcome: "success" });
+      assertEvidence(
+        resultText(report) === "duplicate response activated",
+        "duplicate response: activation result is missing",
+      );
       return {
         observed: { outcome: "protocol_anomaly", fault: "duplicate_response" },
         recovery: null,
@@ -68,6 +119,13 @@ const cases = [
       },
     },
     normalize(report) {
+      const name = "duplicate response with recovery observer";
+      validateReport(report, { name, outcome: "success" });
+      assertEvidence(
+        resultText(report) === "duplicate response activated",
+        `${name}: activation result is missing`,
+      );
+      validateRecovery(report, name);
       return {
         observed: { outcome: "protocol_anomaly", fault: "duplicate_response" },
         recovery: { attempted: true, outcome: "success", tool: "ping" },
@@ -83,6 +141,11 @@ const cases = [
       expect: { outcome: "error" },
     },
     normalize(report) {
+      validateReport(report, { name: "disconnect", outcome: "error" });
+      assertEvidence(
+        typeof report.error === "string" && report.error.length > 0,
+        "disconnect: transport error is missing",
+      );
       return {
         observed: { outcome: "transport_error", fault: "disconnect", usable_result: false },
         recovery: null,
@@ -103,6 +166,13 @@ const cases = [
       },
     },
     normalize(report) {
+      const name = "disconnect with recovery observer";
+      validateReport(report, { name, outcome: "error" });
+      assertEvidence(
+        typeof report.error === "string" && report.error.length > 0,
+        `${name}: transport error is missing`,
+      );
+      validateRecovery(report, name);
       return {
         observed: { outcome: "transport_error", fault: "disconnect", usable_result: false },
         recovery: { attempted: true, outcome: "success", tool: "ping" },
@@ -131,7 +201,7 @@ function runMcp(name, scenario) {
         return JSON.parse(raw);
       } catch {}
     }
-    return { raw: String(e.message ?? e) };
+    throw new Error(`MCP Failure Lab did not return a JSON report for ${name}`, { cause: e });
   }
 }
 
@@ -170,6 +240,11 @@ async function askJev(name, evidence) {
   });
 
   const json = await res.json();
+  if (!res.ok) throw new Error(`Jev request for ${name} failed with HTTP ${res.status}`);
+  assertEvidence(
+    json.answers?.action?.type === "choice",
+    `${name}: Jev response does not contain an action choice`,
+  );
   return {
     scenario: name,
     http: res.status,

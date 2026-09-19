@@ -9,6 +9,11 @@ evidence is identical; only a successful follow-up `ping` is added to the recove
 state sent to Jev deliberately excludes MCP Failure Lab expectations and assertion status so that a
 passing fault-injection test cannot be mistaken for a usable tool result.
 
+Before calling Jev, the runner validates the actual MCP Failure Lab report. It checks the primary
+outcome and result, requires the scenario assertions to pass, and verifies that recovery observers
+returned a successful `ping`. Any mismatch aborts the run instead of substituting the intended
+evidence. Assertion metadata is used only for this internal guard and is never sent to Jev.
+
 ## Cases
 
 - `clean`

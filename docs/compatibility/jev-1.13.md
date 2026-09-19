@@ -24,6 +24,11 @@ fault type, result usability, and optional recovery. MCP Failure Lab's expected 
 status, and other test-oracle metadata were not included. This normalization prevents “the fault
 occurred as expected” from being confused with “the tool result is safe to use.”
 
+Before each Jev request, the harness validated the actual MCP Failure Lab report, including its
+primary outcome, result content, assertion state, and any recovery observer `ping`. A mismatch would
+abort the run. Test-oracle metadata was used only by this validation guard and was not included in
+the evidence shown to Jev.
+
 The decision meanings were:
 
 - `accept`: safe to continue with the current result and session;
