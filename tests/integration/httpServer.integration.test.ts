@@ -50,7 +50,14 @@ describe("Streamable HTTP server", () => {
       expect(client.getNegotiatedProtocolVersion()).toBe("2026-07-28");
       const { tools } = await client.listTools();
       expect(tools.map((tool) => tool.name)).toEqual(
-        expect.arrayContaining(["ping", "delay", "hang", "disconnect", "malformed_message"]),
+        expect.arrayContaining([
+          "ping",
+          "delay",
+          "hang",
+          "disconnect",
+          "malformed_message",
+          "duplicate_response",
+        ]),
       );
 
       const result = await client.callTool({ name: "ping", arguments: {} });
@@ -97,6 +104,59 @@ describe("Streamable HTTP server", () => {
       }
     },
   );
+
+  it("returns a duplicate response without breaking the next HTTP request", async () => {
+    const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
+    const client = createClient();
+
+    try {
+      await client.connect(new StreamableHTTPClientTransport(handle.url));
+      await expect(
+        client.callTool({ name: "duplicate_response", arguments: {} }),
+      ).resolves.toMatchObject({ content: [{ type: "text" }] });
+      await expect(client.callTool({ name: "ping", arguments: {} })).resolves.toMatchObject({
+        content: [{ type: "text" }],
+      });
+    } finally {
+      await client.close();
+      await handle.close();
+    }
+  });
+
+  it("emits two SSE events with the same request ID", async () => {
+    const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
+
+    try {
+      const response = await fetch(handle.url, {
+        method: "POST",
+        headers: {
+          accept: "application/json, text/event-stream",
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          jsonrpc: "2.0",
+          id: 77,
+          method: "tools/call",
+          params: { name: "duplicate_response", arguments: {} },
+        }),
+      });
+      const events = (await response.text())
+        .split(/\r\n\r\n|\n\n|\r\r/)
+        .filter((event) => event.trim() !== "");
+
+      expect(response.headers.get("content-type")).toContain("text/event-stream");
+      expect(events).toHaveLength(2);
+      const payloads = events.map((event) => {
+        const data = event.split(/\r\n|\n|\r/).find((line) => line.startsWith("data:"));
+        expect(data).toBeDefined();
+        return JSON.parse(data?.slice(5).trimStart() ?? "") as unknown;
+      });
+      expect(payloads[0]).toMatchObject({ jsonrpc: "2.0", id: 77 });
+      expect(payloads[1]).toEqual(payloads[0]);
+    } finally {
+      await handle.close();
+    }
+  });
 
   it("routes only the configured endpoint and rejects an untrusted Origin", async () => {
     const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/custom" });
