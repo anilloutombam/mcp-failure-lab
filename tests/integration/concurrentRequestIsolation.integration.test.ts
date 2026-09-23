@@ -8,6 +8,7 @@ import { CorrelationTrackingTransport } from "../helpers/concurrentMcpTestClient
 interface ConcurrentConnection {
   client: Client;
   transport: CorrelationTrackingTransport;
+  malformedEvidence: MalformedResponseEvidence;
   close(): Promise<void>;
 }
 
@@ -66,23 +67,25 @@ async function verifyMalformedIsolation(connection: ConcurrentConnection): Promi
   );
   const healthyA = client.callTool({ name: "ping", arguments: {} });
   const healthyB = client.callTool({ name: "ping", arguments: {} });
+  const calls = [malformed, healthyA, healthyB] as const;
 
-  await transport.gate.allArrived();
-  const ids = expectConcurrentRequestIds(transport, requestOffset, "malformed_message");
-  transport.gate.release();
+  try {
+    await transport.gate.allArrived();
+    const ids = expectConcurrentRequestIds(transport, requestOffset, "malformed_message");
+    transport.gate.release();
 
-  const [faultResult, healthyAResult, healthyBResult] = await Promise.allSettled([
-    malformed,
-    healthyA,
-    healthyB,
-  ]);
-  expect(faultResult.status).toBe("rejected");
-  expectHealthyPing(healthyAResult);
-  expectHealthyPing(healthyBResult);
+    const [faultResult, healthyAResult, healthyBResult] = await Promise.allSettled(calls);
+    expect(faultResult.status).toBe("rejected");
+    expectHealthyPing(healthyAResult);
+    expectHealthyPing(healthyBResult);
 
-  await Promise.all(ids.healthy.map((id) => transport.waitForResponseCount(id, 1)));
-  expect([0, 1]).toContain(transport.responseCount(ids.fault));
-  expect(ids.healthy.map((id) => transport.responseCount(id))).toEqual([1, 1]);
+    await Promise.all(ids.healthy.map((id) => transport.waitForResponseCount(id, 1)));
+    await connection.malformedEvidence.waitFor(ids.fault);
+    expect(ids.healthy.map((id) => transport.responseCount(id))).toEqual([1, 1]);
+  } finally {
+    transport.gate.close();
+    await Promise.allSettled(calls);
+  }
 }
 
 async function verifyDuplicateIsolation(connection: ConcurrentConnection): Promise<void> {
@@ -93,24 +96,26 @@ async function verifyDuplicateIsolation(connection: ConcurrentConnection): Promi
   const duplicate = client.callTool({ name: "duplicate_response", arguments: {} });
   const healthyA = client.callTool({ name: "ping", arguments: {} });
   const healthyB = client.callTool({ name: "ping", arguments: {} });
+  const calls = [duplicate, healthyA, healthyB] as const;
 
-  await transport.gate.allArrived();
-  const ids = expectConcurrentRequestIds(transport, requestOffset, "duplicate_response");
-  transport.gate.release();
+  try {
+    await transport.gate.allArrived();
+    const ids = expectConcurrentRequestIds(transport, requestOffset, "duplicate_response");
+    transport.gate.release();
 
-  const [duplicateResult, healthyAResult, healthyBResult] = await Promise.allSettled([
-    duplicate,
-    healthyA,
-    healthyB,
-  ]);
-  expectHealthyToolResult(duplicateResult);
-  expectHealthyPing(healthyAResult);
-  expectHealthyPing(healthyBResult);
+    const [duplicateResult, healthyAResult, healthyBResult] = await Promise.allSettled(calls);
+    expectHealthyToolResult(duplicateResult);
+    expectHealthyPing(healthyAResult);
+    expectHealthyPing(healthyBResult);
 
-  await transport.waitForResponseCount(ids.fault, 2);
-  await Promise.all(ids.healthy.map((id) => transport.waitForResponseCount(id, 1)));
-  expect(transport.responseCount(ids.fault)).toBe(2);
-  expect(ids.healthy.map((id) => transport.responseCount(id))).toEqual([1, 1]);
+    await transport.waitForResponseCount(ids.fault, 2);
+    await Promise.all(ids.healthy.map((id) => transport.waitForResponseCount(id, 1)));
+    expect(transport.responseCount(ids.fault)).toBe(2);
+    expect(ids.healthy.map((id) => transport.responseCount(id))).toEqual([1, 1]);
+  } finally {
+    transport.gate.close();
+    await Promise.allSettled(calls);
+  }
 }
 
 function expectConcurrentRequestIds(
@@ -141,27 +146,57 @@ function expectHealthyToolResult(result: PromiseSettledResult<unknown>): void {
   expect(result.status).toBe("fulfilled");
   if (result.status === "fulfilled") {
     expect(result.value).toMatchObject({ content: [{ type: "text" }] });
+    expect(result.value).not.toMatchObject({ isError: true });
   }
 }
 
 async function connectStdio(): Promise<ConcurrentConnection> {
-  return connect(
-    new StdioClientTransport({
-      command: process.execPath,
-      args: ["--import", "tsx", "src/cli.ts", "serve"],
-      cwd: process.cwd(),
-      stderr: "pipe",
-    }),
-    "2026-07-28",
-  );
+  const malformedEvidence = new MalformedResponseEvidence();
+  const delegate = new StdioClientTransport({
+    command: process.execPath,
+    args: ["--import", "tsx", "tests/fixtures/concurrentStdioServer.ts"],
+    cwd: process.cwd(),
+    stderr: "pipe",
+  });
+  let stderr = "";
+  const onStderr = (chunk: Buffer): void => {
+    stderr += chunk.toString();
+    const lines = stderr.split("\n");
+    stderr = lines.pop() ?? "";
+    for (const line of lines) {
+      try {
+        const evidence = JSON.parse(line) as { malformedResponseId?: unknown };
+        if (
+          typeof evidence.malformedResponseId === "string" ||
+          typeof evidence.malformedResponseId === "number"
+        ) {
+          malformedEvidence.record(evidence.malformedResponseId);
+        }
+      } catch {
+        // Ignore unrelated diagnostic output from the child process.
+      }
+    }
+  };
+  delegate.stderr?.on("data", onStderr);
+  return connect(delegate, "2026-07-28", undefined, malformedEvidence, () => {
+    delegate.stderr?.off("data", onStderr);
+  });
 }
 
 async function connectHttp(
   protocolVersion: "2025-11-25" | "2026-07-28",
 ): Promise<ConcurrentConnection> {
   const server = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
+  const malformedEvidence = new MalformedResponseEvidence();
+  const transport = new StreamableHTTPClientTransport(server.url, {
+    fetch: async (input, init) => {
+      const response = await fetch(input, init);
+      void recordMalformedHttpResponse(response.clone(), malformedEvidence).catch(() => {});
+      return response;
+    },
+  });
   try {
-    return await connect(new StreamableHTTPClientTransport(server.url), protocolVersion, server);
+    return await connect(transport, protocolVersion, server, malformedEvidence);
   } catch (error) {
     await server.close();
     throw error;
@@ -172,6 +207,8 @@ async function connect(
   delegate: StdioClientTransport | StreamableHTTPClientTransport,
   protocolVersion: "2025-11-25" | "2026-07-28",
   server?: HttpServerHandle,
+  malformedEvidence = new MalformedResponseEvidence(),
+  afterClose?: () => void,
 ): Promise<ConcurrentConnection> {
   const client = new Client(
     { name: "concurrent-isolation-test", version: "0.1.0" },
@@ -188,12 +225,87 @@ async function connect(
   return {
     client,
     transport,
+    malformedEvidence,
     close: async () => {
       if (closed) return;
       closed = true;
       await client.close();
       await server?.close();
+      afterClose?.();
+      malformedEvidence.close();
       transport.assertIdle();
     },
   };
+}
+
+class MalformedResponseEvidence {
+  private readonly ids = new Set<string | number>();
+  private readonly waiters = new Set<{
+    id: string | number;
+    timer: ReturnType<typeof setTimeout>;
+    resolve(): void;
+    reject(error: Error): void;
+  }>();
+
+  record(id: string | number): void {
+    this.ids.add(id);
+    for (const waiter of this.waiters) {
+      if (waiter.id !== id) continue;
+      clearTimeout(waiter.timer);
+      this.waiters.delete(waiter);
+      waiter.resolve();
+    }
+  }
+
+  waitFor(id: string | number, timeoutMs = 1_000): Promise<void> {
+    if (this.ids.has(id)) return Promise.resolve();
+    return new Promise<void>((resolve, reject) => {
+      const waiter = {
+        id,
+        timer: setTimeout(() => {
+          this.waiters.delete(waiter);
+          reject(new Error(`Timed out waiting for malformed response ${String(id)}`));
+        }, timeoutMs),
+        resolve,
+        reject,
+      };
+      this.waiters.add(waiter);
+    });
+  }
+
+  close(): void {
+    for (const waiter of this.waiters) {
+      clearTimeout(waiter.timer);
+      waiter.reject(new Error("Malformed response evidence closed"));
+    }
+    this.waiters.clear();
+  }
+}
+
+async function recordMalformedHttpResponse(
+  response: Response,
+  evidence: MalformedResponseEvidence,
+): Promise<void> {
+  const text = await response.text();
+  const payloads = response.headers.get("content-type")?.includes("text/event-stream")
+    ? text
+        .split(/\r\n|\r|\n/)
+        .filter((line) => line.startsWith("data:"))
+        .map((line) => line.slice(5).trimStart())
+    : [text];
+
+  for (const payload of payloads) {
+    try {
+      const message = JSON.parse(payload) as Record<string, unknown>;
+      if (
+        "result" in message &&
+        "error" in message &&
+        (typeof message.id === "string" || typeof message.id === "number")
+      ) {
+        evidence.record(message.id);
+      }
+    } catch {
+      // Non-JSON responses cannot be malformed JSON-RPC evidence.
+    }
+  }
 }

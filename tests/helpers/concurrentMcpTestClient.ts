@@ -1,6 +1,5 @@
 import {
   isJSONRPCRequest,
-  isJSONRPCResponse,
   type JSONRPCMessage,
   type RequestId,
   type Transport,
@@ -10,25 +9,29 @@ import {
 interface Deferred {
   promise: Promise<void>;
   resolve(): void;
+  reject(error: Error): void;
 }
 
 function deferred(): Deferred {
   let resolve!: () => void;
-  const promise = new Promise<void>((settle) => {
+  let reject!: (error: Error) => void;
+  const promise = new Promise<void>((settle, fail) => {
     resolve = settle;
+    reject = fail;
   });
-  return { promise, resolve };
+  return { promise, resolve, reject };
 }
 
 /** Holds a known number of tool calls until the test explicitly releases them. */
 export class ConcurrentRequestGate {
   private expected = 0;
   private blocked = 0;
+  private closed = false;
   private arrival = deferred();
   private releaseSignal = deferred();
 
   arm(expected: number): void {
-    if (expected < 1 || this.expected !== 0 || this.blocked !== 0) {
+    if (this.closed || expected < 1 || this.expected !== 0 || this.blocked !== 0) {
       throw new Error("Concurrent request gate is already active or has an invalid size");
     }
     this.expected = expected;
@@ -37,6 +40,7 @@ export class ConcurrentRequestGate {
   }
 
   async block(): Promise<void> {
+    if (this.closed) throw new Error("Concurrent request gate is closed");
     if (this.expected === 0) return;
     this.blocked += 1;
     if (this.blocked > this.expected) {
@@ -60,9 +64,15 @@ export class ConcurrentRequestGate {
   }
 
   close(): void {
+    this.closed = true;
     this.expected = 0;
+    const hadBlockedCalls = this.blocked !== 0;
     this.blocked = 0;
-    this.releaseSignal.resolve();
+    if (hadBlockedCalls) {
+      this.releaseSignal.reject(new Error("Concurrent request gate closed with blocked calls"));
+    } else {
+      this.releaseSignal.resolve();
+    }
     this.arrival.resolve();
   }
 
@@ -75,12 +85,20 @@ export class ConcurrentRequestGate {
 
 /** Records request/response IDs while applying an explicit client-side send barrier. */
 export class CorrelationTrackingTransport implements Transport {
+  declare readonly hasPerRequestStream?: boolean;
   readonly requests: Array<{ id: RequestId; tool: string }> = [];
   readonly responses: JSONRPCMessage[] = [];
   readonly gate = new ConcurrentRequestGate();
-  private readonly responseWaiters = new Set<() => void>();
+  private readonly responseWaiters = new Set<ResponseWaiter>();
 
-  constructor(private readonly delegate: Transport) {}
+  constructor(private readonly delegate: Transport) {
+    if (delegate.hasPerRequestStream !== undefined) {
+      Object.defineProperty(this, "hasPerRequestStream", {
+        value: delegate.hasPerRequestStream,
+        enumerable: true,
+      });
+    }
+  }
 
   onclose?: () => void;
   onerror?: (error: Error) => void;
@@ -90,9 +108,9 @@ export class CorrelationTrackingTransport implements Transport {
     this.delegate.onclose = () => this.onclose?.();
     this.delegate.onerror = (error) => this.onerror?.(error);
     this.delegate.onmessage = (message, extra) => {
-      if (isJSONRPCResponse(message)) {
+      if (responseId(message) !== undefined) {
         this.responses.push(message);
-        for (const notify of this.responseWaiters) notify();
+        for (const waiter of this.responseWaiters) waiter.notify();
       }
       this.onmessage?.(message, extra);
     };
@@ -113,6 +131,7 @@ export class CorrelationTrackingTransport implements Transport {
 
   async close(): Promise<void> {
     this.gate.close();
+    for (const waiter of this.responseWaiters) waiter.reject(new Error("Transport closed"));
     this.responseWaiters.clear();
     await this.delegate.close();
   }
@@ -136,19 +155,28 @@ export class CorrelationTrackingTransport implements Transport {
   }
 
   responseCount(id: RequestId): number {
-    return this.responses.filter((message) => isJSONRPCResponse(message) && message.id === id)
-      .length;
+    return this.responses.filter((message) => responseId(message) === id).length;
   }
 
-  waitForResponseCount(id: RequestId, count: number): Promise<void> {
+  waitForResponseCount(id: RequestId, count: number, timeoutMs = 1_000): Promise<void> {
     if (this.responseCount(id) >= count) return Promise.resolve();
-    return new Promise<void>((resolve) => {
-      const notify = (): void => {
-        if (this.responseCount(id) < count) return;
-        this.responseWaiters.delete(notify);
-        resolve();
+    return new Promise<void>((resolve, reject) => {
+      const finish = (settle: () => void): void => {
+        clearTimeout(waiter.timer);
+        this.responseWaiters.delete(waiter);
+        settle();
       };
-      this.responseWaiters.add(notify);
+      const waiter: ResponseWaiter = {
+        timer: setTimeout(() => {
+          finish(() => reject(new Error(`Timed out waiting for response ${String(id)}`)));
+        }, timeoutMs),
+        notify: () => {
+          if (this.responseCount(id) < count) return;
+          finish(resolve);
+        },
+        reject: (error) => finish(() => reject(error)),
+      };
+      this.responseWaiters.add(waiter);
     });
   }
 
@@ -158,4 +186,17 @@ export class CorrelationTrackingTransport implements Transport {
       throw new Error("Correlation tracker still has response listeners");
     }
   }
+}
+
+interface ResponseWaiter {
+  timer: ReturnType<typeof setTimeout>;
+  notify(): void;
+  reject(error: Error): void;
+}
+
+function responseId(message: JSONRPCMessage): RequestId | undefined {
+  if (typeof message !== "object" || message === null) return undefined;
+  if (!("result" in message) && !("error" in message)) return undefined;
+  const { id } = message as { id?: unknown };
+  return typeof id === "string" || typeof id === "number" ? id : undefined;
 }
