@@ -11,6 +11,9 @@ tests; they are not a permanent compatibility guarantee for later client release
 
 Published-package tests against independent MCP projects are documented separately:
 
+- [`punkpeye/mcp-proxy` 6.7.19](punkpeye-mcp-proxy-6.7.19.md) — stateful Streamable
+  HTTP-to-stdio delay, timeout, malformed response, duplicate response, disconnect, recovery, and
+  lifecycle checks using `mcp-failure-lab@0.10.0`.
 - [`supercorp-ai/supergateway` 4.0.0](supergateway-4.0.0.md) — bidirectional Streamable HTTP/stdio
   bridging, delay, timeout/cancellation, malformed and duplicate responses, disconnect recovery,
   and lifecycle checks using `mcp-failure-lab@0.10.0`.
