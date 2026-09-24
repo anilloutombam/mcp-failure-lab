@@ -11,6 +11,9 @@ tests; they are not a permanent compatibility guarantee for later client release
 
 Published-package tests against independent MCP projects are documented separately:
 
+- [`tbxark/mcp-proxy` 1.1.0](tbxark-mcp-proxy-1.1.0.md) — two-server aggregation, delay,
+  timeout, malformed and duplicate responses, downstream isolation, automatic reconnect, and
+  lifecycle checks using `mcp-failure-lab@0.10.0`.
 - [`punkpeye/mcp-proxy` 6.7.19](punkpeye-mcp-proxy-6.7.19.md) — stateful Streamable
   HTTP-to-stdio delay, timeout, malformed response, duplicate response, disconnect, recovery, and
   lifecycle checks using `mcp-failure-lab@0.10.0`.
