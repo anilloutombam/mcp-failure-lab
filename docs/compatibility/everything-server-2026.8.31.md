@@ -73,6 +73,9 @@ The Everything server has no disconnect or malformed-response tools, so those ca
 
 ### stdio cleanup does not complete promptly after a cancelled long-running operation
 
+Tracked in
+[`modelcontextprotocol/servers#4846`](https://github.com/modelcontextprotocol/servers/issues/4846).
+
 The test called `trigger-long-running-operation` with a two-second duration and a 400 ms client
 timeout. Failure Lab cancelled the request and successfully called `echo` on the same session, but
 closing the stdio client then exceeded its 400 ms cleanup bound:

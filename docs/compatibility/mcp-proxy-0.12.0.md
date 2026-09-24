@@ -78,6 +78,8 @@ also passed in both directions.
 
 ### 1. Clean `mcp-proxy` 0.12.0 install is incompatible with the resolved MCP SDK
 
+Tracked in [`sparfenyuk/mcp-proxy#235`](https://github.com/sparfenyuk/mcp-proxy/issues/235).
+
 `mcp-proxy` 0.12.0 declares `mcp>=1.27.1` without an upper bound. On 2026-09-24 a clean install
 resolved `mcp==2.2.0`, after which even `mcp-proxy --version` crashed:
 
@@ -101,6 +103,11 @@ the compatibility matrix to run:
 ```
 
 ### 2. Transport disconnect is not recovered
+
+Related upstream reports:
+
+- HTTP/SSE reconnection: [`sparfenyuk/mcp-proxy#75`](https://github.com/sparfenyuk/mcp-proxy/issues/75)
+- Exited stdio child remains unavailable: [`sparfenyuk/mcp-proxy#247`](https://github.com/sparfenyuk/mcp-proxy/issues/247)
 
 In stdio-to-HTTP mode, invoking Failure Lab's `disconnect` tool caused the upstream HTTP request to
 end without a response. `mcp-proxy` emitted an unhandled `ExceptionGroup` rooted in
