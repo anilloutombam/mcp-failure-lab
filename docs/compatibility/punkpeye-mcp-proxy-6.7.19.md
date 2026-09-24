@@ -1,7 +1,6 @@
 # `punkpeye/mcp-proxy` 6.7.19 compatibility report
 
-Tested on 2026-09-24 with the published `mcp-failure-lab@0.10.0` package. The tests did not use a
-local Failure Lab build.
+Tested on 2026-09-24 with published npm packages.
 
 ## Versions
 
@@ -14,11 +13,7 @@ local Failure Lab build.
 - Node.js: `26.5.0`
 - Platform: macOS arm64
 
-## Setup
-
-```text
-mcp-failure-lab runner -> Streamable HTTP -> mcp-proxy -> stdio -> mcp-failure-lab server
-```
+## Commands
 
 ```bash
 npx -y mcp-proxy@6.7.19 \
@@ -27,15 +22,12 @@ npx -y mcp-proxy@6.7.19 \
   npx -y mcp-failure-lab@0.10.0 serve
 ```
 
-The runner connected to `http://127.0.0.1:3501/mcp`:
-
 ```bash
 npx -y mcp-failure-lab@0.10.0 run SCENARIO.json \
   --target TARGET.json --report json
 ```
 
-The CLI exposes stdio servers over HTTP/SSE. The reverse direction is handled by `mcp-remote` and
-was not tested as part of this report.
+Target URL: `http://127.0.0.1:3501/mcp`.
 
 ## Results
 
@@ -53,18 +45,17 @@ was not tested as part of this report.
 | New session after disconnect            |          Failed with `Not connected` |
 | Normal cleanup                          |                                 Pass |
 
-Malformed calls reached the 1.5 second limit. The following `ping` passed on the same session.
+Malformed calls reached the 1.5 second limit. The next `ping` passed.
 
-## Disconnect finding
+## Disconnect
 
-The `disconnect` tool closed the stdio child during a request. The call failed with
-`Connection closed`. A same-session `ping` failed with `Not connected`. A new HTTP session also
-failed its baseline `ping` with `Not connected`.
+`disconnect` closed the stdio child. The call failed with `Connection closed`. A same-session
+`ping` and a new-session `ping` both failed with `Not connected`.
 
-The proxy process remained running. Its subscription listener retried six times with increasing
-delays, but each attempt failed with `SdkError: Not connected`. The stdio child was not restarted.
+The proxy stayed running. Its subscription listener retried six times; every attempt returned
+`SdkError: Not connected`. The child was not restarted.
 
-## Scope
+## Not tested
 
-Not tested: SSE, stateless HTTP, authentication, TLS, tunnels, event replay, request-size limits,
-concurrency, idle timeout, or soak behavior.
+SSE, stateless HTTP, authentication, TLS, tunnels, event replay, request-size limits, concurrency,
+idle timeout, and soak behavior.
