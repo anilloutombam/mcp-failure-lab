@@ -66,6 +66,7 @@ No GitHub MCP Server defect was reproduced.
 The Failure Lab stdio target accepts literal environment values but has no equivalent of HTTP
 `headerEnv` for resolving a secret from the parent environment. The local test therefore used a
 shell launch helper. This is a Failure Lab configuration limitation, not a GitHub MCP Server bug.
+It is tracked in [mcp-failure-lab#90](https://github.com/anilloutombam/mcp-failure-lab/issues/90).
 
 ## Not tested
 
