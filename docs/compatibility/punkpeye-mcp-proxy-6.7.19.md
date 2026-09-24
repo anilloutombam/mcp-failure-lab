@@ -55,6 +55,8 @@ Malformed calls reached the 1.5 second limit. The next `ping` passed.
 The proxy stayed running. Its subscription listener retried six times; every attempt returned
 `SdkError: Not connected`. The child was not restarted.
 
+Upstream tracking: [punkpeye/mcp-proxy#112](https://github.com/punkpeye/mcp-proxy/issues/112).
+
 ## Not tested
 
 SSE, stateless HTTP, authentication, TLS, tunnels, event replay, request-size limits, concurrency,
