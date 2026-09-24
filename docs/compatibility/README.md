@@ -11,6 +11,9 @@ tests; they are not a permanent compatibility guarantee for later client release
 
 Published-package tests against independent MCP projects are documented separately:
 
+- [GitHub MCP Server 1.12.2](github-mcp-server-1.12.2.md) — hosted Streamable HTTP and local stdio
+  authentication, tool allowlisting, repeated read-only calls, and lifecycle checks using
+  `mcp-failure-lab@0.10.0`.
 - [`tbxark/mcp-proxy` 1.1.0](tbxark-mcp-proxy-1.1.0.md) — two-server aggregation, delay,
   timeout, malformed and duplicate responses, downstream isolation, automatic reconnect, and
   lifecycle checks using `mcp-failure-lab@0.10.0`.
