@@ -13,6 +13,10 @@ import {
   RequestScopedMalformedMessageFaults,
 } from "./malformedMessage.js";
 import { createServer } from "./server.js";
+import {
+  ResponseAfterCancellationFaults,
+  ResponseAfterCancellationTransport,
+} from "./responseAfterCancellation.js";
 import type { ServeOptions } from "./serveArguments.js";
 
 async function serve(options: ServeOptions): Promise<void> {
@@ -20,13 +24,7 @@ async function serve(options: ServeOptions): Promise<void> {
   const duplicateResponseFaults = new RequestScopedDuplicateResponseFaults();
   const serverHandle =
     options.transport === "stdio"
-      ? serveStdio(() => createServer({ malformedMessageFaults, duplicateResponseFaults }), {
-          legacy: "serve",
-          transport: new MalformedMessageTransport(
-            new DuplicateResponseTransport(new StdioServerTransport(), duplicateResponseFaults),
-            malformedMessageFaults,
-          ),
-        })
+      ? startStdioServer(malformedMessageFaults, duplicateResponseFaults)
       : await startHttpServer(options).then((handle) => {
           console.error(`MCP Failure Lab listening at ${handle.url.toString()}`);
           return handle;
@@ -60,6 +58,38 @@ async function serve(options: ServeOptions): Promise<void> {
   process.once("SIGTERM", () => {
     requestShutdown("SIGTERM");
   });
+}
+
+function startStdioServer(
+  malformedMessageFaults: RequestScopedMalformedMessageFaults,
+  duplicateResponseFaults: RequestScopedDuplicateResponseFaults,
+): { close(): Promise<void> } {
+  const stdioTransport = new StdioServerTransport();
+  const responseAfterCancellationFaults = new ResponseAfterCancellationFaults(stdioTransport);
+  const handle = serveStdio(
+    () =>
+      createServer({
+        malformedMessageFaults,
+        duplicateResponseFaults,
+        responseAfterCancellationFaults,
+      }),
+    {
+      legacy: "serve",
+      transport: new ResponseAfterCancellationTransport(
+        new MalformedMessageTransport(
+          new DuplicateResponseTransport(stdioTransport, duplicateResponseFaults),
+          malformedMessageFaults,
+        ),
+        responseAfterCancellationFaults,
+      ),
+    },
+  );
+  return {
+    close: async () => {
+      responseAfterCancellationFaults.clear();
+      await handle.close();
+    },
+  };
 }
 
 const output = {

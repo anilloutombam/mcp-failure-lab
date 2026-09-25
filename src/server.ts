@@ -8,6 +8,10 @@ import {
 } from "./duplicateResponse.js";
 import { registerMalformedMessageTool, type MalformedMessageFaults } from "./malformedMessage.js";
 import { registerPingTool, type Clock } from "./ping.js";
+import {
+  registerResponseAfterCancellationTool,
+  type ResponseAfterCancellationFaults,
+} from "./responseAfterCancellation.js";
 import { VERSION } from "./version.js";
 
 export interface ServerDependencies {
@@ -16,6 +20,7 @@ export interface ServerDependencies {
   disconnect?: Disconnect;
   malformedMessageFaults?: MalformedMessageFaults;
   duplicateResponseFaults?: DuplicateResponseFaults;
+  responseAfterCancellationFaults?: ResponseAfterCancellationFaults;
 }
 
 export function createServer(dependencies: ServerDependencies = {}): McpServer {
@@ -33,6 +38,9 @@ export function createServer(dependencies: ServerDependencies = {}): McpServer {
   }
   if (dependencies.duplicateResponseFaults !== undefined) {
     registerDuplicateResponseTool(server, dependencies.duplicateResponseFaults);
+  }
+  if (dependencies.responseAfterCancellationFaults !== undefined) {
+    registerResponseAfterCancellationTool(server, dependencies.responseAfterCancellationFaults);
   }
 
   return server;

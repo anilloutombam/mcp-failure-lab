@@ -75,6 +75,7 @@ external HTTP or stdio MCP target from the command line.
 Available now:
 
 - `ping`, `delay`, `hang`, `disconnect`, `malformed_message`, and `duplicate_response` tools
+- `response_after_cancellation` on stdio
 - MCP communication over stdio and Streamable HTTP
 - Code-first and JSON scenario definitions
 - Outcome and maximum-duration assertions
@@ -274,14 +275,15 @@ For result assertions, observer calls, reporting formats, and timeout behavior, 
 
 ## Fault tools
 
-| Tool                 | Behavior                                                     |
-| -------------------- | ------------------------------------------------------------ |
-| `ping`               | Returns a deterministic health response                      |
-| `delay`              | Waits for a bounded duration before returning                |
-| `hang`               | Remains pending until the client cancels                     |
-| `disconnect`         | Interrupts the active transport while a request is in flight |
-| `malformed_message`  | Violates one selected JSON-RPC response rule exactly once    |
-| `duplicate_response` | Sends the same JSON-RPC response twice for one request       |
+| Tool                          | Behavior                                                     |
+| ----------------------------- | ------------------------------------------------------------ |
+| `ping`                        | Returns a deterministic health response                      |
+| `delay`                       | Waits for a bounded duration before returning                |
+| `hang`                        | Remains pending until the client cancels                     |
+| `disconnect`                  | Interrupts the active transport while a request is in flight |
+| `malformed_message`           | Violates one selected JSON-RPC response rule exactly once    |
+| `duplicate_response`          | Sends the same JSON-RPC response twice for one request       |
+| `response_after_cancellation` | Sends one late response for a cancelled stdio request        |
 
 `malformed_message` accepts one of three variants:
 
@@ -296,6 +298,15 @@ so later requests on the same connection are unaffected.
 
 `duplicate_response` accepts no arguments. It preserves the request ID and emits exactly one
 additional response. A following observer call can verify that the client remains usable.
+
+`response_after_cancellation` takes no arguments and works over stdio. Call it with an
+`AbortController` and an `onprogress` callback. Cancel when the progress notification arrives.
+The server sends one result with that call's request ID after it sees the cancellation. The
+cancelled call rejects; a separate `ping` on the same connection still gets its own result.
+
+If the server does not see cancellation within five seconds, it sends no late result. Closing
+the connection clears the pending call. The tool is unavailable over Streamable HTTP because
+cancellation closes the response stream. It is also unavailable through `run`, which uses HTTP.
 
 See the [fault tools reference](https://mcplab.dev/docs/fault-tools/) for arguments and behavior.
 
