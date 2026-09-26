@@ -21,20 +21,25 @@ interface PendingResponse {
   timer: ReturnType<typeof setTimeout>;
   onAbort(): void;
   reject(error: Error): void;
+  sending: boolean;
 }
 
 /** Tracks calls waiting for cancellation and sends their responses over stdio. */
 export class ResponseAfterCancellationFaults {
   private readonly pending = new Map<RequestId, PendingResponse>();
   private readonly completed = new Set<RequestId>();
+  private closed = false;
 
   constructor(private readonly sender: LateResponseSender) {}
 
   activate(requestId: RequestId, signal: AbortSignal): Promise<never> {
-    if (this.pending.has(requestId)) {
+    if (this.closed) {
+      throw new Error("Late-response fault is closed");
+    }
+    if (this.pending.has(requestId) || this.completed.has(requestId)) {
       throw new Error(`A late response is already pending for request ${String(requestId)}`);
     }
-    if (this.pending.size >= MAX_PENDING_LATE_RESPONSES) {
+    if (this.pending.size + this.completed.size >= MAX_PENDING_LATE_RESPONSES) {
       throw new Error("Too many pending late-response faults");
     }
     if (signal.aborted) {
@@ -54,39 +59,44 @@ export class ResponseAfterCancellationFaults {
         cleanup();
         reject(new Error("Cancellation was not observed before the late-response deadline"));
       }, LATE_RESPONSE_DEADLINE_MS);
-      this.pending.set(requestId, { signal, timer, onAbort, reject });
+      this.pending.set(requestId, { signal, timer, onAbort, reject, sending: false });
       signal.addEventListener("abort", onAbort, { once: true });
     });
   }
 
   observeCancellation(requestId: RequestId): void {
     const pending = this.pending.get(requestId);
-    if (pending === undefined) return;
+    if (pending === undefined || pending.sending) return;
+    pending.sending = true;
     clearTimeout(pending.timer);
     pending.signal.removeEventListener("abort", pending.onAbort);
-    this.pending.delete(requestId);
-    this.completed.add(requestId);
-    if (this.completed.size > MAX_PENDING_LATE_RESPONSES) {
-      this.completed.delete(this.completed.values().next().value!);
-    }
-    void this.sender
-      .send({
-        jsonrpc: "2.0",
-        id: requestId,
-        result: {
-          content: [{ type: "text", text: "response sent after cancellation" }],
-        },
-      })
+    void Promise.resolve()
+      .then(() =>
+        this.sender.send({
+          jsonrpc: "2.0",
+          id: requestId,
+          result: {
+            content: [{ type: "text", text: "response sent after cancellation" }],
+          },
+        }),
+      )
       .then(
-        () => pending.reject(new Error("Late response sent after cancellation")),
+        () => {
+          if (this.pending.get(requestId) !== pending) return;
+          this.pending.delete(requestId);
+          if (!pending.signal.aborted) this.completed.add(requestId);
+          pending.reject(new Error("Late response sent after cancellation"));
+        },
         (error: unknown) => {
-          this.completed.delete(requestId);
+          if (this.pending.get(requestId) !== pending) return;
+          this.pending.delete(requestId);
           pending.reject(error instanceof Error ? error : new Error(String(error)));
         },
       );
   }
 
   clear(): void {
+    this.closed = true;
     for (const [requestId, pending] of this.pending) {
       clearTimeout(pending.timer);
       pending.signal.removeEventListener("abort", pending.onAbort);
@@ -102,7 +112,7 @@ export class ResponseAfterCancellationFaults {
 
   cancel(requestId: RequestId): void {
     const pending = this.pending.get(requestId);
-    if (pending === undefined) return;
+    if (pending === undefined || pending.sending) return;
     clearTimeout(pending.timer);
     pending.signal.removeEventListener("abort", pending.onAbort);
     this.pending.delete(requestId);
