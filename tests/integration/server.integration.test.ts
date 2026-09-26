@@ -3,6 +3,7 @@ import { createRequire } from "node:module";
 import { describe, expect, it } from "vitest";
 
 import { createServer } from "../../src/server.js";
+import { ResponseAfterCancellationFaults } from "../../src/responseAfterCancellation.js";
 import { connectTestClient, type TestProtocolVersion } from "../helpers/mcpTestClient.js";
 
 const require = createRequire(import.meta.url);
@@ -12,6 +13,21 @@ const packageJson = require("../../package.json") as {
 };
 
 describe("MCP server metadata", () => {
+  it("registers the late-response tool when the stdio fault is configured", async () => {
+    const faults = new ResponseAfterCancellationFaults({ send: async () => undefined });
+    const connection = await connectTestClient(() =>
+      createServer({ responseAfterCancellationFaults: faults }),
+    );
+
+    try {
+      const { tools } = await connection.client.listTools();
+      expect(tools.map((tool) => tool.name)).toContain("response_after_cancellation");
+    } finally {
+      await connection.close();
+      faults.clear();
+    }
+  });
+
   it("reports the package version during initialization", async () => {
     const connection = await connectTestClient(() => createServer());
 
