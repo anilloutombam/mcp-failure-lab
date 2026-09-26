@@ -22,6 +22,8 @@ interface PendingResponse {
   onAbort(): void;
   reject(error: Error): void;
   sending: boolean;
+  settled: boolean;
+  frameworkResponseConsumed: boolean;
 }
 
 /** Tracks calls waiting for cancellation and sends their responses over stdio. */
@@ -29,6 +31,7 @@ export class ResponseAfterCancellationFaults {
   private readonly pending = new Map<RequestId, PendingResponse>();
   private readonly completed = new Set<RequestId>();
   private closed = false;
+  private protocolVersion?: string;
 
   constructor(private readonly sender: LateResponseSender) {}
 
@@ -56,10 +59,24 @@ export class ResponseAfterCancellationFaults {
       };
       const onAbort = (): void => this.observeCancellation(requestId);
       const timer = setTimeout(() => {
+        const pending = this.pending.get(requestId);
+        if (pending?.sending) {
+          pending.settled = true;
+          reject(new Error("Late response send did not complete before the deadline"));
+          return;
+        }
         cleanup();
         reject(new Error("Cancellation was not observed before the late-response deadline"));
       }, LATE_RESPONSE_DEADLINE_MS);
-      this.pending.set(requestId, { signal, timer, onAbort, reject, sending: false });
+      this.pending.set(requestId, {
+        signal,
+        timer,
+        onAbort,
+        reject,
+        sending: false,
+        settled: false,
+        frameworkResponseConsumed: false,
+      });
       signal.addEventListener("abort", onAbort, { once: true });
     });
   }
@@ -68,31 +85,48 @@ export class ResponseAfterCancellationFaults {
     const pending = this.pending.get(requestId);
     if (pending === undefined || pending.sending) return;
     pending.sending = true;
-    clearTimeout(pending.timer);
     pending.signal.removeEventListener("abort", pending.onAbort);
     void Promise.resolve()
-      .then(() =>
-        this.sender.send({
-          jsonrpc: "2.0",
-          id: requestId,
-          result: {
-            content: [{ type: "text", text: "response sent after cancellation" }],
-          },
-        }),
-      )
+      .then(() => {
+        if (this.closed || this.pending.get(requestId) !== pending) return false;
+        const result: Record<string, unknown> = {
+          content: [{ type: "text", text: "response sent after cancellation" }],
+        };
+        if (this.protocolVersion !== undefined && this.protocolVersion >= "2026-07-28") {
+          result.resultType = "complete";
+        }
+        return this.sender
+          .send({
+            jsonrpc: "2.0",
+            id: requestId,
+            result,
+          })
+          .then(() => true);
+      })
       .then(
-        () => {
+        (sent) => {
+          if (!sent) return;
           if (this.pending.get(requestId) !== pending) return;
+          clearTimeout(pending.timer);
           this.pending.delete(requestId);
-          if (!pending.signal.aborted) this.completed.add(requestId);
-          pending.reject(new Error("Late response sent after cancellation"));
+          if (!pending.signal.aborted && !pending.frameworkResponseConsumed) {
+            this.completed.add(requestId);
+          }
+          if (!pending.settled) pending.reject(new Error("Late response sent after cancellation"));
         },
         (error: unknown) => {
           if (this.pending.get(requestId) !== pending) return;
+          clearTimeout(pending.timer);
           this.pending.delete(requestId);
-          pending.reject(error instanceof Error ? error : new Error(String(error)));
+          if (!pending.settled) {
+            pending.reject(error instanceof Error ? error : new Error(String(error)));
+          }
         },
       );
+  }
+
+  setProtocolVersion(version: string): void {
+    this.protocolVersion = version;
   }
 
   clear(): void {
@@ -106,7 +140,12 @@ export class ResponseAfterCancellationFaults {
     this.completed.clear();
   }
 
-  consumeCompleted(requestId: RequestId): boolean {
+  consumeResponse(requestId: RequestId): boolean {
+    const pending = this.pending.get(requestId);
+    if (pending?.sending) {
+      pending.frameworkResponseConsumed = true;
+      return true;
+    }
     return this.completed.delete(requestId);
   }
 
@@ -157,7 +196,7 @@ export class ResponseAfterCancellationTransport implements Transport {
     if (
       isJSONRPCResponse(message) &&
       message.id !== undefined &&
-      this.faults.consumeCompleted(message.id)
+      this.faults.consumeResponse(message.id)
     ) {
       return Promise.resolve();
     }
@@ -170,6 +209,7 @@ export class ResponseAfterCancellationTransport implements Transport {
   }
 
   setProtocolVersion(version: string): void {
+    this.faults.setProtocolVersion(version);
     this.delegate.setProtocolVersion?.(version);
   }
 

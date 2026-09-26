@@ -86,6 +86,9 @@ describe.each(["2026-07-28", "2025-11-25"] as const)(
           await transport.waitForResponseCount(healthyId!, 1);
           expect(transport.responseCount(faultId!)).toBe(1);
           expect(errors.some((error) => error.message.includes("unknown message ID"))).toBe(true);
+          expect(
+            errors.some((error) => error.message.includes("missing required resultType")),
+          ).toBe(false);
           transport.assertIdle();
         } finally {
           clearTimeout(activationTimer);

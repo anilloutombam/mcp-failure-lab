@@ -33,8 +33,8 @@ describe("response-after-cancellation faults", () => {
       },
     ]);
     expect(faults.pendingCount).toBe(0);
-    expect(faults.consumeCompleted(0)).toBe(true);
-    expect(faults.consumeCompleted(0)).toBe(false);
+    expect(faults.consumeResponse(0)).toBe(true);
+    expect(faults.consumeResponse(0)).toBe(false);
   });
 
   it("expires an activation if cancellation is never observed", async () => {
@@ -95,7 +95,7 @@ describe("response-after-cancellation faults", () => {
     expect(() => faults.activate("overflow", new AbortController().signal)).toThrow(
       "Too many pending late-response faults",
     );
-    expect(faults.consumeCompleted(0)).toBe(true);
+    expect(faults.consumeResponse(0)).toBe(true);
     const next = faults.activate("next", new AbortController().signal);
     const settled = next.catch(() => undefined);
     faults.clear();
@@ -127,7 +127,46 @@ describe("response-after-cancellation faults", () => {
     await Promise.resolve();
 
     expect(faults.pendingCount).toBe(0);
-    expect(faults.consumeCompleted(3)).toBe(false);
+    expect(faults.consumeResponse(3)).toBe(false);
+  });
+
+  it("does not start a queued send after the connection closes", async () => {
+    const send = vi.fn(async () => undefined);
+    const faults = new ResponseAfterCancellationFaults({ send });
+    const pending = faults.activate(6, new AbortController().signal);
+    const outcome = expect(pending).rejects.toThrow("closed for request 6");
+
+    faults.observeCancellation(6);
+    faults.clear();
+
+    await outcome;
+    await Promise.resolve();
+    expect(send).not.toHaveBeenCalled();
+  });
+
+  it("settles a blocked send at the deadline but tracks it until completion", async () => {
+    vi.useFakeTimers();
+    let releaseSend!: () => void;
+    const faults = new ResponseAfterCancellationFaults({
+      send: () =>
+        new Promise<void>((resolve) => {
+          releaseSend = resolve;
+        }),
+    });
+    const pending = faults.activate(7, new AbortController().signal);
+    const outcome = expect(pending).rejects.toThrow("send did not complete before the deadline");
+    faults.observeCancellation(7);
+    await Promise.resolve();
+
+    await vi.advanceTimersByTimeAsync(LATE_RESPONSE_DEADLINE_MS);
+    await outcome;
+    expect(faults.pendingCount).toBe(1);
+    expect(faults.consumeResponse(7)).toBe(true);
+
+    releaseSend();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(faults.pendingCount).toBe(0);
+    expect(faults.consumeResponse(7)).toBe(false);
   });
 
   it("keeps a sending response tracked if activation cleanup races cancellation", async () => {
@@ -153,7 +192,7 @@ describe("response-after-cancellation faults", () => {
 
     releaseSend();
     await outcome;
-    expect(faults.consumeCompleted(4)).toBe(true);
+    expect(faults.consumeResponse(4)).toBe(true);
   });
 
   it("does not keep a completed marker after a failed send", async () => {
@@ -167,7 +206,7 @@ describe("response-after-cancellation faults", () => {
 
     await expect(pending).rejects.toThrow("output closed");
     expect(faults.pendingCount).toBe(0);
-    expect(faults.consumeCompleted(5)).toBe(false);
+    expect(faults.consumeResponse(5)).toBe(false);
   });
 
   it("forwards healthy responses but suppresses the framework response for the fault", async () => {
@@ -209,6 +248,33 @@ describe("response-after-cancellation faults", () => {
     expect(sent).toHaveLength(2);
     expect(sent[0]).toMatchObject({ id: 0 });
     expect(sent[1]).toEqual(healthyResponse);
+    await transport.close();
+  });
+
+  it("uses the result shape for the negotiated protocol version", async () => {
+    const sent: JSONRPCMessage[] = [];
+    const delegate: Transport = {
+      start: async () => undefined,
+      send: async (message) => {
+        sent.push(message);
+      },
+      close: async () => undefined,
+    };
+    const faults = new ResponseAfterCancellationFaults({ send: delegate.send });
+    const transport = new ResponseAfterCancellationTransport(delegate, faults);
+
+    transport.setProtocolVersion("2026-07-28");
+    const modern = faults.activate(8, new AbortController().signal);
+    faults.observeCancellation(8);
+    await modern.catch(() => undefined);
+
+    transport.setProtocolVersion("2025-11-25");
+    const legacy = faults.activate(9, new AbortController().signal);
+    faults.observeCancellation(9);
+    await legacy.catch(() => undefined);
+
+    expect(sent[0]).toMatchObject({ result: { resultType: "complete" } });
+    expect(sent[1]).not.toHaveProperty("result.resultType");
     await transport.close();
   });
 });
