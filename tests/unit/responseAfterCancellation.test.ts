@@ -1,4 +1,4 @@
-import type { JSONRPCMessage, Transport } from "@modelcontextprotocol/server";
+import type { JSONRPCMessage, McpServer, RequestId, Transport } from "@modelcontextprotocol/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
@@ -6,11 +6,33 @@ import {
   MAX_PENDING_LATE_RESPONSES,
   ResponseAfterCancellationFaults,
   ResponseAfterCancellationTransport,
+  registerResponseAfterCancellationTool,
 } from "../../src/responseAfterCancellation.js";
 
 afterEach(() => vi.useRealTimers());
 
 describe("response-after-cancellation faults", () => {
+  it("rejects invalid activations", async () => {
+    const faults = new ResponseAfterCancellationFaults({ send: vi.fn(async () => undefined) });
+    const first = faults.activate(1, new AbortController().signal);
+    const settled = first.catch(() => undefined);
+    expect(() => faults.activate(1, new AbortController().signal)).toThrow(
+      "already pending for request 1",
+    );
+
+    const aborted = new AbortController();
+    aborted.abort();
+    expect(() => faults.activate(2, aborted.signal)).toThrow(
+      "cancelled before late-response activation",
+    );
+
+    faults.clear();
+    await settled;
+    expect(() => faults.activate(3, new AbortController().signal)).toThrow(
+      "Late-response fault is closed",
+    );
+  });
+
   it("sends once for the cancelled request ID and consumes the activation", async () => {
     const sent: JSONRPCMessage[] = [];
     const faults = new ResponseAfterCancellationFaults({
@@ -209,6 +231,17 @@ describe("response-after-cancellation faults", () => {
     expect(faults.consumeResponse(5)).toBe(false);
   });
 
+  it("cancels an activation before sending", async () => {
+    const send = vi.fn(async () => undefined);
+    const faults = new ResponseAfterCancellationFaults({ send });
+    const pending = faults.activate(10, new AbortController().signal);
+    faults.cancel(10);
+
+    await expect(pending).rejects.toThrow("activation failed for request 10");
+    expect(send).not.toHaveBeenCalled();
+    expect(faults.pendingCount).toBe(0);
+  });
+
   it("forwards healthy responses but suppresses the framework response for the fault", async () => {
     const sent: JSONRPCMessage[] = [];
     const delegate: Transport = {
@@ -277,4 +310,95 @@ describe("response-after-cancellation faults", () => {
     expect(sent[1]).not.toHaveProperty("result.resultType");
     await transport.close();
   });
+
+  it("forwards transport lifecycle events and supported versions", async () => {
+    const delegate: Transport = {
+      start: async () => undefined,
+      send: async () => undefined,
+      close: async () => undefined,
+      setSupportedProtocolVersions: vi.fn(),
+    };
+    const faults = new ResponseAfterCancellationFaults({ send: delegate.send });
+    const transport = new ResponseAfterCancellationTransport(delegate, faults);
+    transport.onclose = vi.fn();
+    transport.onerror = vi.fn();
+    await transport.start();
+
+    delegate.onerror?.(new Error("transport failed"));
+    transport.setSupportedProtocolVersions(["2026-07-28", "2025-11-25"]);
+    delegate.onclose?.();
+
+    expect(transport.onerror).toHaveBeenCalledWith(
+      expect.objectContaining({ message: "transport failed" }),
+    );
+    expect(transport.onclose).toHaveBeenCalledOnce();
+    expect(delegate.setSupportedProtocolVersions).toHaveBeenCalledWith([
+      "2026-07-28",
+      "2025-11-25",
+    ]);
+  });
+
+  it("registers the tool and reports activation before cancellation", async () => {
+    let handler: ToolHandler | undefined;
+    const server = {
+      registerTool: vi.fn((_name, _config, callback) => {
+        handler = callback as unknown as ToolHandler;
+      }),
+    } as unknown as McpServer;
+    const faults = new ResponseAfterCancellationFaults({ send: vi.fn(async () => undefined) });
+    const notify = vi.fn(async () => undefined);
+    const controller = new AbortController();
+    registerResponseAfterCancellationTool(server, faults);
+
+    const call = handler?.({}, requestContext(12, controller.signal, notify, "progress-12"));
+    expect(call).toBeDefined();
+    await vi.waitFor(() => expect(notify).toHaveBeenCalledOnce());
+    faults.observeCancellation(12);
+    await expect(call).rejects.toThrow("Late response sent after cancellation");
+  });
+
+  it("cleans up the activation when progress notification fails", async () => {
+    let handler: ToolHandler | undefined;
+    const server = {
+      registerTool: vi.fn((_name, _config, callback) => {
+        handler = callback as unknown as ToolHandler;
+      }),
+    } as unknown as McpServer;
+    const faults = new ResponseAfterCancellationFaults({ send: vi.fn(async () => undefined) });
+    registerResponseAfterCancellationTool(server, faults);
+
+    await expect(
+      handler?.(
+        {},
+        requestContext(
+          13,
+          new AbortController().signal,
+          vi.fn(async () => Promise.reject(new Error("progress failed"))),
+          "progress-13",
+        ),
+      ),
+    ).rejects.toThrow("progress failed");
+    expect(faults.pendingCount).toBe(0);
+  });
 });
+
+type ToolHandler = (
+  args: Record<string, never>,
+  context: ReturnType<typeof requestContext>,
+) => Promise<unknown>;
+
+function requestContext(
+  id: RequestId,
+  signal: AbortSignal,
+  notify: (message: unknown) => Promise<void>,
+  progressToken?: string,
+) {
+  return {
+    mcpReq: {
+      id,
+      signal,
+      _meta: progressToken === undefined ? undefined : { progressToken },
+      notify,
+    },
+  };
+}
