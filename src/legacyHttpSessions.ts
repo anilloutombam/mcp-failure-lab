@@ -1,3 +1,4 @@
+import { AsyncLocalStorage } from "node:async_hooks";
 import { randomUUID } from "node:crypto";
 
 import {
@@ -18,23 +19,34 @@ import { createServer } from "./server.js";
 import type { SessionLossActivation, SessionLossController } from "./sessionLoss.js";
 
 export const MAX_HTTP_SESSIONS = 128;
+export const HTTP_SESSION_IDLE_TIMEOUT_MS = 5 * 60_000;
+
+interface RequestContext {
+  interruptResponse: () => void;
+}
 
 interface LegacySession {
   transport: WebStandardStreamableHTTPServerTransport;
   server: McpServer;
   malformedMessage: MalformedMessageFaults;
   duplicateResponse: DuplicateResponseFaults;
-  interruptActiveResponse: () => void;
   loss?: SessionLossActivation;
+  lastActivity: number;
+  activeRequests: number;
   closed: boolean;
 }
 
 export class LegacyHttpSessions {
   private readonly sessions = new Map<string, LegacySession>();
   private readonly active = new Set<LegacySession>();
+  private readonly requestContext = new AsyncLocalStorage<RequestContext>();
   private closed = false;
 
-  constructor(private readonly maxSessions = MAX_HTTP_SESSIONS) {}
+  constructor(
+    private readonly maxSessions = MAX_HTTP_SESSIONS,
+    private readonly idleTimeoutMs = HTTP_SESSION_IDLE_TIMEOUT_MS,
+    private readonly now: () => number = Date.now,
+  ) {}
 
   async fetch(
     request: Request,
@@ -46,9 +58,9 @@ export class LegacyHttpSessions {
     if (sessionId !== null) {
       const session = this.sessions.get(sessionId);
       if (session === undefined) return sessionError(404, -32001, "Session not found");
-      session.interruptActiveResponse = interruptActiveResponse;
-      return this.handle(session, request);
+      return this.handle(session, request, interruptActiveResponse);
     }
+    await this.reclaimIdleSessions();
     if (this.active.size >= this.maxSessions) {
       return sessionError(503, -32603, "Too many active sessions");
     }
@@ -71,12 +83,16 @@ export class LegacyHttpSessions {
         session.loss = activation;
         const id = transport.sessionId;
         if (id !== undefined) this.sessions.delete(id);
-        if (activation === "during_request") session.interruptActiveResponse();
+        if (activation === "during_request") {
+          const context = this.requestContext.getStore();
+          if (context === undefined) throw new Error("Session loss requires an active request");
+          context.interruptResponse();
+        }
       },
     };
     const server = createServer({
       disconnect: async () => {
-        session.interruptActiveResponse();
+        this.requestContext.getStore()?.interruptResponse();
       },
       malformedMessageFaults: malformedMessage,
       duplicateResponseFaults: duplicateResponse,
@@ -87,7 +103,8 @@ export class LegacyHttpSessions {
       server,
       malformedMessage,
       duplicateResponse,
-      interruptActiveResponse,
+      lastActivity: this.now(),
+      activeRequests: 0,
       closed: false,
     };
     this.active.add(session);
@@ -98,7 +115,7 @@ export class LegacyHttpSessions {
       throw error;
     }
 
-    const response = await this.handle(session, request);
+    const response = await this.handle(session, request, interruptActiveResponse);
     if (transport.sessionId === undefined) await this.closeSession(session);
     return response;
   }
@@ -111,18 +128,34 @@ export class LegacyHttpSessions {
     await Promise.all(sessions.map((session) => this.closeSession(session)));
   }
 
-  private async handle(session: LegacySession, request: Request): Promise<Response> {
-    const response = await session.transport.handleRequest(request);
-    const transformed = await applyMalformedMessageResponse(
-      response,
-      session.malformedMessage,
-      session.duplicateResponse,
-    );
+  private async handle(
+    session: LegacySession,
+    request: Request,
+    interruptResponse: () => void,
+  ): Promise<Response> {
+    session.activeRequests += 1;
+    session.lastActivity = this.now();
+    let transformed: Response;
+    try {
+      const response = await this.requestContext.run({ interruptResponse }, () =>
+        session.transport.handleRequest(request),
+      );
+      transformed = await applyMalformedMessageResponse(
+        response,
+        session.malformedMessage,
+        session.duplicateResponse,
+      );
+    } catch (error) {
+      this.finishRequest(session);
+      throw error;
+    }
     if (request.method.toUpperCase() === "DELETE") {
+      this.finishRequest(session);
       await this.closeSession(session);
       return transformed;
     }
     if (transformed.body === null) {
+      this.finishRequest(session);
       if (session.loss !== undefined) await this.closeSession(session);
       return transformed;
     }
@@ -131,6 +164,12 @@ export class LegacyHttpSessions {
 
   private closeAfterLoss(response: Response, session: LegacySession): Response {
     const reader = response.body!.getReader();
+    let finished = false;
+    const finish = (): void => {
+      if (finished) return;
+      finished = true;
+      this.finishRequest(session);
+    };
     const body = new ReadableStream<Uint8Array>({
       pull: async (controller) => {
         try {
@@ -139,15 +178,18 @@ export class LegacyHttpSessions {
             controller.enqueue(value);
             return;
           }
+          finish();
           if (session.loss !== undefined) await this.closeSession(session);
           controller.close();
         } catch (error) {
+          finish();
           await this.closeSession(session);
           controller.error(error);
         }
       },
       cancel: async (reason) => {
         await reader.cancel(reason).catch(() => undefined);
+        finish();
         if (session.loss !== undefined) await this.closeSession(session);
       },
     });
@@ -156,6 +198,19 @@ export class LegacyHttpSessions {
       statusText: response.statusText,
       headers: response.headers,
     });
+  }
+
+  private finishRequest(session: LegacySession): void {
+    session.activeRequests = Math.max(0, session.activeRequests - 1);
+    session.lastActivity = this.now();
+  }
+
+  private async reclaimIdleSessions(): Promise<void> {
+    const cutoff = this.now() - this.idleTimeoutMs;
+    const idle = [...this.active].filter(
+      (session) => session.activeRequests === 0 && session.lastActivity <= cutoff,
+    );
+    await Promise.all(idle.map((session) => this.closeSession(session)));
   }
 
   private async closeSession(session: LegacySession): Promise<void> {

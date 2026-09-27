@@ -21,15 +21,38 @@ describe("legacy HTTP sessions", () => {
     const afterClose = await sessions.fetch(initializeRequest(3));
     expect(afterClose.status).toBe(503);
   });
+
+  it("reclaims an idle session before applying the session limit", async () => {
+    let now = 0;
+    const sessions = new LegacyHttpSessions(1, 1_000, () => now);
+    const first = await sessions.fetch(initializeRequest(1));
+    const firstSessionId = first.headers.get("mcp-session-id");
+    await first.text();
+    expect(firstSessionId).toBeTruthy();
+
+    now = 1_000;
+    const replacement = await sessions.fetch(initializeRequest(2));
+    await replacement.text();
+    expect(replacement.status).toBe(200);
+    expect(replacement.headers.get("mcp-session-id")).toBeTruthy();
+
+    const staleRequest = initializeRequest(3, firstSessionId!);
+    const staleResponse = await sessions.fetch(staleRequest);
+    expect(staleResponse.status).toBe(404);
+
+    await sessions.close();
+  });
 });
 
-function initializeRequest(id: number): Request {
+function initializeRequest(id: number, sessionId?: string): Request {
+  const headers: Record<string, string> = {
+    accept: "application/json, text/event-stream",
+    "content-type": "application/json",
+  };
+  if (sessionId !== undefined) headers["mcp-session-id"] = sessionId;
   return new Request("http://mcp.test/mcp", {
     method: "POST",
-    headers: {
-      accept: "application/json, text/event-stream",
-      "content-type": "application/json",
-    },
+    headers,
     body: JSON.stringify({
       jsonrpc: "2.0",
       id,

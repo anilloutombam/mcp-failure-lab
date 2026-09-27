@@ -94,7 +94,6 @@ Available now:
 Not implemented:
 
 - Provider-specific adapters and recovery policies
-- Session-loss faults
 
 MCP Failure Lab is not a general-purpose proxy. External targets are exercised through the same
 scenario calls and expectations as the built-in server.
