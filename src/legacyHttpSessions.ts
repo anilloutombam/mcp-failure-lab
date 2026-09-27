@@ -41,6 +41,7 @@ export class LegacyHttpSessions {
   private readonly active = new Set<LegacySession>();
   private readonly requestContext = new AsyncLocalStorage<RequestContext>();
   private admissionTail: Promise<void> = Promise.resolve();
+  private closePromise: Promise<void> | undefined;
   private closed = false;
 
   constructor(
@@ -64,14 +65,15 @@ export class LegacyHttpSessions {
     return this.withAdmissionLock(() => this.createSession(request, interruptActiveResponse));
   }
 
-  async close(): Promise<void> {
-    if (this.closed) return;
+  close(): Promise<void> {
+    if (this.closePromise !== undefined) return this.closePromise;
     this.closed = true;
-    await this.withAdmissionLock(async () => {
+    this.closePromise = this.withAdmissionLock(async () => {
       const sessions = [...this.active];
       this.sessions.clear();
       await Promise.all(sessions.map((session) => this.closeSession(session)));
     });
+    return this.closePromise;
   }
 
   private async createSession(

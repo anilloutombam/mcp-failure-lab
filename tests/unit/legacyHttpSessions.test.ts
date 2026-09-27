@@ -59,22 +59,49 @@ describe("legacy HTTP sessions", () => {
   });
 
   it("closes a session when shutdown starts during connection", async () => {
-    let clockReads = 0;
-    let closing: Promise<void> | undefined;
-    let sessions!: LegacyHttpSessions;
-    sessions = new LegacyHttpSessions(1, 1_000, () => {
-      clockReads += 1;
-      if (clockReads === 2) closing = sessions.close();
-      return 0;
+    let markConnecting!: () => void;
+    const connecting = new Promise<void>((resolve) => {
+      markConnecting = resolve;
     });
-
-    const response = await sessions.fetch(initializeRequest(1));
-    await closing;
-
-    expect(response.status).toBe(503);
-    await expect(response.json()).resolves.toMatchObject({
-      error: { message: "Server shutting down" },
+    let finishConnecting!: () => void;
+    const connectionGate = new Promise<void>((resolve) => {
+      finishConnecting = resolve;
     });
+    const start = vi
+      .spyOn(WebStandardStreamableHTTPServerTransport.prototype, "start")
+      .mockImplementationOnce(async () => {
+        markConnecting();
+        await connectionGate;
+      });
+
+    try {
+      const sessions = new LegacyHttpSessions();
+      const initializing = sessions.fetch(initializeRequest(1));
+      await connecting;
+
+      let firstFinished = false;
+      let secondFinished = false;
+      const firstClose = sessions.close().then(() => {
+        firstFinished = true;
+      });
+      const secondClose = sessions.close().then(() => {
+        secondFinished = true;
+      });
+      await Promise.resolve();
+      expect(firstFinished).toBe(false);
+      expect(secondFinished).toBe(false);
+
+      finishConnecting();
+      const response = await initializing;
+      await Promise.all([firstClose, secondClose]);
+
+      expect(response.status).toBe(503);
+      await expect(response.json()).resolves.toMatchObject({
+        error: { message: "Server shutting down" },
+      });
+    } finally {
+      start.mockRestore();
+    }
   });
 
   it("releases request tracking when a response body is cancelled", async () => {
