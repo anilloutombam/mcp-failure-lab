@@ -118,6 +118,50 @@ describe("legacy HTTP sessions", () => {
     await sessions.close();
   });
 
+  it("closes a request that does not initialize a session", async () => {
+    const sessions = new LegacyHttpSessions();
+    const response = await sessions.fetch(toolCallRequest(1, undefined, "ping"));
+    expect(response.status).toBe(400);
+    await response.text();
+    await sessions.close();
+  });
+
+  it("closes a lost session when its activation response is cancelled", async () => {
+    const sessions = new LegacyHttpSessions();
+    const initialized = await sessions.fetch(initializeRequest(1));
+    const sessionId = initialized.headers.get("mcp-session-id");
+    await initialized.text();
+    expect(sessionId).toBeTruthy();
+
+    const response = await sessions.fetch(
+      toolCallRequest(2, sessionId!, "session_loss", { activation: "after_response" }),
+    );
+    await response.body!.cancel();
+
+    const stale = await sessions.fetch(toolCallRequest(3, sessionId!, "ping"));
+    expect(stale.status).toBe(404);
+    await sessions.close();
+  });
+
+  it("closes a session when its response stream fails", async () => {
+    const sessions = new LegacyHttpSessions();
+    const initialized = await sessions.fetch(initializeRequest(1));
+    const sessionId = initialized.headers.get("mcp-session-id");
+    await initialized.text();
+    expect(sessionId).toBeTruthy();
+
+    const response = await sessions.fetch(toolCallRequest(2, sessionId!, "ping"));
+    const read = vi
+      .spyOn(ReadableStreamDefaultReader.prototype, "read")
+      .mockRejectedValueOnce(new Error("response failed"));
+    try {
+      await expect(response.text()).rejects.toThrow("response failed");
+    } finally {
+      read.mockRestore();
+      await sessions.close();
+    }
+  });
+
   it("handles disconnect without a Node response hook", async () => {
     const sessions = new LegacyHttpSessions();
     const initialized = await sessions.fetch(initializeRequest(1));
@@ -181,20 +225,26 @@ function initializeRequest(id: number, sessionId?: string): Request {
   });
 }
 
-function toolCallRequest(id: number, sessionId: string, name: string): Request {
+function toolCallRequest(
+  id: number,
+  sessionId: string | undefined,
+  name: string,
+  arguments_: Record<string, unknown> = {},
+): Request {
+  const headers: Record<string, string> = {
+    accept: "application/json, text/event-stream",
+    "content-type": "application/json",
+    "mcp-protocol-version": "2025-11-25",
+  };
+  if (sessionId !== undefined) headers["mcp-session-id"] = sessionId;
   return new Request("http://mcp.test/mcp", {
     method: "POST",
-    headers: {
-      accept: "application/json, text/event-stream",
-      "content-type": "application/json",
-      "mcp-session-id": sessionId,
-      "mcp-protocol-version": "2025-11-25",
-    },
+    headers,
     body: JSON.stringify({
       jsonrpc: "2.0",
       id,
       method: "tools/call",
-      params: { name, arguments: {} },
+      params: { name, arguments: arguments_ },
     }),
   });
 }
