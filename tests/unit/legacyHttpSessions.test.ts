@@ -1,4 +1,5 @@
-import { describe, expect, it } from "vitest";
+import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/server";
+import { describe, expect, it, vi } from "vitest";
 
 import { LegacyHttpSessions } from "../../src/legacyHttpSessions.js";
 
@@ -56,6 +57,79 @@ describe("legacy HTTP sessions", () => {
       error: { message: "Server shutting down" },
     });
   });
+
+  it("closes a session when shutdown starts during connection", async () => {
+    let clockReads = 0;
+    let closing: Promise<void> | undefined;
+    let sessions!: LegacyHttpSessions;
+    sessions = new LegacyHttpSessions(1, 1_000, () => {
+      clockReads += 1;
+      if (clockReads === 2) closing = sessions.close();
+      return 0;
+    });
+
+    const response = await sessions.fetch(initializeRequest(1));
+    await closing;
+
+    expect(response.status).toBe(503);
+    await expect(response.json()).resolves.toMatchObject({
+      error: { message: "Server shutting down" },
+    });
+  });
+
+  it("releases request tracking when a response body is cancelled", async () => {
+    let now = 0;
+    const sessions = new LegacyHttpSessions(1, 1_000, () => now);
+    const response = await sessions.fetch(initializeRequest(1));
+    expect(response.body).not.toBeNull();
+    await response.body!.cancel();
+
+    now = 1_000;
+    const replacement = await sessions.fetch(initializeRequest(2));
+    expect(replacement.status).toBe(200);
+    await replacement.body!.cancel();
+    await sessions.close();
+  });
+
+  it("handles disconnect without a Node response hook", async () => {
+    const sessions = new LegacyHttpSessions();
+    const initialized = await sessions.fetch(initializeRequest(1));
+    const sessionId = initialized.headers.get("mcp-session-id");
+    await initialized.text();
+    expect(sessionId).toBeTruthy();
+
+    const response = await sessions.fetch(toolCallRequest(2, sessionId!, "disconnect"));
+    expect(response.status).toBe(200);
+    await response.text();
+    await sessions.close();
+  });
+
+  it("cleans up when the transport cannot connect", async () => {
+    const start = vi
+      .spyOn(WebStandardStreamableHTTPServerTransport.prototype, "start")
+      .mockRejectedValueOnce(new Error("connect failed"));
+    const sessions = new LegacyHttpSessions();
+    await expect(sessions.fetch(initializeRequest(1))).rejects.toThrow("connect failed");
+    start.mockRestore();
+    await sessions.close();
+  });
+
+  it("releases request tracking when the transport handler fails", async () => {
+    const sessions = new LegacyHttpSessions();
+    const initialized = await sessions.fetch(initializeRequest(1));
+    const sessionId = initialized.headers.get("mcp-session-id");
+    await initialized.text();
+    expect(sessionId).toBeTruthy();
+
+    const handleRequest = vi
+      .spyOn(WebStandardStreamableHTTPServerTransport.prototype, "handleRequest")
+      .mockRejectedValueOnce(new Error("request failed"));
+    await expect(sessions.fetch(toolCallRequest(2, sessionId!, "ping"))).rejects.toThrow(
+      "request failed",
+    );
+    handleRequest.mockRestore();
+    await sessions.close();
+  });
 });
 
 function initializeRequest(id: number, sessionId?: string): Request {
@@ -76,6 +150,24 @@ function initializeRequest(id: number, sessionId?: string): Request {
         capabilities: {},
         clientInfo: { name: "session-test", version: "0.1.0" },
       },
+    }),
+  });
+}
+
+function toolCallRequest(id: number, sessionId: string, name: string): Request {
+  return new Request("http://mcp.test/mcp", {
+    method: "POST",
+    headers: {
+      accept: "application/json, text/event-stream",
+      "content-type": "application/json",
+      "mcp-session-id": sessionId,
+      "mcp-protocol-version": "2025-11-25",
+    },
+    body: JSON.stringify({
+      jsonrpc: "2.0",
+      id,
+      method: "tools/call",
+      params: { name, arguments: {} },
     }),
   });
 }

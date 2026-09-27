@@ -276,6 +276,69 @@ describe("Streamable HTTP server", () => {
     }
   });
 
+  it("disconnects a modern HTTP request without stopping the listener", async () => {
+    const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
+    const client = createClient();
+
+    try {
+      await client.connect(new StreamableHTTPClientTransport(handle.url));
+      await expect(client.callTool({ name: "disconnect", arguments: {} })).rejects.toThrow();
+      await expect(client.callTool({ name: "ping", arguments: {} })).resolves.toMatchObject({
+        content: [{ type: "text" }],
+      });
+    } finally {
+      await client.close();
+      await handle.close();
+    }
+  });
+
+  it("routes claimless legacy requests that are not valid initialization calls", async () => {
+    const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
+    const headers = {
+      accept: "application/json, text/event-stream",
+      "content-type": "application/json",
+      "mcp-protocol-version": "2025-11-25",
+    };
+
+    try {
+      const getResponse = await fetch(handle.url, { headers });
+      expect(getResponse.status).not.toBe(500);
+      const malformedResponse = await fetch(handle.url, {
+        method: "POST",
+        headers,
+        body: "{",
+      });
+      expect(malformedResponse.status).toBe(400);
+    } finally {
+      await handle.close();
+    }
+  });
+
+  it("disconnects a claimless legacy request without stopping the listener", async () => {
+    const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
+
+    try {
+      const disconnected = fetch(handle.url, {
+        method: "POST",
+        headers: {
+          accept: "application/json, text/event-stream",
+          "content-type": "application/json",
+          "mcp-protocol-version": "2025-11-25",
+        },
+        body: JSON.stringify({
+          jsonrpc: "2.0",
+          id: 91,
+          method: "tools/call",
+          params: { name: "disconnect", arguments: {} },
+        }),
+      });
+      await expect(disconnected).rejects.toThrow();
+      expect(await fetch(handle.url)).toMatchObject({ status: 405 });
+    } finally {
+      await handle.close();
+    }
+  });
+
   it("rejects requests already connected when shutdown starts", async () => {
     const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
     const socket = createConnection(Number(handle.url.port), handle.url.hostname);
