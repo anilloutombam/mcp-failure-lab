@@ -3,6 +3,7 @@ import { createServer as createNodeServer } from "node:http";
 import { createConnection } from "node:net";
 
 import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/client";
+import { SdkErrorCode } from "@modelcontextprotocol/server";
 import { describe, expect, it } from "vitest";
 
 import { startHttpServer } from "../../src/httpServer.js";
@@ -11,6 +12,16 @@ function createClient(): Client {
   return new Client(
     { name: "http-integration-test", version: "0.1.0" },
     { versionNegotiation: { mode: { pin: "2026-07-28" } } },
+  );
+}
+
+function createLegacyClient(name: string): Client {
+  return new Client(
+    { name, version: "0.1.0" },
+    {
+      supportedProtocolVersions: ["2025-11-25"],
+      versionNegotiation: { mode: "legacy" },
+    },
   );
 }
 
@@ -59,6 +70,7 @@ describe("Streamable HTTP server", () => {
           "duplicate_response",
         ]),
       );
+      expect(tools.map((tool) => tool.name)).not.toContain("session_loss");
 
       const result = await client.callTool({ name: "ping", arguments: {} });
       expect(result.isError).not.toBe(true);
@@ -68,6 +80,75 @@ describe("Streamable HTTP server", () => {
     }
 
     await expect(fetch(handle.url)).rejects.toThrow();
+  });
+
+  it("invalidates one legacy session after returning the activation response", async () => {
+    const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
+    const affected = createLegacyClient("session-loss-affected");
+    const healthy = createLegacyClient("session-loss-healthy");
+
+    try {
+      await affected.connect(new StreamableHTTPClientTransport(handle.url));
+      await healthy.connect(new StreamableHTTPClientTransport(handle.url));
+      const { tools } = await affected.listTools();
+      expect(tools.map((tool) => tool.name)).toContain("session_loss");
+
+      await expect(
+        affected.callTool({
+          name: "session_loss",
+          arguments: { activation: "after_response" },
+        }),
+      ).resolves.toMatchObject({ content: [{ type: "text" }] });
+
+      await expect(affected.callTool({ name: "ping", arguments: {} })).rejects.toThrow(
+        /Session not found|404/,
+      );
+      await expect(healthy.callTool({ name: "ping", arguments: {} })).resolves.toMatchObject({
+        content: [{ type: "text" }],
+      });
+    } finally {
+      await affected.close().catch(() => undefined);
+      await healthy.close().catch(() => undefined);
+      await handle.close();
+    }
+  });
+
+  it("invalidates one legacy session while the activation request is active", async () => {
+    const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
+    const affected = createLegacyClient("active-session-loss-affected");
+    const healthy = createLegacyClient("active-session-loss-healthy");
+
+    try {
+      await affected.connect(new StreamableHTTPClientTransport(handle.url));
+      await healthy.connect(new StreamableHTTPClientTransport(handle.url));
+
+      const activeResult = await affected
+        .callTool(
+          {
+            name: "session_loss",
+            arguments: { activation: "during_request" },
+          },
+          { timeout: 1_000 },
+        )
+        .then(
+          (value) => ({ status: "resolved" as const, value }),
+          (error: unknown) => ({ status: "rejected" as const, error }),
+        );
+      expect(activeResult.status).toBe("rejected");
+      if (activeResult.status === "rejected") {
+        expect(activeResult.error).not.toMatchObject({ code: SdkErrorCode.RequestTimeout });
+      }
+      await expect(affected.callTool({ name: "ping", arguments: {} })).rejects.toThrow(
+        /Session not found|404/,
+      );
+      await expect(healthy.callTool({ name: "ping", arguments: {} })).resolves.toMatchObject({
+        content: [{ type: "text" }],
+      });
+    } finally {
+      await affected.close().catch(() => undefined);
+      await healthy.close().catch(() => undefined);
+      await handle.close();
+    }
   });
 
   it.each(["2026-07-28", "2025-11-25"] as const)(

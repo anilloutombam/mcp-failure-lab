@@ -8,7 +8,9 @@ import {
   toNodeHandler,
   type NodeIncomingMessageLike,
 } from "@modelcontextprotocol/node";
+import { isLegacyRequest, type McpHttpHandler } from "@modelcontextprotocol/server";
 import { isCanonicalHttpPath, isWildcardHost } from "./httpValidation.js";
+import { LegacyHttpSessions } from "./legacyHttpSessions.js";
 import { createResponseFaultHttpHandler } from "./malformedMessageHttp.js";
 import { createServer } from "./server.js";
 
@@ -63,7 +65,21 @@ export async function startHttpServer(options: HttpServerOptions): Promise<HttpS
   }
 
   const activeResponse = new AsyncLocalStorage<ServerResponse>();
-  const handler = createResponseFaultHttpHandler(
+  const modernHandler = createResponseFaultHttpHandler(
+    (responseFaults) =>
+      createServer({
+        disconnect: async () => {
+          activeResponse.getStore()?.destroy();
+        },
+        malformedMessageFaults: responseFaults.malformedMessage,
+        duplicateResponseFaults: responseFaults.duplicateResponse,
+      }),
+    {
+      legacy: "reject",
+      onerror: (error) => console.error("Streamable HTTP request failed:", error),
+    },
+  );
+  const legacyStatelessHandler = createResponseFaultHttpHandler(
     (responseFaults) =>
       createServer({
         disconnect: async () => {
@@ -77,6 +93,26 @@ export async function startHttpServer(options: HttpServerOptions): Promise<HttpS
       onerror: (error) => console.error("Streamable HTTP request failed:", error),
     },
   );
+  const legacySessions = new LegacyHttpSessions();
+  const handler: McpHttpHandler = {
+    fetch: async (request, requestOptions) => {
+      if (!(await isLegacyRequest(request))) return modernHandler.fetch(request, requestOptions);
+      if (request.headers.has("mcp-session-id") || (await isInitializeRequest(request))) {
+        const response = activeResponse.getStore();
+        return legacySessions.fetch(request, () => response?.destroy());
+      }
+      return legacyStatelessHandler.fetch(request, requestOptions);
+    },
+    close: async () => {
+      await Promise.all([
+        modernHandler.close(),
+        legacyStatelessHandler.close(),
+        legacySessions.close(),
+      ]);
+    },
+    notify: modernHandler.notify,
+    bus: modernHandler.bus,
+  };
   const nodeHandler = toNodeHandler(handler, {
     onerror: (error) => console.error("Streamable HTTP adapter failed:", error),
   });
@@ -164,4 +200,14 @@ export async function startHttpServer(options: HttpServerOptions): Promise<HttpS
       return closePromise;
     },
   };
+}
+
+async function isInitializeRequest(request: Request): Promise<boolean> {
+  if (request.method.toUpperCase() !== "POST") return false;
+  try {
+    const body = (await request.clone().json()) as { method?: unknown };
+    return body.method === "initialize";
+  } catch {
+    return false;
+  }
 }
