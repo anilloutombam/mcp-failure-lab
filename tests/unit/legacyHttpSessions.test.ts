@@ -42,6 +42,20 @@ describe("legacy HTTP sessions", () => {
 
     await sessions.close();
   });
+
+  it("does not admit a session during shutdown", async () => {
+    const sessions = new LegacyHttpSessions();
+    const initializing = sessions.fetch(initializeRequest(1));
+    const closing = sessions.close();
+
+    const response = await initializing;
+    await closing;
+
+    expect(response.status).toBe(503);
+    await expect(response.json()).resolves.toMatchObject({
+      error: { message: "Server shutting down" },
+    });
+  });
 });
 
 function initializeRequest(id: number, sessionId?: string): Request {

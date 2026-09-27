@@ -40,6 +40,7 @@ export class LegacyHttpSessions {
   private readonly sessions = new Map<string, LegacySession>();
   private readonly active = new Set<LegacySession>();
   private readonly requestContext = new AsyncLocalStorage<RequestContext>();
+  private admissionTail: Promise<void> = Promise.resolve();
   private closed = false;
 
   constructor(
@@ -60,7 +61,26 @@ export class LegacyHttpSessions {
       if (session === undefined) return sessionError(404, -32001, "Session not found");
       return this.handle(session, request, interruptActiveResponse);
     }
+    return this.withAdmissionLock(() => this.createSession(request, interruptActiveResponse));
+  }
+
+  async close(): Promise<void> {
+    if (this.closed) return;
+    this.closed = true;
+    await this.withAdmissionLock(async () => {
+      const sessions = [...this.active];
+      this.sessions.clear();
+      await Promise.all(sessions.map((session) => this.closeSession(session)));
+    });
+  }
+
+  private async createSession(
+    request: Request,
+    interruptActiveResponse: () => void,
+  ): Promise<Response> {
+    if (this.closed) return sessionError(503, -32603, "Server shutting down");
     await this.reclaimIdleSessions();
+    if (this.closed) return sessionError(503, -32603, "Server shutting down");
     if (this.active.size >= this.maxSessions) {
       return sessionError(503, -32603, "Too many active sessions");
     }
@@ -114,18 +134,14 @@ export class LegacyHttpSessions {
       await this.closeSession(session);
       throw error;
     }
+    if (this.closed || session.closed) {
+      await this.closeSession(session);
+      return sessionError(503, -32603, "Server shutting down");
+    }
 
     const response = await this.handle(session, request, interruptActiveResponse);
     if (transport.sessionId === undefined) await this.closeSession(session);
     return response;
-  }
-
-  async close(): Promise<void> {
-    if (this.closed) return;
-    this.closed = true;
-    const sessions = [...this.active];
-    this.sessions.clear();
-    await Promise.all(sessions.map((session) => this.closeSession(session)));
   }
 
   private async handle(
@@ -211,6 +227,20 @@ export class LegacyHttpSessions {
       (session) => session.activeRequests === 0 && session.lastActivity <= cutoff,
     );
     await Promise.all(idle.map((session) => this.closeSession(session)));
+  }
+
+  private async withAdmissionLock<T>(operation: () => Promise<T>): Promise<T> {
+    const previous = this.admissionTail;
+    let release!: () => void;
+    this.admissionTail = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    await previous;
+    try {
+      return await operation();
+    } finally {
+      release();
+    }
   }
 
   private async closeSession(session: LegacySession): Promise<void> {
