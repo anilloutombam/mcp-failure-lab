@@ -76,6 +76,7 @@ Available now:
 
 - `ping`, `delay`, `hang`, `disconnect`, `malformed_message`, and `duplicate_response` tools
 - `response_after_cancellation` on stdio
+- `session_loss` on legacy Streamable HTTP sessions
 - MCP communication over stdio and Streamable HTTP
 - Code-first and JSON scenario definitions
 - Outcome and maximum-duration assertions
@@ -93,7 +94,6 @@ Available now:
 Not implemented:
 
 - Provider-specific adapters and recovery policies
-- Session-loss faults
 
 MCP Failure Lab is not a general-purpose proxy. External targets are exercised through the same
 scenario calls and expectations as the built-in server.
@@ -284,6 +284,7 @@ For result assertions, observer calls, reporting formats, and timeout behavior, 
 | `malformed_message`           | Violates one selected JSON-RPC response rule exactly once    |
 | `duplicate_response`          | Sends the same JSON-RPC response twice for one request       |
 | `response_after_cancellation` | Sends one late response for a cancelled stdio request        |
+| `session_loss`                | Invalidates the caller's legacy HTTP session                 |
 
 `malformed_message` accepts one of three variants:
 

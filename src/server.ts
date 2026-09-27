@@ -12,6 +12,7 @@ import {
   registerResponseAfterCancellationTool,
   type ResponseAfterCancellationFaults,
 } from "./responseAfterCancellation.js";
+import { registerSessionLossTool, type SessionLossController } from "./sessionLoss.js";
 import { VERSION } from "./version.js";
 
 export interface ServerDependencies {
@@ -21,6 +22,7 @@ export interface ServerDependencies {
   malformedMessageFaults?: MalformedMessageFaults;
   duplicateResponseFaults?: DuplicateResponseFaults;
   responseAfterCancellationFaults?: ResponseAfterCancellationFaults;
+  sessionLoss?: SessionLossController;
 }
 
 export function createServer(dependencies: ServerDependencies = {}): McpServer {
@@ -41,6 +43,9 @@ export function createServer(dependencies: ServerDependencies = {}): McpServer {
   }
   if (dependencies.responseAfterCancellationFaults !== undefined) {
     registerResponseAfterCancellationTool(server, dependencies.responseAfterCancellationFaults);
+  }
+  if (dependencies.sessionLoss !== undefined) {
+    registerSessionLossTool(server, dependencies.sessionLoss);
   }
 
   return server;
