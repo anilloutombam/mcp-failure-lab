@@ -32,6 +32,7 @@
     "format:check": "prettier --check .",
     "registry:sync": "node scripts/sync-registry-version.mjs",
     "registry:validate": "npm run registry:sync && mcp-publisher validate",
+    "observatory:validate": "node scripts/validate-observatory-manifest.mjs",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",

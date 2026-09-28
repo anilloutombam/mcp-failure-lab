@@ -96,6 +96,11 @@ Update documentation when a change affects:
 
 Documentation should describe implemented behavior separately from planned capabilities.
 
+Compatibility-report pull requests must also update the normalized Observatory
+manifest when the report should appear in MCP Failure Observatory. Run
+`npm run observatory:validate` before opening the pull request. Decision-layer
+experiments remain outside the MCP implementation manifest.
+
 ## Branches and commits
 
 Create branches from the latest `main` using a descriptive prefix:

@@ -37,3 +37,30 @@ acts on failure evidence rather than whether an MCP client conforms to the proto
   evidence from `mcp-failure-lab@0.10.0`.
 
 The public documentation provides a shorter [compatibility overview](https://mcplab.dev/docs/compatibility/).
+
+## Publishing data to MCP Failure Observatory
+
+The normalized, machine-readable companion to these reports is stored at
+[`data/observatory/compatibility-reports.json`](../../data/observatory/compatibility-reports.json).
+It is the ingestion contract for MCP Failure Observatory; Markdown is not
+scraped because report prose and tables are intentionally human-oriented.
+
+When adding a supported compatibility report:
+
+1. Add the report Markdown in this directory.
+2. Add its normalized implementation, scenarios, runs, evidence summaries,
+   and reviewed upstream links to the manifest.
+3. Give every report, run alias, and Finding a stable identifier.
+4. Run `npm run observatory:validate`.
+
+Decision-layer experiments must not be added to this manifest because they do
+not represent MCP implementation Test Runs.
+
+After a manifest change reaches `main`, GitHub Actions validates it and can
+send a `failure-lab-data-published` event to the Observatory. The raw manifest
+remains available at a stable URL for scheduled fallback ingestion.
+
+Repository maintainers can enable immediate delivery by adding an
+`OBSERVATORY_DISPATCH_TOKEN` Actions secret. Use a fine-grained token scoped to
+`anilloutombam/mcp-observatory` with **Contents: write** permission, which is
+required by GitHub's repository-dispatch endpoint.
