@@ -1,0 +1,79 @@
+name: Publish Observatory data
+
+on:
+  pull_request:
+    paths:
+      - "data/observatory/**"
+      - "docs/compatibility/**"
+      - "scripts/validate-observatory-manifest.mjs"
+      - "tests/unit/observatoryManifestScript.test.mjs"
+      - ".github/workflows/publish-observatory-data.yml"
+  push:
+    branches: [main]
+    paths:
+      - "data/observatory/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: observatory-data-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Failure Lab
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.19.0
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate Observatory manifest
+        run: npm run observatory:validate
+
+      - name: Test manifest contract
+        run: npx vitest run tests/unit/observatoryManifestScript.test.mjs
+
+  notify-observatory:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: validate
+    runs-on: ubuntu-latest
+    env:
+      OBSERVATORY_DISPATCH_TOKEN: ${{ secrets.OBSERVATORY_DISPATCH_TOKEN }}
+    steps:
+      - name: Notify Observatory
+        if: env.OBSERVATORY_DISPATCH_TOKEN != ''
+        env:
+          GH_TOKEN: ${{ secrets.OBSERVATORY_DISPATCH_TOKEN }}
+          SOURCE_REVISION: ${{ github.sha }}
+          SOURCE_URL: https://raw.githubusercontent.com/anilloutombam/mcp-failure-lab/main/data/observatory/compatibility-reports.json
+        shell: bash
+        run: |
+          jq -n \
+            --arg source_url "$SOURCE_URL" \
+            --arg source_revision "$SOURCE_REVISION" \
+            '{
+              event_type: "failure-lab-data-published",
+              client_payload: {
+                source_url: $source_url,
+                source_revision: $source_revision
+              }
+            }' | gh api \
+              --method POST \
+              repos/anilloutombam/mcp-observatory/dispatches \
+              --input -
+
+      - name: Explain skipped notification
+        if: env.OBSERVATORY_DISPATCH_TOKEN == ''
+        run: |
+          echo "Manifest is published, but OBSERVATORY_DISPATCH_TOKEN is not configured."
+          echo "The Observatory scheduled sync can still ingest the manifest."

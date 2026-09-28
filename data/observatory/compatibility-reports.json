@@ -1,0 +1,835 @@
+{
+  "schemaVersion": 1,
+  "reports": [
+    {
+      "id": "github-mcp-server-1.12.2",
+      "testedOn": "2026-09-24",
+      "sourceUrl": "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/github-mcp-server-1.12.2.md",
+      "implementation": {
+        "name": "GitHub MCP Server",
+        "slug": "github-mcp-server",
+        "version": "1.12.2",
+        "kind": "server",
+        "repositoryUrl": "https://github.com/github/github-mcp-server"
+      },
+      "outcomes": [
+        {
+          "scenario": ["Authenticated get_me", "authenticated-get-me", "baseline"],
+          "runs": [
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              1049.35,
+              "Hosted authenticated get_me completed successfully (run 1)."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              966.47,
+              "Hosted authenticated get_me completed successfully (run 2)."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              846.11,
+              "Hosted authenticated get_me completed successfully (run 3)."
+            ],
+            [
+              "http-4",
+              "streamable-http",
+              "passed",
+              993.68,
+              "Hosted authenticated get_me completed successfully (run 4)."
+            ],
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              533.05,
+              "Local stdio get_me completed successfully and cleanup passed (run 1)."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              514.52,
+              "Local stdio get_me completed successfully and cleanup passed (run 2)."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              574.59,
+              "Local stdio get_me completed successfully and cleanup passed (run 3)."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Missing Authorization", "missing-authorization", "protocol"],
+          "runs": [
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "Hosted request without authorization was rejected during setup without exposing a credential."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Invalid Authorization", "invalid-authorization", "protocol"],
+          "runs": [
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "Hosted request with invalid authorization was rejected during setup without exposing a credential."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Tool Filter Exclusion", "tool-filter-exclusion", "protocol"],
+          "runs": [
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "A tool excluded by X-MCP-Tools was rejected as unknown and cleanup passed."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "everything-server-2026.8.31",
+      "testedOn": "2026-09-24",
+      "sourceUrl": "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/everything-server-2026.8.31.md",
+      "implementation": {
+        "name": "Official Everything Server",
+        "slug": "official-everything-server",
+        "version": "2026.8.31",
+        "kind": "server",
+        "repositoryUrl": "https://github.com/modelcontextprotocol/servers"
+      },
+      "outcomes": [
+        {
+          "scenario": ["Baseline Echo", "baseline-echo", "baseline"],
+          "runs": [
+            ["stdio", "stdio", "passed", 2.16, "Baseline echo passed."],
+            ["http", "streamable-http", "passed", 6.03, "Baseline echo passed."]
+          ]
+        },
+        {
+          "scenario": ["500 ms Bounded Delay", "bounded-delay-500ms", "timing"],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "passed",
+              506.75,
+              "The 500 ms long-running operation completed within its bound."
+            ],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              506.32,
+              "The 500 ms long-running operation completed within its bound."
+            ]
+          ]
+        },
+        {
+          "scenario": ["400 ms Timeout", "hang-timeout-400ms", "timing"],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "passed",
+              402.69,
+              "The two-second operation timed out at the configured 400 ms bound."
+            ],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              403.69,
+              "The two-second operation timed out at the configured 400 ms bound."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Recovery After Timeout", "recovery-after-timeout", "lifecycle"],
+          "runs": [
+            ["stdio", "stdio", "passed", 5.92, "Same-session echo passed after timeout."],
+            ["http", "streamable-http", "passed", 9.92, "Same-session echo passed after timeout."]
+          ]
+        },
+        {
+          "scenario": ["Invalid Tool Input", "invalid-tool-input", "protocol"],
+          "runs": [
+            ["stdio", "stdio", "passed", 2.15, "Invalid echo input returned the expected error."],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              3.39,
+              "Invalid echo input returned the expected error."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Recovery After Input Error", "recovery-after-input-error", "lifecycle"],
+          "runs": [
+            ["stdio", "stdio", "passed", 0.44, "Same-session echo passed after the input error."],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              3.96,
+              "Same-session echo passed after the input error."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Normal Cleanup", "normal-cleanup", "lifecycle"],
+          "runs": [
+            ["stdio", "stdio", "passed", null, "Normal setup and cleanup passed."],
+            ["http", "streamable-http", "passed", null, "Normal setup and cleanup passed."]
+          ]
+        },
+        {
+          "scenario": ["Cleanup After Timeout", "cleanup-after-timeout", "lifecycle"],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "failed",
+              400,
+              "Client cleanup exceeded the 400 ms bound after cancellation while the session remained usable."
+            ],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              4.97,
+              "Cleanup completed after the timed-out operation."
+            ]
+          ]
+        }
+      ],
+      "findings": [
+        {
+          "id": "stdio-cleanup-after-cancellation",
+          "run": "cleanup-after-timeout:stdio",
+          "statement": "A cancelled long-running operation can delay stdio client cleanup beyond the configured bound.",
+          "category": "reliability",
+          "reportingStatus": "reported",
+          "repository": "modelcontextprotocol/servers",
+          "issueNumber": 4846,
+          "issueUrl": "https://github.com/modelcontextprotocol/servers/issues/4846",
+          "reportedAt": "2026-09-24T13:21:07Z"
+        }
+      ]
+    },
+    {
+      "id": "sparfenyuk-mcp-proxy-0.12.0",
+      "testedOn": "2026-09-24",
+      "sourceUrl": "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/mcp-proxy-0.12.0.md",
+      "implementation": {
+        "name": "sparfenyuk/mcp-proxy",
+        "slug": "sparfenyuk-mcp-proxy",
+        "version": "0.12.0",
+        "kind": "proxy",
+        "repositoryUrl": "https://github.com/sparfenyuk/mcp-proxy"
+      },
+      "outcomes": [
+        {
+          "scenario": ["Clean Install Startup", "clean-install-startup", "lifecycle"],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "failed",
+              null,
+              "A clean install resolved mcp 2.2.0 and mcp-proxy --version crashed because request_ctx was removed. Pinning mcp below 2 restored startup."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Baseline Ping", "baseline-ping", "baseline"],
+          "runs": [
+            ["stdio", "stdio", "passed", 7.29, "HTTP server through stdio proxy passed."],
+            ["http", "streamable-http", "passed", 8.02, "stdio server through HTTP proxy passed."]
+          ]
+        },
+        {
+          "scenario": ["500 ms Bounded Delay", "bounded-delay-500ms", "timing"],
+          "runs": [
+            ["stdio", "stdio", "passed", 520.06, "Bounded delay passed."],
+            ["http", "streamable-http", "passed", 509.53, "Bounded delay passed."]
+          ]
+        },
+        {
+          "scenario": ["400 ms Timeout", "hang-timeout-400ms", "timing"],
+          "runs": [
+            ["stdio", "stdio", "passed", 402.92, "Hang timed out within the configured bound."],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              405.76,
+              "Hang timed out within the configured bound."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Recovery After Timeout", "recovery-after-timeout", "lifecycle"],
+          "runs": [
+            ["stdio", "stdio", "passed", 22.64, "Same-session ping passed after timeout."],
+            ["http", "streamable-http", "passed", 9.14, "Same-session ping passed after timeout."]
+          ]
+        },
+        {
+          "scenario": ["Missing JSON-RPC Version", "missing-jsonrpc-version", "protocol"],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "passed",
+              null,
+              "Malformed response timed out within the bound and recovery passed."
+            ],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "Malformed response timed out within the bound and recovery passed."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Invalid JSON-RPC Version", "invalid-jsonrpc-version", "protocol"],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "passed",
+              null,
+              "Malformed response timed out within the bound and recovery passed."
+            ],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "Malformed response timed out within the bound and recovery passed."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Result and Error Response", "result-and-error-response", "protocol"],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "passed",
+              null,
+              "An immediate error was returned and recovery passed."
+            ],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "An immediate error was returned and recovery passed."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Disconnect Recovery", "disconnect-recovery", "lifecycle"],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "failed",
+              null,
+              "The proxy exited after the upstream HTTP response closed; the next call failed with Connection closed."
+            ],
+            [
+              "http",
+              "streamable-http",
+              "failed",
+              null,
+              "The stdio child exited; same-session and new-session calls remained unavailable while the proxy kept running."
+            ]
+          ]
+        }
+      ],
+      "findings": [
+        {
+          "id": "mcp-2-startup-incompatibility",
+          "run": "clean-install-startup:stdio",
+          "statement": "mcp-proxy 0.12.0 clean installs can resolve an incompatible MCP SDK and fail during import.",
+          "category": "compatibility",
+          "reportingStatus": "already-reported",
+          "repository": "sparfenyuk/mcp-proxy",
+          "issueNumber": 235,
+          "issueUrl": "https://github.com/sparfenyuk/mcp-proxy/issues/235",
+          "commentUrl": "https://github.com/sparfenyuk/mcp-proxy/issues/235#issuecomment-5814934441",
+          "reportedAt": "2026-09-24T13:21:07Z"
+        },
+        {
+          "id": "http-disconnect-not-recovered",
+          "run": "disconnect-recovery:stdio",
+          "statement": "An upstream HTTP disconnect can terminate the proxy and leave the active session unusable.",
+          "category": "recovery",
+          "reportingStatus": "already-reported",
+          "repository": "sparfenyuk/mcp-proxy",
+          "issueNumber": 75,
+          "issueUrl": "https://github.com/sparfenyuk/mcp-proxy/issues/75",
+          "commentUrl": "https://github.com/sparfenyuk/mcp-proxy/issues/75#issuecomment-5814934736",
+          "reportedAt": "2026-09-24T13:21:08Z"
+        },
+        {
+          "id": "stdio-child-not-restarted",
+          "run": "disconnect-recovery:http",
+          "statement": "An exited stdio child remains unavailable to later sessions while the proxy process stays running.",
+          "category": "recovery",
+          "reportingStatus": "already-reported",
+          "repository": "sparfenyuk/mcp-proxy",
+          "issueNumber": 247,
+          "issueUrl": "https://github.com/sparfenyuk/mcp-proxy/issues/247",
+          "commentUrl": "https://github.com/sparfenyuk/mcp-proxy/issues/247#issuecomment-5814934043",
+          "reportedAt": "2026-09-24T13:21:05Z"
+        }
+      ]
+    },
+    {
+      "id": "punkpeye-mcp-proxy-6.7.19",
+      "testedOn": "2026-09-24",
+      "sourceUrl": "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/punkpeye-mcp-proxy-6.7.19.md",
+      "implementation": {
+        "name": "punkpeye/mcp-proxy",
+        "slug": "punkpeye-mcp-proxy",
+        "version": "6.7.19",
+        "kind": "proxy",
+        "repositoryUrl": "https://github.com/punkpeye/mcp-proxy"
+      },
+      "outcomes": [
+        {
+          "scenario": ["Baseline Ping", "baseline-ping", "baseline"],
+          "runs": [["http", "streamable-http", "passed", 8.45, "Baseline ping passed."]]
+        },
+        {
+          "scenario": ["500 ms Bounded Delay", "bounded-delay-500ms", "timing"],
+          "runs": [["http", "streamable-http", "passed", 511.19, "Bounded delay passed."]]
+        },
+        {
+          "scenario": ["400 ms Timeout", "hang-timeout-400ms", "timing"],
+          "runs": [
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              402.76,
+              "Hang timed out within the configured bound."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Recovery After Timeout", "recovery-after-timeout", "lifecycle"],
+          "runs": [
+            ["http", "streamable-http", "passed", 5.16, "Same-session ping passed after timeout."]
+          ]
+        },
+        {
+          "scenario": ["Duplicate Response", "duplicate-response", "protocol"],
+          "runs": [
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "The first result was accepted and recovery passed."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Missing JSON-RPC Version", "missing-jsonrpc-version", "protocol"],
+          "runs": [
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "The malformed response reached the bound and recovery passed."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Invalid JSON-RPC Version", "invalid-jsonrpc-version", "protocol"],
+          "runs": [
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "The malformed response reached the bound and recovery passed."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Result and Error Response", "result-and-error-response", "protocol"],
+          "runs": [
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "The malformed response reached the bound and recovery passed."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Disconnect Recovery", "disconnect-recovery", "lifecycle"],
+          "runs": [
+            [
+              "http",
+              "streamable-http",
+              "failed",
+              null,
+              "Disconnect returned an immediate error; same-session and new-session recovery failed with Not connected."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Normal Cleanup", "normal-cleanup", "lifecycle"],
+          "runs": [["http", "streamable-http", "passed", null, "Normal cleanup passed."]]
+        }
+      ],
+      "findings": [
+        {
+          "id": "stdio-child-leaves-new-sessions-disconnected",
+          "run": "disconnect-recovery:http",
+          "statement": "An exited stdio child leaves same-session and new Streamable HTTP sessions disconnected.",
+          "category": "recovery",
+          "reportingStatus": "reported",
+          "repository": "punkpeye/mcp-proxy",
+          "issueNumber": 112,
+          "issueUrl": "https://github.com/punkpeye/mcp-proxy/issues/112",
+          "reportedAt": "2026-09-24T14:03:56Z"
+        }
+      ]
+    },
+    {
+      "id": "supergateway-4.0.0",
+      "testedOn": "2026-09-24",
+      "sourceUrl": "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/supergateway-4.0.0.md",
+      "implementation": {
+        "name": "Supergateway",
+        "slug": "supergateway",
+        "version": "4.0.0",
+        "kind": "proxy",
+        "repositoryUrl": "https://github.com/supercorp-ai/supergateway"
+      },
+      "outcomes": [
+        {
+          "scenario": ["Baseline Ping", "baseline-ping", "baseline"],
+          "runs": [
+            ["stdio", "stdio", "passed", 5.7, "HTTP server through stdio gateway passed."],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              6.25,
+              "stdio server through stateful HTTP gateway passed."
+            ]
+          ]
+        },
+        {
+          "scenario": ["500 ms Bounded Delay", "bounded-delay-500ms", "timing"],
+          "runs": [
+            ["stdio", "stdio", "passed", 509.54, "Bounded delay passed."],
+            ["http", "streamable-http", "passed", 509.08, "Bounded delay passed."]
+          ]
+        },
+        {
+          "scenario": ["400 ms Timeout", "hang-timeout-400ms", "timing"],
+          "runs": [
+            ["stdio", "stdio", "passed", 403.57, "Hang timed out within the configured bound."],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              403.72,
+              "Hang timed out within the configured bound."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Recovery After Timeout", "recovery-after-timeout", "lifecycle"],
+          "runs": [
+            ["stdio", "stdio", "passed", 13.23, "Same-session ping passed after timeout."],
+            ["http", "streamable-http", "passed", 10.47, "Same-session ping passed after timeout."]
+          ]
+        },
+        {
+          "scenario": ["Duplicate Response", "duplicate-response", "protocol"],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "passed",
+              null,
+              "The first result was accepted and recovery passed."
+            ],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "The first result was accepted and recovery passed."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Missing JSON-RPC Version", "missing-jsonrpc-version", "protocol"],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "passed",
+              null,
+              "The malformed response reached the bound and recovery passed."
+            ],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "The malformed response reached the bound and recovery passed."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Invalid JSON-RPC Version", "invalid-jsonrpc-version", "protocol"],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "passed",
+              null,
+              "The malformed response reached the bound and recovery passed."
+            ],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "The malformed response reached the bound and recovery passed."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Result and Error Response", "result-and-error-response", "protocol"],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "passed",
+              null,
+              "The malformed response reached the bound and recovery passed."
+            ],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "The malformed response reached the bound and recovery passed."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Disconnect Recovery", "disconnect-recovery", "lifecycle"],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "passed",
+              null,
+              "The upstream HTTP request failed immediately and the same stdio session remained usable."
+            ],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "The child exited and the session closed; a newly initialized session passed."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Normal Cleanup", "normal-cleanup", "lifecycle"],
+          "runs": [
+            ["stdio", "stdio", "passed", null, "Normal setup and cleanup passed."],
+            ["http", "streamable-http", "passed", null, "Normal setup and cleanup passed."]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tbxark-mcp-proxy-1.1.0",
+      "testedOn": "2026-09-24",
+      "sourceUrl": "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/tbxark-mcp-proxy-1.1.0.md",
+      "implementation": {
+        "name": "tbxark/mcp-proxy",
+        "slug": "tbxark-mcp-proxy",
+        "version": "1.1.0",
+        "kind": "proxy",
+        "repositoryUrl": "https://github.com/tbxark/mcp-proxy"
+      },
+      "outcomes": [
+        {
+          "scenario": ["Baseline Ping", "baseline-ping", "baseline"],
+          "runs": [["http", "streamable-http", "passed", 5.72, "Baseline ping passed."]]
+        },
+        {
+          "scenario": ["500 ms Bounded Delay", "bounded-delay-500ms", "timing"],
+          "runs": [["http", "streamable-http", "passed", 508.5, "Bounded delay passed."]]
+        },
+        {
+          "scenario": ["400 ms Timeout", "hang-timeout-400ms", "timing"],
+          "runs": [
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              405.85,
+              "Hang timed out within the configured bound."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Recovery After Timeout", "recovery-after-timeout", "lifecycle"],
+          "runs": [
+            ["http", "streamable-http", "passed", 9.95, "Same-session ping passed after timeout."]
+          ]
+        },
+        {
+          "scenario": ["Duplicate Response", "duplicate-response", "protocol"],
+          "runs": [
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "The first result was accepted and recovery passed."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Missing JSON-RPC Version", "missing-jsonrpc-version", "protocol"],
+          "runs": [
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "A fault acknowledgement was returned and recovery passed."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Invalid JSON-RPC Version", "invalid-jsonrpc-version", "protocol"],
+          "runs": [
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "A fault acknowledgement was returned and recovery passed."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Result and Error Response", "result-and-error-response", "protocol"],
+          "runs": [
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "An immediate internal error was returned and recovery passed."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Primary Child Disconnect", "primary-child-disconnect", "lifecycle"],
+          "runs": [
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "The primary child returned an immediate transport closed error while the control route remained isolated."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Control Route Isolation", "control-route-isolation", "lifecycle"],
+          "runs": [
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              2.9,
+              "The control route passed while the primary route recovered."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Primary Auto-Reconnect", "primary-auto-reconnect", "lifecycle"],
+          "runs": [
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "The primary route reconnected after three failed 250 ms health probes."
+            ]
+          ]
+        },
+        {
+          "scenario": ["New Session After Reconnect", "new-session-after-reconnect", "lifecycle"],
+          "runs": [
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              5.19,
+              "A new primary session passed after reconnect."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Graceful Proxy Shutdown", "graceful-proxy-shutdown", "lifecycle"],
+          "runs": [
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              null,
+              "Both stdio children received SIGINT and stopped."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}
