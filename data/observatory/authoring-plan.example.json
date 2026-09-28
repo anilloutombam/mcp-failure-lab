@@ -1,0 +1,23 @@
+{
+  "report": {
+    "id": "example-mcp-server-1.0.0",
+    "testedOn": "2026-09-28",
+    "sourcePath": "docs/compatibility/example-mcp-server-1.0.0.md"
+  },
+  "implementation": {
+    "name": "Example MCP Server",
+    "slug": "example-mcp-server",
+    "version": "1.0.0",
+    "kind": "server",
+    "repositoryUrl": "https://github.com/example/example-mcp-server"
+  },
+  "runs": [
+    {
+      "resultFile": "../../artifacts/example-baseline-stdio.json",
+      "alias": "stdio",
+      "transport": "stdio",
+      "scenarioSlug": "baseline-ping",
+      "category": "baseline"
+    }
+  ]
+}

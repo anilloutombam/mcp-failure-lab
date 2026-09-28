@@ -13,7 +13,34 @@ from human-oriented Markdown:
 - reviewed Finding and upstream-report links when available.
 
 The JSON is canonical source data, not a generated interpretation of report
-prose. Update it in the same pull request as a compatible report and run:
+prose. A checked test result can be converted into a draft report with an
+authoring plan:
+
+```bash
+cp data/observatory/authoring-plan.example.json /tmp/observatory-plan.json
+npm run observatory:prepare -- --input /tmp/observatory-plan.json
+```
+
+The preview command does not change the manifest. Review its identity,
+categories, statuses, and observations, then append it with:
+
+```bash
+npm run observatory:prepare -- --input /tmp/observatory-plan.json --write
+npm run observatory:validate
+```
+
+Result paths are resolved relative to the authoring plan. The compatibility
+report must already exist in `docs/compatibility`. Status and duration are read
+from each JSON scenario result; `scenarioName`, `status`, and `observation` may
+be supplied when the reviewed record needs clearer wording or a
+`needs-review` status.
+
+The command intentionally leaves `findings` empty. A test result is not, by
+itself, a verified Finding or proof of an upstream defect. Add reviewed Finding
+and upstream-report metadata separately.
+
+To edit the manifest without the authoring command, update it in the same pull
+request as a compatible report and run:
 
 ```bash
 npm run observatory:validate
