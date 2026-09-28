@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { validateObservatoryManifest } from "../../scripts/validate-observatory-manifest.mjs";
+import {
+  sourcePathForReport,
+  validateObservatoryManifest,
+} from "../../scripts/validate-observatory-manifest.mjs";
 
 function validManifest() {
   return {
@@ -60,5 +63,63 @@ describe("Observatory manifest validation", () => {
       reportedAt: "2026-09-28T10:00:00Z",
     });
     expect(() => validateObservatoryManifest(manifest)).toThrow("references missing run");
+  });
+
+  it("rejects issue links that do not match their declared repository and number", () => {
+    const manifest = validManifest();
+    manifest.reports[0].findings.push({
+      id: "mismatched-link",
+      run: "baseline-ping:stdio",
+      statement: "The issue link points to a different issue.",
+      category: "reliability",
+      reportingStatus: "reported",
+      repository: "example/server",
+      issueNumber: 12,
+      issueUrl: "https://github.com/example/server/issues/99",
+      commentUrl: "https://github.com/example/server/issues/12#issuecomment-1234",
+      reportedAt: "2026-09-28T10:00:00Z",
+    });
+    expect(() => validateObservatoryManifest(manifest)).toThrow(
+      "Issue URL must match example/server#12",
+    );
+  });
+
+  it("rejects comment links that point to a different issue", () => {
+    const manifest = validManifest();
+    manifest.reports[0].findings.push({
+      id: "mismatched-comment",
+      run: "baseline-ping:stdio",
+      statement: "The comment link points to a different issue.",
+      category: "reliability",
+      reportingStatus: "already-reported",
+      repository: "example/server",
+      issueNumber: 12,
+      issueUrl: "https://github.com/example/server/issues/12",
+      commentUrl: "https://github.com/example/server/issues/99#issuecomment-1234",
+      reportedAt: "2026-09-28T10:00:00Z",
+    });
+    expect(() => validateObservatoryManifest(manifest)).toThrow(
+      "Comment URL must point to a comment on example/server#12",
+    );
+  });
+
+  it("accepts a report filename that differs from its stable report id", () => {
+    expect(
+      sourcePathForReport({
+        id: "sparfenyuk-mcp-proxy-0.12.0",
+        sourceUrl:
+          "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/mcp-proxy-0.12.0.md",
+      }),
+    ).toBe("docs/compatibility/mcp-proxy-0.12.0.md");
+  });
+
+  it.each([
+    "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/",
+    "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/README.md",
+    "https://github.com/anilloutombam/mcp-failure-lab/blob/main/README.md",
+  ])("rejects a source URL that is not a compatibility report file", (sourceUrl) => {
+    expect(() => sourcePathForReport({ id: "invalid-source", sourceUrl })).toThrow(
+      "Invalid source path",
+    );
   });
 });

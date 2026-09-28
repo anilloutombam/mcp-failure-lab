@@ -1,4 +1,4 @@
-import { access, readFile } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { z } from "zod";
 
@@ -53,7 +53,39 @@ const findingSchema = z
     commentUrl: httpsUrlSchema.optional(),
     reportedAt: z.iso.datetime(),
   })
-  .strict();
+  .strict()
+  .superRefine((finding, context) => {
+    const expectedPath = `/${finding.repository}/issues/${finding.issueNumber}`;
+    const issueUrl = new URL(finding.issueUrl);
+    if (
+      issueUrl.hostname !== "github.com" ||
+      issueUrl.pathname !== expectedPath ||
+      issueUrl.search ||
+      issueUrl.hash
+    ) {
+      context.addIssue({
+        code: "custom",
+        path: ["issueUrl"],
+        message: `Issue URL must match ${finding.repository}#${finding.issueNumber}.`,
+      });
+    }
+
+    if (finding.commentUrl) {
+      const commentUrl = new URL(finding.commentUrl);
+      if (
+        commentUrl.hostname !== "github.com" ||
+        commentUrl.pathname !== expectedPath ||
+        commentUrl.search ||
+        !/^#issuecomment-\d+$/.test(commentUrl.hash)
+      ) {
+        context.addIssue({
+          code: "custom",
+          path: ["commentUrl"],
+          message: `Comment URL must point to a comment on ${finding.repository}#${finding.issueNumber}.`,
+        });
+      }
+    }
+  });
 
 const reportSchema = z
   .object({
@@ -151,13 +183,25 @@ export function summarizeObservatoryManifest(manifest) {
   );
 }
 
+export function sourcePathForReport(report) {
+  const relativePath = new URL(report.sourceUrl).pathname.split("/blob/main/")[1];
+  if (
+    !relativePath ||
+    !/^docs\/compatibility\/[^/]+\.md$/.test(relativePath) ||
+    relativePath === "docs/compatibility/README.md"
+  ) {
+    throw new Error(`Invalid source path for ${report.id}`);
+  }
+  return relativePath;
+}
+
 async function validateSourceFiles(manifest, repositoryRoot) {
   for (const report of manifest.reports) {
-    const relativePath = new URL(report.sourceUrl).pathname.split("/blob/main/")[1];
-    if (!relativePath?.startsWith("docs/compatibility/")) {
-      throw new Error(`Invalid source path for ${report.id}`);
+    const relativePath = sourcePathForReport(report);
+    const sourceStat = await stat(new URL(relativePath, repositoryRoot));
+    if (!sourceStat.isFile()) {
+      throw new Error(`Source path is not a file for ${report.id}`);
     }
-    await access(new URL(relativePath, repositoryRoot));
   }
 }
 
