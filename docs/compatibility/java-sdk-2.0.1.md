@@ -109,9 +109,11 @@ the late response in all three runs.
 
 ## Classification
 
-- Accepting `jsonrpc: "1.0"`: failed protocol validation.
-- Losing stdio request processing after the other two malformed responses: failed recovery.
-- No upstream issues were opened as part of this test.
+- Accepting `jsonrpc: "1.0"`: failed protocol validation, reported upstream in
+  [modelcontextprotocol/java-sdk#1156](https://github.com/modelcontextprotocol/java-sdk/issues/1156).
+- Losing stdio request processing after the other two malformed responses: failed recovery,
+  reported upstream in
+  [modelcontextprotocol/java-sdk#1157](https://github.com/modelcontextprotocol/java-sdk/issues/1157).
 
 ## Not tested
 
