@@ -830,6 +830,181 @@
           ]
         }
       ]
+    },
+    {
+      "id": "official-java-sdk-2.0.1",
+      "testedOn": "2026-10-02",
+      "sourceUrl": "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/java-sdk-2.0.1.md",
+      "implementation": {
+        "name": "Official Java SDK",
+        "slug": "official-java-sdk",
+        "version": "2.0.1",
+        "kind": "client",
+        "repositoryUrl": "https://github.com/modelcontextprotocol/java-sdk"
+      },
+      "outcomes": [
+        {
+          "scenario": ["Baseline Ping", "baseline-ping", "baseline"],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "passed",
+              692,
+              "All three runs initialized, listed seven tools, and completed ping over stdio."
+            ],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              13,
+              "All three runs initialized, listed seven tools, and completed ping over Streamable HTTP."
+            ]
+          ]
+        },
+        {
+          "scenario": ["250 ms Bounded Delay", "bounded-delay-250ms", "timing"],
+          "runs": [
+            ["stdio", "stdio", "passed", 916, "The 250 ms delay passed in all three runs."],
+            ["http", "streamable-http", "passed", 272, "The 250 ms delay passed in all three runs."]
+          ]
+        },
+        {
+          "scenario": [
+            "Two-second Delay Timeout and Recovery",
+            "delay-timeout-recovery",
+            "lifecycle"
+          ],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "passed",
+              1652,
+              "The delayed call exceeded the one-second request timeout and the same client completed ping in all three runs."
+            ],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              1027,
+              "The delayed call exceeded the one-second request timeout and the same client completed ping in all three runs."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Duplicate Response", "duplicate-response", "protocol"],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "passed",
+              776,
+              "The first result was accepted and same-client recovery passed in all three runs."
+            ],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              126,
+              "The first result was accepted and same-client recovery passed in all three runs."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Missing JSON-RPC Version", "missing-jsonrpc-version", "protocol"],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "failed",
+              4668,
+              "The transport logged a parse error, but the call and following ping timed out after inbound processing stopped in all three runs."
+            ],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              19,
+              "The malformed response was rejected and the same client completed ping in all three runs."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Invalid JSON-RPC Version", "invalid-jsonrpc-version", "protocol"],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "failed",
+              687,
+              "The client accepted a response declaring JSON-RPC 1.0 in all three runs."
+            ],
+            [
+              "http",
+              "streamable-http",
+              "failed",
+              12,
+              "The client accepted a response declaring JSON-RPC 1.0 in all three runs."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Result and Error Response", "result-and-error-response", "protocol"],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "failed",
+              4685,
+              "The transport logged a validation error, but the call and following ping timed out after inbound processing stopped in all three runs."
+            ],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              10,
+              "The malformed response was rejected and the same client completed ping in all three runs."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Disconnect Recovery", "disconnect-recovery", "lifecycle"],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "passed",
+              5336,
+              "The exited stdio child made same-client recovery unavailable; a fresh client completed ping in all three runs."
+            ],
+            [
+              "http",
+              "streamable-http",
+              "passed",
+              19,
+              "The same HTTP client and a fresh client completed ping after the forced disconnect in all three runs."
+            ]
+          ]
+        },
+        {
+          "scenario": [
+            "Late Response After Cancellation",
+            "response-after-cancellation",
+            "lifecycle"
+          ],
+          "runs": [
+            [
+              "stdio",
+              "stdio",
+              "passed",
+              2831,
+              "The request timed out, the late response settled, and the same client completed ping in all three runs."
+            ]
+          ]
+        }
+      ],
+      "findings": []
     }
   ]
 }

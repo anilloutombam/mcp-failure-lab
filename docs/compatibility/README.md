@@ -12,6 +12,9 @@ tests; they are not a permanent compatibility guarantee for later client release
 
 Published-package tests against independent MCP projects are documented separately:
 
+- [Official Java SDK 2.0.1](java-sdk-2.0.1.md) — stdio and Streamable HTTP baseline, delay,
+  timeout recovery, malformed and duplicate responses, disconnect recovery, and late-response
+  cancellation checks using `mcp-failure-lab@0.11.0`.
 - [GitHub MCP Server 1.12.2](github-mcp-server-1.12.2.md) — hosted Streamable HTTP and local stdio
   authentication, tool allowlisting, repeated read-only calls, and lifecycle checks using
   `mcp-failure-lab@0.10.0`.
