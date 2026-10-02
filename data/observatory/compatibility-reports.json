@@ -1004,7 +1004,30 @@
           ]
         }
       ],
-      "findings": []
+      "findings": [
+        {
+          "id": "invalid-jsonrpc-version-accepted",
+          "run": "invalid-jsonrpc-version:stdio",
+          "statement": "The client accepts a response declaring JSON-RPC 1.0 instead of rejecting it.",
+          "category": "protocol-behavior",
+          "reportingStatus": "reported",
+          "repository": "modelcontextprotocol/java-sdk",
+          "issueNumber": 1156,
+          "issueUrl": "https://github.com/modelcontextprotocol/java-sdk/issues/1156",
+          "reportedAt": "2026-10-02T12:40:42Z"
+        },
+        {
+          "id": "stdio-malformed-response-stops-processing",
+          "run": "missing-jsonrpc-version:stdio",
+          "statement": "After rejecting a malformed response, the stdio client stops processing later responses.",
+          "category": "recovery",
+          "reportingStatus": "reported",
+          "repository": "modelcontextprotocol/java-sdk",
+          "issueNumber": 1157,
+          "issueUrl": "https://github.com/modelcontextprotocol/java-sdk/issues/1157",
+          "reportedAt": "2026-10-02T12:43:12Z"
+        }
+      ]
     }
   ]
 }
