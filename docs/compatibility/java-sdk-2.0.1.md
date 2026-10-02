@@ -1,86 +1,123 @@
-# Official Java SDK 2.0.1 compatibility report
+# Java SDK 2.0.1 compatibility
 
-Tested on 2026-10-02 against the published `mcp-failure-lab@0.11.0` npm package. The
-MCP Failure Lab source checkout was not used to execute the server.
+Test date: 2026-10-02
 
-## Release identity
+## Versions
 
-- npm package: `mcp-failure-lab@0.11.0`
-- npm integrity:
-  `sha512-NXwSIP6hwO29fQYiWNWWF7iVhJ3aTRLO1cxAr+UNteBAHHNSivK3hcpM/RqT7G3DmudxtHqt6lThbCJxcGmtyw==`
-- npm SHA-1: `adee5052d9d30efd4774e703b875e1b22d7ce232`
-- Official Java MCP SDK: `io.modelcontextprotocol.sdk:mcp:2.0.1`
-- Negotiated protocol: `2025-11-25`
+| Component       | Version    |
+| --------------- | ---------- |
+| MCP Failure Lab | 0.11.0     |
+| Java MCP SDK    | 2.0.1      |
+| Protocol        | 2025-11-25 |
+| Java            | 21.0.9     |
+| Maven           | 3.9.11     |
+| Node.js         | 22.23.3    |
+| npm             | 10.9.9     |
 
-## Environment and method
+The server was started from the published npm package, not from the repository checkout:
 
-- Linux arm64 container
-- Eclipse Temurin Java 21.0.9
-- Maven 3.9.11
-- Node.js 22.23.3
-- npm 10.9.9
+```text
+npx -y mcp-failure-lab@0.11.0 serve
+npx -y mcp-failure-lab@0.11.0 serve --transport http --host 127.0.0.1 --port 43123 --path /mcp
+```
 
-The reproducible harness is in [`experiments/java-sdk`](../../experiments/java-sdk/README.md).
-It starts every stdio server with `npx -y mcp-failure-lab@0.11.0 serve` and starts the HTTP
-server with the same pinned package. Every case was repeated three times. Durations below are
-the median end-to-end harness durations in milliseconds and include client initialization and
-cleanup.
+Package identity:
+
+```text
+integrity: sha512-NXwSIP6hwO29fQYiWNWWF7iVhJ3aTRLO1cxAr+UNteBAHHNSivK3hcpM/RqT7G3DmudxtHqt6lThbCJxcGmtyw==
+sha1:      adee5052d9d30efd4774e703b875e1b22d7ce232
+```
+
+The test ran in a Linux arm64 container. The harness and pinned container images are in
+[`experiments/java-sdk`](../../experiments/java-sdk/README.md).
+
+## Procedure
+
+Each case ran three times. The client used the synchronous Java SDK API.
+
+- Normal requests had a five-second timeout.
+- The timeout case called `delay` with `delayMs: 2000` and a one-second request timeout, then
+  called `ping` on the same client.
+- Malformed-response cases called `malformed_message`, then called `ping` on the same client.
+- The duplicate-response case called `duplicate_response`, waited 100 ms, then called `ping`.
+- The disconnect case attempted `ping` on the same client and on a new client.
+- The cancellation case called `response_after_cancellation` with a one-second request timeout,
+  waited 1.2 seconds, then called `ping` on the same client.
+
+Durations are medians for the complete case, including initialization and cleanup.
 
 ## Results
 
-| Scenario                              |                stdio |   Streamable HTTP | Result |
-| ------------------------------------- | -------------------: | ----------------: | ------ |
-| Initialize, list tools, and ping      |               692 ms |             13 ms | Pass   |
-| 250 ms bounded delay                  |               916 ms |            272 ms | Pass   |
-| Two-second delay timeout and recovery |             1,652 ms |          1,027 ms | Pass   |
-| Duplicate response and recovery       |               776 ms |            126 ms | Pass   |
-| Missing `jsonrpc` and recovery        | **Failed**, 4,668 ms |             19 ms | Mixed  |
-| Invalid `jsonrpc: "1.0"` rejection    |   **Failed**, 687 ms | **Failed**, 12 ms | Fail   |
-| Both `result` and `error`             | **Failed**, 4,685 ms |             10 ms | Mixed  |
-| Forced disconnect and reconnect       |             5,336 ms |             19 ms | Pass   |
-| Late response after cancellation      |             2,831 ms |               N/A | Pass   |
+| Case                                   | stdio           | Streamable HTTP |
+| -------------------------------------- | --------------- | --------------- |
+| Initialize, list tools, `ping`         | Pass — 692 ms   | Pass — 13 ms    |
+| 250 ms delay                           | Pass — 916 ms   | Pass — 272 ms   |
+| Timeout, then `ping`                   | Pass — 1,652 ms | Pass — 1,027 ms |
+| Duplicate response, then `ping`        | Pass — 776 ms   | Pass — 126 ms   |
+| Missing `jsonrpc`, then `ping`         | Fail — 4,668 ms | Pass — 19 ms    |
+| `jsonrpc: "1.0"`, then `ping`          | Fail — 687 ms   | Fail — 12 ms    |
+| Both `result` and `error`, then `ping` | Fail — 4,685 ms | Pass — 10 ms    |
+| Disconnect and reconnect               | Pass — 5,336 ms | Pass — 19 ms    |
+| Response after cancellation            | Pass — 2,831 ms | Not applicable  |
 
-All results reproduced identically in three runs.
+The status of every case was the same in all three runs.
 
-## Passed behavior
+## Observations
 
-The Java client initialized, listed all seven tools, and called `ping` over both transports.
-A bounded delay completed successfully. A two-second delay exceeded the configured one-second
-request timeout, and the same client completed the following `ping`.
+### Invalid JSON-RPC version
 
-The client accepted the first duplicate response and remained usable. Streamable HTTP rejected
-responses missing `jsonrpc` or containing both `result` and `error`, and the same client recovered.
-After an HTTP disconnect, the same client and a new client both completed `ping`. After a stdio
-disconnect exited the child process, a newly initialized client completed `ping`.
+The SDK returned the `malformed_message` tool result when its response contained
+`jsonrpc: "1.0"`. It did this over both transports. The following `ping` succeeded.
 
-For `response_after_cancellation`, the stdio request timed out, Failure Lab observed the
-cancellation and emitted the late response, and the same Java client completed the following
-`ping` in all three runs.
+Expected: reject the response because its JSON-RPC version is not `2.0`.
 
-## Invalid JSON-RPC version acceptance
+### Missing `jsonrpc` over stdio
 
-The Java SDK accepted a response declaring `jsonrpc: "1.0"` as a successful tool result over both
-stdio and Streamable HTTP. The following `ping` also succeeded. This reproduced in all six runs.
-The response should be rejected because MCP uses JSON-RPC 2.0.
+The stdio transport logged:
 
-## Stdio inbound processing after malformed responses
+```text
+Cannot construct instance of io.modelcontextprotocol.spec.McpSchema$JSONRPCResponse:
+jsonrpc must not be empty
+```
 
-For a response missing `jsonrpc`, the stdio transport logged a Jackson construction error stating
-that `jsonrpc` must not be empty. For a response containing both `result` and `error`, it logged
-that MCP responses must contain only one of those fields. In both cases, the original call did not
-receive the parsing failure and instead expired at the request timeout. A following `ping` on the
-same client also timed out.
+The tool call timed out. The following `ping` also timed out. Over Streamable HTTP, the tool call
+failed and the following `ping` succeeded.
 
-The same malformed responses were rejected over Streamable HTTP without making the client
-unusable. This transport difference reproduced in every run.
+### Both `result` and `error` over stdio
 
-These observations are recorded as compatibility failures. They should be reviewed with the Java
-SDK maintainers before an upstream issue is opened; this report does not yet claim a confirmed
-upstream defect.
+The stdio transport logged:
 
-## Scope
+```text
+Cannot construct instance of io.modelcontextprotocol.spec.McpSchema$JSONRPCResponse:
+MCP responses MUST either have a result or error
+```
 
-This check covers the synchronous Java client, stdio and modern Streamable HTTP, request timeouts,
-malformed and duplicate responses, transport loss, cancellation, and immediate recovery. It does
-not cover the asynchronous client API, legacy HTTP sessions, SSE, concurrency, authentication,
-idle-session expiry, or soak behavior.
+The tool call timed out. The following `ping` also timed out. Over Streamable HTTP, the tool call
+failed and the following `ping` succeeded.
+
+### Disconnect behavior
+
+The stdio child exited after `disconnect`. The existing client could not recover; a new client
+initialized and completed `ping`. Over Streamable HTTP, both the existing client and a new client
+completed `ping` after the interrupted response.
+
+### Cancellation behavior
+
+The stdio call to `response_after_cancellation` reached the one-second request timeout. Failure
+Lab sent the late response after receiving cancellation. The same client completed `ping` after
+the late response in all three runs.
+
+## Classification
+
+- Accepting `jsonrpc: "1.0"`: failed protocol validation.
+- Losing stdio request processing after the other two malformed responses: failed recovery.
+- No upstream issues were opened as part of this test.
+
+## Not tested
+
+- Asynchronous Java client API
+- Legacy HTTP and SSE
+- Concurrent requests
+- Authentication
+- Idle-session expiry
+- Soak behavior
