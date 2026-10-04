@@ -3,8 +3,8 @@ import { createServer as createNodeServer } from "node:http";
 import { createConnection } from "node:net";
 
 import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/client";
-import { SdkErrorCode } from "@modelcontextprotocol/server";
-import { describe, expect, it } from "vitest";
+import { ProtocolError, ProtocolErrorCode, SdkErrorCode } from "@modelcontextprotocol/server";
+import { describe, expect, it, vi } from "vitest";
 
 import { startHttpServer } from "../../src/httpServer.js";
 
@@ -26,6 +26,96 @@ function createLegacyClient(name: string): Client {
 }
 
 describe("Streamable HTTP server", () => {
+  it("closes the legacy liveness response after a rejected ping without affecting another client", async () => {
+    const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
+    const affected = createLegacyClient("liveness-affected");
+    const healthy = createLegacyClient("liveness-healthy");
+    const diagnostics: Record<string, unknown>[] = [];
+    const order: string[] = [];
+    const stderr = vi.spyOn(console, "error").mockImplementation((message: unknown) => {
+      if (typeof message !== "string" || !message.startsWith("{")) return;
+      const diagnostic = JSON.parse(message) as Record<string, unknown>;
+      if (diagnostic.event !== "protocol_ping_liveness") return;
+      diagnostics.push(diagnostic);
+      order.push((diagnostic.transport as { outcome: string }).outcome);
+    });
+    const rejectedPing = vi.fn(async () => {
+      throw new ProtocolError(ProtocolErrorCode.MethodNotFound, "ping rejected by fixture");
+    });
+    affected.setRequestHandler("ping", rejectedPing);
+    try {
+      await affected.connect(
+        new StreamableHTTPClientTransport(handle.url, {
+          fetch: async (input, init) => {
+            const response = await fetch(input, init);
+            if (
+              !response.body ||
+              !response.headers.get("content-type")?.includes("text/event-stream")
+            )
+              return response;
+            const reader = response.body.getReader();
+            return new Response(
+              new ReadableStream<Uint8Array>({
+                async pull(controller) {
+                  try {
+                    const chunk = await reader.read();
+                    if (chunk.done) controller.close();
+                    else controller.enqueue(chunk.value);
+                  } catch (error) {
+                    order.push("stream_interrupted");
+                    controller.error(error);
+                  }
+                },
+                async cancel(reason) {
+                  await reader.cancel(reason);
+                },
+              }),
+              { status: response.status, headers: response.headers },
+            );
+          },
+        }),
+      );
+      await healthy.connect(new StreamableHTTPClientTransport(handle.url));
+      const call = affected
+        .callTool(
+          {
+            name: "protocol_ping_liveness",
+            arguments: { pingAfterMs: 0, livenessTimeoutMs: 500, closeOnFailure: true },
+          },
+          { timeout: 2000 },
+        )
+        .catch((error: unknown) => {
+          order.push("request_rejected");
+          throw error;
+        });
+      await expect(call).rejects.toThrow();
+      expect(rejectedPing).toHaveBeenCalledOnce();
+      expect(diagnostics).toEqual([
+        expect.objectContaining({
+          requestId: expect.any(Number),
+          protocolPing: { outcome: "unsupported" },
+          transport: { outcome: "closure_requested" },
+        }),
+        expect.objectContaining({
+          requestId: expect.any(Number),
+          protocolPing: { outcome: "unsupported" },
+          transport: { outcome: "closed" },
+        }),
+      ]);
+      expect(diagnostics[0]?.requestId).toBe(diagnostics[1]?.requestId);
+      expect(order.indexOf("closure_requested")).toBeLessThan(order.indexOf("request_rejected"));
+      expect(order).toContain("stream_interrupted");
+      expect(order.indexOf("closure_requested")).toBeLessThan(order.indexOf("stream_interrupted"));
+      await expect(
+        healthy.callTool({ name: "ping", arguments: {} }, { timeout: 1000 }),
+      ).resolves.toMatchObject({ content: [{ type: "text" }] });
+    } finally {
+      stderr.mockRestore();
+      await affected.close().catch(() => undefined);
+      await healthy.close().catch(() => undefined);
+      await handle.close();
+    }
+  });
   it.each(["0.0.0.0", "0", "0.0", "0.0.0.00", "::", "::0", "0:0:0:0:0:0:0:0"])(
     "rejects wildcard bind host %s without an allowlist",
     async (host) => {
