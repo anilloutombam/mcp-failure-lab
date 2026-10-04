@@ -6,6 +6,7 @@ tests; they are not a permanent compatibility guarantee for later client release
 
 | Failure Lab release | Tested clients                                                                   | Report               |
 | ------------------- | -------------------------------------------------------------------------------- | -------------------- |
+| 0.12.0              | TypeScript 1.30.1, Python 2.2.0, Go 1.7.0, Rust 3.4.0, C# 2.2.0, Java 2.0.1      | [Report](v0.12.0.md) |
 | 0.11.0              | TypeScript 1.30.1, Python 2.2.0, Go 1.7.0, Rust 3.4.0, C# 2.2.0                  | [Report](v0.11.0.md) |
 | 0.10.0              | TypeScript 1.30.0, Python 2.2.0, Go 1.7.0, Rust 3.4.0, C# 2.2.0                  | [Report](v0.10.0.md) |
 | 0.9.0               | TypeScript 1.30.0, Python 2.2.0, Go 1.7.0, Rust 3.4.0, C# 2.2.0, Inspector 2.7.0 | [Report](v0.9.0.md)  |
