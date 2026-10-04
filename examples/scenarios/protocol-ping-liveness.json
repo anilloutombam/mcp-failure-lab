@@ -1,5 +1,6 @@
 {
   "name": "protocol ping succeeds during an in-flight call",
+  "protocolVersion": "2025-11-25",
   "call": {
     "tool": "protocol_ping_liveness",
     "args": {

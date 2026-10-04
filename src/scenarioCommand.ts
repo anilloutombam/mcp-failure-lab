@@ -1,6 +1,15 @@
 import { readFile } from "node:fs/promises";
 import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/client";
 import { z } from "zod";
+import { InMemoryTransport } from "@modelcontextprotocol/server";
+import {
+  MalformedMessageTransport,
+  RequestScopedMalformedMessageFaults,
+} from "./malformedMessage.js";
+import {
+  DuplicateResponseTransport,
+  RequestScopedDuplicateResponseFaults,
+} from "./duplicateResponse.js";
 
 import {
   ConsoleScenarioReporter,
@@ -51,6 +60,7 @@ const expectationSchema = z
 const scenarioSchema = z
   .object({
     name: z.string().min(1),
+    protocolVersion: z.enum(["2025-11-25", "2026-07-28"]).optional(),
     call: callSchema,
     timeoutMs: z.number().int().positive().optional(),
     expect: expectationSchema,
@@ -171,6 +181,9 @@ export async function loadScenario(path: string): Promise<Scenario> {
 
   return {
     name: scenario.name,
+    ...(scenario.protocolVersion === undefined
+      ? {}
+      : { protocolVersion: scenario.protocolVersion }),
     call: scenario.call,
     expect: toScenarioExpectation(scenario.expect),
     timeoutMs: scenario.timeoutMs ?? DEFAULT_SCENARIO_TIMEOUT_MS,
@@ -202,6 +215,32 @@ export function formatScenarioResult(result: ScenarioResult, format: ReportForma
 }
 
 export async function executeScenario(scenario: Scenario): Promise<ScenarioResult> {
+  if (scenario.protocolVersion === "2025-11-25") {
+    const malformedMessageFaults = new RequestScopedMalformedMessageFaults();
+    const duplicateResponseFaults = new RequestScopedDuplicateResponseFaults();
+    const server = createServer({ malformedMessageFaults, duplicateResponseFaults });
+    const client = new Client(
+      { name: "mcp-failure-lab-scenario-client", version: "0.1.0" },
+      { supportedProtocolVersions: ["2025-11-25"], versionNegotiation: { mode: "legacy" } },
+    );
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    try {
+      await server.connect(
+        new MalformedMessageTransport(
+          new DuplicateResponseTransport(serverTransport, duplicateResponseFaults),
+          malformedMessageFaults,
+        ),
+      );
+      await client.connect(clientTransport);
+      return await runScenario(client, scenario);
+    } finally {
+      try {
+        await client.close();
+      } finally {
+        await server.close();
+      }
+    }
+  }
   const handler = createResponseFaultHttpHandler(
     (responseFaults) =>
       createServer({
@@ -254,6 +293,15 @@ export async function runScenarioCommand(
   }
 
   let target: ResolvedTargetClient | undefined;
+  if (targetPath !== undefined && scenario.protocolVersion !== undefined) {
+    writeScenarioCommandError(
+      "invalid_arguments",
+      "scenario protocolVersion is supported only by the built-in runner; external targets negotiate their own protocol",
+      format,
+      output,
+    );
+    return 1;
+  }
   if (targetPath !== undefined) {
     try {
       target = await loadTargetClient(targetPath, registry);

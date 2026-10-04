@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { z } from "zod";
 
 import { createServer } from "../../src/server.js";
+import { executeScenario, loadScenario } from "../../src/scenarioCommand.js";
 import { connectTestClient } from "../helpers/mcpTestClient.js";
 
 const resultSchema = z.object({
@@ -13,6 +14,22 @@ const resultSchema = z.object({
 });
 
 describe("protocol ping liveness MCP integration", () => {
+  it("runs the included legacy success scenario through the built-in runner", async () => {
+    const scenario = await loadScenario("examples/scenarios/protocol-ping-liveness.json");
+    await expect(executeScenario(scenario)).resolves.toMatchObject({
+      passed: true,
+      outcome: "success",
+    });
+  });
+  it("keeps the default runner on the modern protocol", async () => {
+    await expect(
+      executeScenario({
+        name: "modern ping",
+        call: { tool: "protocol_ping_liveness", args: { pingAfterMs: 0, livenessTimeoutMs: 100 } },
+        expect: { outcome: "error", result: { textContains: "unsupported" } },
+      }),
+    ).resolves.toMatchObject({ passed: true, outcome: "error" });
+  });
   it("retains a shared connection and an unrelated active call when closure is requested", async () => {
     let started!: () => void;
     let release!: () => void;

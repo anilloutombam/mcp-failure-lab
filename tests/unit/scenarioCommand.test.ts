@@ -29,6 +29,28 @@ afterEach(async () => {
 });
 
 describe("scenario files", () => {
+  it.each(["2025-11-25", "2026-07-28"])("preserves protocolVersion %s", async (protocolVersion) => {
+    const path = await writeScenario(
+      JSON.stringify({
+        name: "protocol",
+        protocolVersion,
+        call: { tool: "ping", args: {} },
+        expect: { outcome: "success" },
+      }),
+    );
+    await expect(loadScenario(path)).resolves.toMatchObject({ protocolVersion });
+  });
+  it("rejects an unsupported protocol version", async () => {
+    const path = await writeScenario(
+      JSON.stringify({
+        name: "protocol",
+        protocolVersion: "unknown",
+        call: { tool: "ping", args: {} },
+        expect: { outcome: "success" },
+      }),
+    );
+    await expect(loadScenario(path)).rejects.toThrow("is invalid");
+  });
   it("loads a valid JSON scenario", async () => {
     const path = await writeScenario(
       JSON.stringify({

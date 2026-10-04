@@ -304,7 +304,8 @@ additional response. A following observer call can verify that the client remain
 
 `protocol_ping_liveness` sends one bounded server-to-client protocol `ping` during its in-flight
 tool call; the existing `ping` tool checks server health. Protocol ping requires legacy MCP
-`2025-11-25` and reports `unsupported` on `2026-07-28`, including through the built-in runner.
+`2025-11-25`. Set scenario `protocolVersion` to `"2025-11-25"` to run the included success example;
+the default `2026-07-28` reports `unsupported`.
 See the [protocol liveness reference](https://mcplab.dev/docs/fault-tools/#protocol_ping_liveness)
 for arguments, outcomes, transport limitations, and Inspector instructions.
 
