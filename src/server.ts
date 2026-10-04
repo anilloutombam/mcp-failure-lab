@@ -9,6 +9,11 @@ import {
 import { registerMalformedMessageTool, type MalformedMessageFaults } from "./malformedMessage.js";
 import { registerPingTool, type Clock } from "./ping.js";
 import {
+  registerProtocolPingLivenessTool,
+  type LivenessSleeper,
+  type ProtocolPingRecorder,
+} from "./protocolPingLiveness.js";
+import {
   registerResponseAfterCancellationTool,
   type ResponseAfterCancellationFaults,
 } from "./responseAfterCancellation.js";
@@ -23,6 +28,8 @@ export interface ServerDependencies {
   duplicateResponseFaults?: DuplicateResponseFaults;
   responseAfterCancellationFaults?: ResponseAfterCancellationFaults;
   sessionLoss?: SessionLossController;
+  livenessSleeper?: LivenessSleeper;
+  protocolPingRecorder?: ProtocolPingRecorder;
 }
 
 export function createServer(dependencies: ServerDependencies = {}): McpServer {
@@ -32,6 +39,12 @@ export function createServer(dependencies: ServerDependencies = {}): McpServer {
   });
 
   registerPingTool(server, dependencies.clock);
+  registerProtocolPingLivenessTool(
+    server,
+    dependencies.disconnect,
+    dependencies.livenessSleeper,
+    dependencies.protocolPingRecorder,
+  );
   registerDelayTool(server, dependencies.sleeper);
   registerHangTool(server);
   registerDisconnectTool(server, dependencies.disconnect ?? (() => server.close()));

@@ -1,0 +1,21 @@
+{
+  "name": "protocol ping succeeds during an in-flight call",
+  "call": {
+    "tool": "protocol_ping_liveness",
+    "args": {
+      "pingAfterMs": 100,
+      "livenessTimeoutMs": 1000,
+      "completionDelayMs": 100,
+      "closeOnFailure": false
+    }
+  },
+  "timeoutMs": 2000,
+  "expect": {
+    "outcome": "success",
+    "maxDurationMs": 1500,
+    "result": {
+      "isError": false,
+      "textContains": "protocol_ping_succeeded"
+    }
+  }
+}

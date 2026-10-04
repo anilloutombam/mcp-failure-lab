@@ -144,8 +144,9 @@ for lifecycle, ownership, timeout, and observation details.
 
 MCP Failure Lab runs deterministic scenarios through its built-in MCP client and server or through
 a configured external HTTP or stdio target. A scenario invokes a tool, records the observed outcome
-and duration, and evaluates the declared expectations. Built-in scenarios use `ping`, `delay`,
-`hang`, `disconnect`, `malformed_message`, or `duplicate_response`; external scenarios use tools
+and duration, and evaluates the declared expectations. Built-in scenarios use `ping`,
+`protocol_ping_liveness`, `delay`, `hang`, `disconnect`, `malformed_message`, or
+`duplicate_response`; external scenarios use tools
 exposed by their target server.
 
 Optional observer calls run sequentially on the same MCP client connection to verify post-conditions through a separate tool path.
@@ -278,6 +279,7 @@ For result assertions, observer calls, reporting formats, and timeout behavior, 
 | Tool                          | Behavior                                                     |
 | ----------------------------- | ------------------------------------------------------------ |
 | `ping`                        | Returns a deterministic health response                      |
+| `protocol_ping_liveness`      | Sends a bounded protocol ping during its in-flight call      |
 | `delay`                       | Waits for a bounded duration before returning                |
 | `hang`                        | Remains pending until the client cancels                     |
 | `disconnect`                  | Interrupts the active transport while a request is in flight |
@@ -299,6 +301,12 @@ so later requests on the same connection are unaffected.
 
 `duplicate_response` accepts no arguments. It preserves the request ID and emits exactly one
 additional response. A following observer call can verify that the client remains usable.
+
+`protocol_ping_liveness` sends one bounded server-to-client protocol `ping` during its in-flight
+tool call; the existing `ping` tool checks server health. Protocol ping requires legacy MCP
+`2025-11-25` and reports `unsupported` on `2026-07-28`, including through the built-in runner.
+See the [protocol liveness reference](https://mcplab.dev/docs/fault-tools/#protocol_ping_liveness)
+for arguments, outcomes, transport limitations, and Inspector instructions.
 
 `response_after_cancellation` takes no arguments and works over stdio. Call it with an
 `AbortController` and an `onprogress` callback. Cancel when the progress notification arrives.
