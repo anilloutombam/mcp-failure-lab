@@ -63,6 +63,7 @@ const stdioConfigSchema = z
     args: z.array(z.string()).optional(),
     cwd: z.string().min(1).optional(),
     env: z.record(z.string(), z.string()).optional(),
+    envFrom: z.record(z.string().min(1), z.string().min(1)).optional(),
   })
   .strict();
 
@@ -95,11 +96,21 @@ export class DefaultMcpTransportFactory implements McpTransportFactory {
         },
       });
     }
+    const env = { ...config.env };
+    for (const [destination, source] of Object.entries(config.envFrom ?? {})) {
+      const value = process.env[source];
+      if (value === undefined) {
+        throw new Error(
+          `environment variable ${source} is required for stdio variable ${destination}`,
+        );
+      }
+      env[destination] = value;
+    }
     return new StdioClientTransport({
       command: config.command,
       ...(config.args === undefined ? {} : { args: config.args }),
       ...(config.cwd === undefined ? {} : { cwd: config.cwd }),
-      ...(config.env === undefined ? {} : { env: config.env }),
+      ...(config.env === undefined && config.envFrom === undefined ? {} : { env }),
     });
   }
 }

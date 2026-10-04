@@ -100,6 +100,10 @@ scenario calls and expectations as the built-in server.
 
 ## Run against another MCP server
 
+Stdio targets support `envFrom` to pass credentials from the runner's environment without storing
+them in target JSON. See the [stdio target guide](https://mcplab.dev/docs/external-targets/#stdio)
+and `examples/targets/github-stdio.json`.
+
 Pass a target configuration to execute the same scenario against a Streamable HTTP or stdio MCP
 server:
 
