@@ -1,5 +1,7 @@
 # MCP Failure Lab
 
+Reproduce MCP timeouts, cancellation races, transport loss, and invalid responses with repeatable tests and CI reports.
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://mcplab.dev/brand/mcp-failure-lab-logo-dark.svg">
@@ -13,25 +15,16 @@
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-Official-blue)](https://registry.modelcontextprotocol.io/)
 [![GitHub MCP Registry](https://img.shields.io/badge/GitHub_MCP_Registry-Listed-181717?logo=github)](https://github.com/mcp/anilloutombam/mcp-failure-lab)
 
-A chaos-engineering and resilience-testing toolkit for Model Context Protocol servers.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 [Documentation](https://mcplab.dev/docs/) ·
 [Compatibility](https://mcplab.dev/docs/compatibility/) ·
 [Project page](https://mcplab.dev/failure)
 
-![MCP Failure Lab demonstrating a bounded delay and an expected timeout](docs/demo.gif)
-
-## Quick start
-
-Run a real deterministic delay scenario without cloning the repository or installing the package globally:
-
-```bash
-npx mcp-failure-lab demo
-```
-
-Example output:
+Example output (duration varies):
 
 ```text
+$ npx mcp-failure-lab demo
 MCP Failure Lab — Demo
 Running a real 500ms delay scenario...
 
@@ -41,244 +34,78 @@ Duration: ~500 ms
 Assertions: passed
 ```
 
-The exact duration may vary slightly between runs. No API key or external MCP server is required.
+## Why this exists
 
-Display the available commands:
+Real MCP clients behave differently when things break. A timeout may leave a connection usable;
+an interrupted response may close it. A malformed reply may be rejected by one client and accepted by another.
+
+Failure Lab makes those cases repeatable so you can check both the failed call and what happens next.
+
+## Real-world findings
+
+- [Python SDK #3522](https://github.com/modelcontextprotocol/python-sdk/issues/3522): Python `mcp` 2.2.0 stayed closed after an interrupted HTTP response, rejected the next request, and raised an `ExceptionGroup` during cleanup.
+- [Rust SDK #1283](https://github.com/modelcontextprotocol/rust-sdk/issues/1283): `rmcp` 3.4.0 accepted an invalid response containing both `result` and `error` over stdio and HTTP.
+- Java SDK 2.0.1 accepted `jsonrpc: "1.0"` over both transports ([#1156](https://github.com/modelcontextprotocol/java-sdk/issues/1156)). Over stdio, responses missing `jsonrpc` or containing both `result` and `error` left the next `ping` timing out ([#1157](https://github.com/modelcontextprotocol/java-sdk/issues/1157)). See the [Java report](docs/compatibility/java-sdk-2.0.1.md).
+- [Duplicate-response comparison](docs/compatibility/v0.10.0.md): all five tested SDKs completed the next `ping`. TypeScript reported the duplicate through its error callback; the other harnesses surfaced no call-level duplicate error.
+
+The SDK comparisons describe specific tested versions, not every release.
+See the [versioned reports](docs/compatibility/README.md) for reproduction steps and limitations.
+
+![MCP Failure Lab demonstrating a bounded delay and an expected timeout](docs/demo.gif)
+
+## Quick start
+
+Requires Node.js 22.19.0 or newer and npm.
 
 ```bash
-npx mcp-failure-lab --help
+npx mcp-failure-lab demo
 ```
 
-Start the built-in MCP server over stdio:
+The demo needs no API key, external server, or global installation. To test your own MCP client,
+connect it to Failure Lab over stdio or local Streamable HTTP:
 
 ```bash
 npx mcp-failure-lab serve
-```
-
-Or start a local Streamable HTTP endpoint:
-
-```bash
+# Or:
 npx mcp-failure-lab serve --transport http
 ```
 
-## Purpose
+The stdio process waits for a client; it is not an interactive terminal command. Configure your
+client to launch it, or follow the [getting started guide](https://mcplab.dev/docs/getting-started/).
+Press `Ctrl+C` to stop a manually started server.
 
-MCP Failure Lab helps server authors reproduce delays, hanging tools, cancellation, transport loss, and malformed responses in a deterministic way.
+HTTP defaults to `http://127.0.0.1:3000/mcp`. It provides neither authentication nor TLS;
+do not expose it to an untrusted network.
 
-It provides controlled failure behavior for testing timeout handling, cancellation cleanup, transport-loss recovery, assertions, and CI outcomes.
+## Test your own MCP server
 
-## Current scope
-
-MCP Failure Lab runs deterministic JSON scenarios against its built-in server or a configured
-external HTTP or stdio MCP target from the command line.
-
-Available now:
-
-- `ping`, `delay`, `hang`, `disconnect`, `malformed_message`, and `duplicate_response` tools
-- `response_after_cancellation` on stdio
-- `session_loss` on legacy Streamable HTTP sessions
-- MCP communication over stdio and Streamable HTTP
-- Code-first and JSON scenario definitions
-- Outcome and maximum-duration assertions
-- MCP result assertions
-- Sequential observer calls for post-condition verification
-- External MCP target orchestration through a validated adapter registry
-- Streamable HTTP and stdio target configurations
-- Bounded adapter setup, execution, observation, cancellation, and cleanup
-- Separate scenario-assertion and adapter-lifecycle diagnostics
-- Console, JSON, and JUnit XML reporting
-- Machine-readable command errors
-- CI-friendly exit codes
-- Unit, integration, and end-to-end tests
-
-Not implemented:
-
-- Provider-specific adapters and recovery policies
-
-MCP Failure Lab is not a general-purpose proxy. External targets are exercised through the same
-scenario calls and expectations as the built-in server.
-
-## Run against another MCP server
-
-Stdio targets support `envFrom` to pass credentials from the runner's environment without storing
-them in target JSON. See the [stdio target guide](https://mcplab.dev/docs/external-targets/#stdio)
-and `examples/targets/github-stdio.json`.
-
-Pass a target configuration to execute the same scenario against a Streamable HTTP or stdio MCP
-server:
+External targets support HTTP and stdio. After the
+[repository setup](https://mcplab.dev/docs/getting-started/#run-an-included-scenario),
+install the official GitHub MCP server with its executable on `PATH` and set
+`GITHUB_PERSONAL_ACCESS_TOKEN` in your environment. Then run:
 
 ```bash
-# From a repository checkout
-npm run dev -- run path/to/scenario.json --target path/to/target.json
-
-# With the published package and your own scenario and target files
-npx mcp-failure-lab run path/to/scenario.json --target path/to/target.json
-```
-
-See the [external MCP targets guide](https://mcplab.dev/docs/external-targets/) for complete HTTP
-and stdio configuration, verified GitHub and GitLab workflows, browser-based MCP Inspector
-validation, lifecycle diagnostics, credential handling, and troubleshooting.
-
-The repository also includes a safe, read-only GitHub MCP example using the official remote server:
-
-```bash
-export GITHUB_MCP_AUTHORIZATION="Bearer your-token"
 npm run dev -- run examples/scenarios/github-get-me.json \
-  --target examples/targets/github-http.json
+  --target examples/targets/github-stdio.json
 ```
 
-GitLab is available through its OAuth-capable stdio bridge:
+The example calls GitHub's read-only `get_me` tool. Its target configuration uses `envFrom`
+to pass the token from your environment rather than storing it in JSON.
+For your own [scenario](https://mcplab.dev/docs/scenarios/) and
+[target configuration](https://mcplab.dev/docs/external-targets/), use:
 
 ```bash
-npm run dev -- run examples/scenarios/gitlab-search-projects.json \
-  --target examples/targets/gitlab-stdio.json
+npx mcp-failure-lab run scenario.json --target target.json
 ```
 
-The first connection can open a browser for GitLab authorization. See the external-target guide
-for GitLab prerequisites and the difference between GitLab OAuth and GitHub token authentication.
+External runs check tool results, deadlines, and adapter setup and cleanup.
+They do **not** inject faults into another server; Failure Lab is not a proxy.
 
-## Target-client adapter contract
+See the [external targets guide](https://mcplab.dev/docs/external-targets/) for prerequisites, credential handling, and configuration.
 
-The generic adapter contract drives external-target orchestration, and the deterministic test
-adapter verifies its lifecycle without external I/O. See the
-[architecture documentation](https://mcplab.dev/docs/architecture/#target-client-adapter-boundary)
-for lifecycle, ownership, timeout, and observation details.
+## What Failure Lab can break
 
-## How it works
-
-MCP Failure Lab runs deterministic scenarios through its built-in MCP client and server or through
-a configured external HTTP or stdio target. A scenario invokes a tool, records the observed outcome
-and duration, and evaluates the declared expectations. Built-in scenarios use `ping`,
-`protocol_ping_liveness`, `delay`, `hang`, `disconnect`, `malformed_message`, or
-`duplicate_response`; external scenarios use tools
-exposed by their target server.
-
-Optional observer calls run sequentially on the same MCP client connection to verify post-conditions through a separate tool path.
-
-See the [architecture documentation](https://mcplab.dev/docs/architecture/) for diagrams, responsibilities, and implementation boundaries.
-
-## Documentation
-
-Full guides and references are available at [mcplab.dev/docs](https://mcplab.dev/docs/).
-
-- [Getting started](https://mcplab.dev/docs/getting-started/)
-- [Scenarios](https://mcplab.dev/docs/scenarios/)
-- [External MCP targets](https://mcplab.dev/docs/external-targets/)
-- [Fault tools](https://mcplab.dev/docs/fault-tools/)
-- [CLI reference](https://mcplab.dev/docs/cli/)
-- [Reporting](https://mcplab.dev/docs/reporting/)
-- [Architecture](https://mcplab.dev/docs/architecture/)
-- [Examples](https://mcplab.dev/docs/examples/)
-- [Troubleshooting](https://mcplab.dev/docs/troubleshooting/)
-- [External compatibility](docs/compatibility/README.md)
-
-## Requirements
-
-- Node.js 22.19.0 or newer
-- npm
-
-## Protocol compatibility
-
-MCP Failure Lab targets MCP `2026-07-28` and accepts the `2025-11-25` initialization flow for
-compatibility. See [Streamable HTTP](https://mcplab.dev/docs/streamable-http/) for protocol and
-session details.
-
-## Installation
-
-Run the package directly with `npx`:
-
-```bash
-npx mcp-failure-lab demo
-```
-
-No global installation is required.
-
-To install the command globally:
-
-```bash
-npm install -g mcp-failure-lab
-```
-
-## CLI
-
-```bash
-# Run the built-in demonstration
-npx mcp-failure-lab demo
-
-# Display command help
-npx mcp-failure-lab --help
-
-# Display the installed version
-npx mcp-failure-lab --version
-
-# Start the MCP server over stdio
-npx mcp-failure-lab serve
-
-# Start Streamable HTTP with local-safe defaults
-npx mcp-failure-lab serve --transport http
-
-# Override the HTTP endpoint explicitly
-npx mcp-failure-lab serve --transport http --host localhost --port 4000 --path /mcp
-```
-
-The `serve` process waits for an MCP client. Press `Ctrl+C` to shut it down gracefully.
-
-Streamable HTTP listens on `http://127.0.0.1:3000/mcp` by default. The server validates
-the request path plus `Host` and `Origin` headers. Binding another host is an explicit
-choice; this mode does not provide authentication or TLS, so do not expose it to an
-untrusted network. Put authentication and TLS termination in a trusted front end if
-remote access is required.
-
-## Run a scenario
-
-Scenario files use JSON:
-
-```json
-{
-  "name": "bounded delay succeeds",
-  "call": {
-    "tool": "delay",
-    "args": {
-      "delayMs": 250
-    }
-  },
-  "timeoutMs": 1000,
-  "expect": {
-    "outcome": "success",
-    "maxDurationMs": 500
-  }
-}
-```
-
-From a repository checkout, run the included scenario:
-
-```bash
-npm run dev -- run examples/scenarios/delay-success.json
-```
-
-Generate machine-readable output:
-
-```bash
-npm run dev -- run examples/scenarios/delay-success.json --report json
-```
-
-Generate JUnit XML for CI systems:
-
-```bash
-npm run --silent dev -- run examples/scenarios/delay-success.json --report junit > junit.xml
-```
-
-The command exits with:
-
-| Code | Meaning                                      |
-| ---: | -------------------------------------------- |
-|  `0` | All expectations passed                      |
-|  `1` | The scenario could not be loaded or executed |
-|  `2` | One or more assertions failed                |
-
-For result assertions, observer calls, reporting formats, and timeout behavior, see the [scenario](https://mcplab.dev/docs/scenarios/) and [reporting](https://mcplab.dev/docs/reporting/) documentation.
-
-## Fault tools
+The built-in server exposes these tools for testing client behavior:
 
 | Tool                          | Behavior                                                     |
 | ----------------------------- | ------------------------------------------------------------ |
@@ -292,87 +119,69 @@ For result assertions, observer calls, reporting formats, and timeout behavior, 
 | `response_after_cancellation` | Sends one late response for a cancelled stdio request        |
 | `session_loss`                | Invalidates the caller's legacy HTTP session                 |
 
-`malformed_message` accepts one of three variants:
+Protocol `ping` is distinct from the `ping` tool. Built-in scenarios default to MCP `2026-07-28`;
+protocol liveness requires scenario `protocolVersion: "2025-11-25"`.
+Both public transports accept legacy clients.
 
-| Variant                   | Protocol violation                                       |
-| ------------------------- | -------------------------------------------------------- |
-| `missing-jsonrpc`         | Omits the required `jsonrpc` member                      |
-| `invalid-jsonrpc-version` | Sets `jsonrpc` to `"1.0"` instead of `"2.0"`             |
-| `result-with-error`       | Includes mutually exclusive `result` and `error` members |
+See the [fault tools reference](https://mcplab.dev/docs/fault-tools/) for timing bounds, activation, cancellation, cleanup, and transport limits.
 
-Each invocation affects only its own response. The fault is consumed before the response is sent,
-so later requests on the same connection are unaffected.
+## How recovery testing works
 
-`duplicate_response` accepts no arguments. It preserves the request ID and emits exactly one
-additional response. A following observer call can verify that the client remains usable.
+Trigger a fault, record its outcome, then make a second request on the same connection.
+A detected fault does not prove recovery; the follow-up must succeed too.
 
-`protocol_ping_liveness` sends one bounded server-to-client protocol `ping` during its in-flight
-tool call; the existing `ping` tool checks server health. Protocol ping requires legacy MCP
-`2025-11-25`. Set scenario `protocolVersion` to `"2025-11-25"` to run the included success example;
-the default `2026-07-28` reports `unsupported`.
-See the [protocol liveness reference](https://mcplab.dev/docs/fault-tools/#protocol_ping_liveness)
-for arguments, outcomes, transport limitations, and Inspector instructions.
-
-`response_after_cancellation` takes no arguments and works over stdio. Call it with an
-`AbortController` and an `onprogress` callback. Cancel when the progress notification arrives.
-The server sends one result with that call's request ID after it sees the cancellation. The
-cancelled call rejects; a separate `ping` on the same connection still gets its own result.
-
-If the server does not see cancellation within five seconds, it sends no late result. Closing
-the connection clears the pending call. The tool is unavailable over Streamable HTTP because
-cancellation closes the response stream. It is also unavailable through `run`, which uses HTTP.
-
-See the [fault tools reference](https://mcplab.dev/docs/fault-tools/) for arguments and behavior.
-
-## Inspect the server
-
-Launch the official MCP Inspector web UI against the published package:
+Scenario `observe` calls run after the primary call, including errors and timeouts.
+For example, [duplicate-response.json](examples/scenarios/duplicate-response.json)
+calls `duplicate_response`, then uses `ping` to check that the connection remains usable:
 
 ```bash
-npx @modelcontextprotocol/inspector npx mcp-failure-lab serve
+# From a repository checkout
+npm run dev -- run examples/scenarios/duplicate-response.json
 ```
 
-See [External MCP targets](https://mcplab.dev/docs/external-targets/#validate-the-connection-in-a-browser)
-for the complete browser-testing workflow and credential guidance.
+This checks post-fault behavior, not an automatic recovery policy.
+A stdio disconnect terminates the server process and requires a new process and connection.
 
-## External integration validation
+See [Scenarios](https://mcplab.dev/docs/scenarios/) for outcome, duration, result, and observer assertions.
 
-See the [Future AGI example](https://mcplab.dev/docs/examples/#future-agi-experiment) for an
-independent Python-client validation of the `hang` fault. It is an external validation example,
-not an official integration or endorsement.
+## SDK / transport evidence
 
-## Development
+[MCP Failure Observatory](https://observatory.mcplab.dev) collects SDK and transport evidence.
+The [repository reports](docs/compatibility/README.md) preserve tested versions, methods, and limitations.
 
-Clone the repository and install its dependencies:
+Results vary by SDK, version, transport, and protocol. A passing run is evidence for that combination,
+not a guarantee for every client.
+
+## CI usage
+
+Save a [scenario file](https://mcplab.dev/docs/scenarios/) with explicit expectations and timeouts,
+then produce a JUnit report:
 
 ```bash
-git clone https://github.com/anilloutombam/mcp-failure-lab.git
-cd mcp-failure-lab
-npm install
+npx mcp-failure-lab run scenario.json --report junit > junit.xml
 ```
 
-Run the development CLI:
+Pin the Failure Lab package version in CI so upgrades do not change the test environment unexpectedly.
 
-```bash
-npm run dev -- --help
-```
+Exit codes: `0` means expectations passed, `1` means the scenario could not be loaded or executed,
+and `2` means an assertion failed. An expected timeout can pass; an unexpected success can fail.
 
-Before opening a pull request, run:
+See [Reporting](https://mcplab.dev/docs/reporting/) for JSON, JUnit, and lifecycle diagnostics.
 
-```bash
-npm run format:check
-npm run typecheck
-npm test
-npm run build
-```
+## Documentation
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the contribution workflow.
+Detailed guides live at [mcplab.dev](https://mcplab.dev/docs/):
+[Getting started](https://mcplab.dev/docs/getting-started/) ·
+[CLI](https://mcplab.dev/docs/cli/) ·
+[Architecture](https://mcplab.dev/docs/architecture/) ·
+[Troubleshooting](https://mcplab.dev/docs/troubleshooting/).
 
-## Roadmap
+## Contributing
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, tests, and the contribution workflow.
 Planned work is tracked in [GitHub Issues](https://github.com/anilloutombam/mcp-failure-lab/issues).
 
-Roadmap items are not part of the current implementation unless explicitly documented as available.
+If Failure Lab helps you test an MCP integration, consider starring the repository.
 
 ## License
 
