@@ -30,6 +30,7 @@ export interface ScenarioObserver {
 
 export interface Scenario {
   name: string;
+  protocolVersion?: "2025-11-25" | "2026-07-28";
   call: ScenarioCall;
   timeoutMs?: number;
   expect: ScenarioExpectation;
