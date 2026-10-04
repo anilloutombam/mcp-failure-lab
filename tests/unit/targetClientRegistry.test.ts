@@ -87,6 +87,38 @@ describe("target-client adapter registry", () => {
 });
 
 describe("MCP target configuration", () => {
+  it("validates stdio envFrom mappings", () => {
+    expect(
+      mcpTargetConfigSchema.parse({
+        transport: "stdio",
+        command: "server",
+        envFrom: { CHILD_TOKEN: "PARENT_TOKEN" },
+      }),
+    ).toMatchObject({ envFrom: { CHILD_TOKEN: "PARENT_TOKEN" } });
+    for (const envFrom of [{ TOKEN: "" }, { "": "TOKEN" }, { TOKEN: 1 }]) {
+      expect(
+        mcpTargetConfigSchema.safeParse({ transport: "stdio", command: "server", envFrom }).success,
+      ).toBe(false);
+    }
+    expect(
+      mcpTargetConfigSchema.safeParse({
+        transport: "http",
+        url: "https://example.com",
+        envFrom: { TOKEN: "TOKEN" },
+      }).success,
+    ).toBe(false);
+  });
+  it("fails before creating a transport if a mapped variable is missing without exposing resolved values", () => {
+    vi.stubEnv("LAB_PRESENT_TOKEN", "fixture-secret-value");
+    vi.stubEnv("LAB_MISSING_TOKEN", undefined);
+    expect(() =>
+      new DefaultMcpTransportFactory().create({
+        transport: "stdio",
+        command: "never-spawn",
+        envFrom: { FIRST: "LAB_PRESENT_TOKEN", SECOND: "LAB_MISSING_TOKEN" },
+      }),
+    ).toThrow("environment variable LAB_MISSING_TOKEN is required for stdio variable SECOND");
+  });
   it("accepts HTTP and stdio transports", () => {
     expect(
       mcpTargetConfigSchema.parse({ transport: "http", url: "https://example.com/mcp" }),
