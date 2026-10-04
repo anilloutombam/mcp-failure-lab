@@ -1,0 +1,3608 @@
+{
+  "testedOn": "2026-10-04",
+  "failureLabVersion": "0.12.0",
+  "packageIntegrity": "sha512-AcCJ7wpQjguEHaseUVtsL04juezYoI5kboGs/UCZNFHXAbY+M3W6coStHUtGAxLhI3nkaxSfpBijciPEMvjX7A==",
+  "note": "Raw harness results. Failed expectations are not automatically SDK or server defects. See v0.12.0.md for protocol negotiation, scope, and classification.",
+  "clients": {
+    "typescript": [
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "baseline",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 141
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "delay",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 151
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "delay_timeout",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 204
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "hang_timeout",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 205
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "duplicate",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 250
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "liveness_success",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 157
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "liveness_rejected",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 132
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "liveness_timeout",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 215
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "malformed_missing",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 227
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "malformed_version",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 229
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "malformed_both",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 227
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "late_cancellation",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 356
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "baseline",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 147
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "delay",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 151
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "delay_timeout",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 202
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "hang_timeout",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 206
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "duplicate",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 176
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "liveness_success",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 156
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "liveness_rejected",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 132
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "liveness_timeout",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 214
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "malformed_missing",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 228
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "malformed_version",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 226
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "malformed_both",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 228
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "late_cancellation",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 367
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "baseline",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 146
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "delay",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 151
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "delay_timeout",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 202
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "hang_timeout",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 206
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "duplicate",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 177
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "liveness_success",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 157
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "liveness_rejected",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 132
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "liveness_timeout",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 212
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "malformed_missing",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 226
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "malformed_version",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 230
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "malformed_both",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 230
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "late_cancellation",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 369
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "baseline",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 47
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "delay",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 42
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "delay_timeout",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 90
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "hang_timeout",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 88
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "duplicate",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 60
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "liveness_success",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 42
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "liveness_rejected",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 17
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "liveness_timeout",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 98
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "malformed_missing",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 108
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "malformed_version",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 108
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "malformed_both",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 108
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "session_loss",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 16
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "baseline",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 6
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "delay",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 36
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "delay_timeout",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 86
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "hang_timeout",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 87
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "duplicate",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 59
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "liveness_success",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 41
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "liveness_rejected",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 22
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "liveness_timeout",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 101
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "malformed_missing",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 108
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "malformed_version",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 110
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "malformed_both",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 112
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "session_loss",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 20
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "baseline",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 6
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "delay",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 37
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "delay_timeout",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 88
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "hang_timeout",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 91
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "duplicate",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 60
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "liveness_success",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 43
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "liveness_rejected",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 22
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "liveness_timeout",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 101
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "malformed_missing",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 108
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "malformed_version",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 107
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "malformed_both",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 106
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "session_loss",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 9
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "disconnect",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 245
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "disconnect",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 240
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "stdio",
+        "test": "disconnect",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 239
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "disconnect",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 28
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "disconnect",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 11
+      },
+      {
+        "sdk": "TypeScript 1.30.1",
+        "transport": "http",
+        "test": "disconnect",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 7
+      }
+    ],
+    "python": [
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "baseline",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 176
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "delay",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 182
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "delay_timeout",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 213
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "hang_timeout",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 219
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "duplicate",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 186
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "liveness_success",
+        "repeat": 1,
+        "protocol": "2025-11-25",
+        "status": "pass",
+        "durationMs": 168
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "liveness_rejected",
+        "repeat": 1,
+        "protocol": "2025-11-25",
+        "status": "pass",
+        "durationMs": 146
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "liveness_timeout",
+        "repeat": 1,
+        "protocol": "2025-11-25",
+        "status": "pass",
+        "durationMs": 225
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "malformed_missing",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 293
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "malformed_version",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 295
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "malformed_both",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 143
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "late_cancellation",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 365
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "baseline",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 147
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "delay",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 160
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "delay_timeout",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 212
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "hang_timeout",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 214
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "duplicate",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 187
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "liveness_success",
+        "repeat": 2,
+        "protocol": "2025-11-25",
+        "status": "pass",
+        "durationMs": 167
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "liveness_rejected",
+        "repeat": 2,
+        "protocol": "2025-11-25",
+        "status": "pass",
+        "durationMs": 146
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "liveness_timeout",
+        "repeat": 2,
+        "protocol": "2025-11-25",
+        "status": "pass",
+        "durationMs": 225
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "malformed_missing",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 293
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "malformed_version",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 297
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "malformed_both",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 143
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "late_cancellation",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 365
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "baseline",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 148
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "delay",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 163
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "delay_timeout",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 213
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "hang_timeout",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 219
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "duplicate",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 188
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "liveness_success",
+        "repeat": 3,
+        "protocol": "2025-11-25",
+        "status": "pass",
+        "durationMs": 168
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "liveness_rejected",
+        "repeat": 3,
+        "protocol": "2025-11-25",
+        "status": "pass",
+        "durationMs": 144
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "liveness_timeout",
+        "repeat": 3,
+        "protocol": "2025-11-25",
+        "status": "pass",
+        "durationMs": 225
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "malformed_missing",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 292
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "malformed_version",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 297
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "malformed_both",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 141
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "late_cancellation",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 367
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "baseline",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 74
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "delay",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 44
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "delay_timeout",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 95
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "hang_timeout",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 95
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "duplicate",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 64
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "liveness_success",
+        "repeat": 1,
+        "protocol": "2025-11-25",
+        "status": "pass",
+        "durationMs": 49
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "liveness_rejected",
+        "repeat": 1,
+        "protocol": "2025-11-25",
+        "status": "pass",
+        "durationMs": 24
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "liveness_timeout",
+        "repeat": 1,
+        "protocol": "2025-11-25",
+        "status": "pass",
+        "durationMs": 106
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "malformed_missing",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 16
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "malformed_version",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 10
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "malformed_both",
+        "repeat": 1,
+        "status": "pass",
+        "durationMs": 9
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "session_loss",
+        "repeat": 1,
+        "status": "fail",
+        "error": "ExceptionGroup('unhandled errors in a TaskGroup', [ExceptionGroup('unhandled errors in a TaskGroup', [ExceptionGroup('unhandled errors in a TaskGroup', [ExceptionGroup('unhandled errors in a TaskGroup', [MCPError(-32001, 'Session not found', None)])])])])",
+        "durationMs": 9
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "baseline",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 6
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "delay",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 40
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "delay_timeout",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 91
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "hang_timeout",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 93
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "duplicate",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 63
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "liveness_success",
+        "repeat": 2,
+        "protocol": "2025-11-25",
+        "status": "pass",
+        "durationMs": 47
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "liveness_rejected",
+        "repeat": 2,
+        "protocol": "2025-11-25",
+        "status": "pass",
+        "durationMs": 24
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "liveness_timeout",
+        "repeat": 2,
+        "protocol": "2025-11-25",
+        "status": "pass",
+        "durationMs": 105
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "malformed_missing",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 12
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "malformed_version",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 9
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "malformed_both",
+        "repeat": 2,
+        "status": "pass",
+        "durationMs": 9
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "session_loss",
+        "repeat": 2,
+        "status": "fail",
+        "error": "ExceptionGroup('unhandled errors in a TaskGroup', [ExceptionGroup('unhandled errors in a TaskGroup', [ExceptionGroup('unhandled errors in a TaskGroup', [ExceptionGroup('unhandled errors in a TaskGroup', [MCPError(-32001, 'Session not found', None)])])])])",
+        "durationMs": 10
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "baseline",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 7
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "delay",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 39
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "delay_timeout",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 90
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "hang_timeout",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 94
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "duplicate",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 63
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "liveness_success",
+        "repeat": 3,
+        "protocol": "2025-11-25",
+        "status": "pass",
+        "durationMs": 46
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "liveness_rejected",
+        "repeat": 3,
+        "protocol": "2025-11-25",
+        "status": "pass",
+        "durationMs": 23
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "liveness_timeout",
+        "repeat": 3,
+        "protocol": "2025-11-25",
+        "status": "pass",
+        "durationMs": 104
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "malformed_missing",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 12
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "malformed_version",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 10
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "malformed_both",
+        "repeat": 3,
+        "status": "pass",
+        "durationMs": 9
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "session_loss",
+        "repeat": 3,
+        "status": "fail",
+        "error": "ExceptionGroup('unhandled errors in a TaskGroup', [ExceptionGroup('unhandled errors in a TaskGroup', [ExceptionGroup('unhandled errors in a TaskGroup', [ExceptionGroup('unhandled errors in a TaskGroup', [MCPError(-32001, 'Session not found', None)])])])])",
+        "durationMs": 9
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "disconnect",
+        "repeat": 1,
+        "stage": "fresh_client",
+        "requestRejected": true,
+        "freshClient": "success",
+        "status": "pass",
+        "durationMs": 299
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "disconnect",
+        "repeat": 2,
+        "stage": "fresh_client",
+        "requestRejected": true,
+        "freshClient": "success",
+        "status": "pass",
+        "durationMs": 254
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "stdio",
+        "test": "disconnect",
+        "repeat": 3,
+        "stage": "fresh_client",
+        "requestRejected": true,
+        "freshClient": "success",
+        "status": "pass",
+        "durationMs": 256
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "disconnect",
+        "repeat": 1,
+        "stage": "fresh_client",
+        "disconnectContextError": "ExceptionGroup('unhandled errors in a TaskGroup', [RemoteProtocolError('Server disconnected without sending a response.')])",
+        "freshClient": "success",
+        "status": "pass",
+        "durationMs": 59
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "disconnect",
+        "repeat": 2,
+        "stage": "fresh_client",
+        "disconnectContextError": "ExceptionGroup('unhandled errors in a TaskGroup', [RemoteProtocolError('Server disconnected without sending a response.')])",
+        "freshClient": "success",
+        "status": "pass",
+        "durationMs": 12
+      },
+      {
+        "sdk": "Python 2.2.0",
+        "transport": "http",
+        "test": "disconnect",
+        "repeat": 3,
+        "stage": "fresh_client",
+        "disconnectContextError": "ExceptionGroup('unhandled errors in a TaskGroup', [RemoteProtocolError('Server disconnected without sending a response.')])",
+        "freshClient": "success",
+        "status": "pass",
+        "durationMs": 12
+      }
+    ],
+    "go": [
+      {
+        "durationMs": 156,
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "baseline",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 155,
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "delay",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 205,
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "delay_timeout",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 207,
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "hang_timeout",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 177,
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "duplicate",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 134,
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "liveness",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 117,
+        "error": "connection closed: calling \"tools/call\": client is closing: invalid message version tag \"\"; expected \"2.0\"",
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "fail",
+        "test": "malformed_missing",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 118,
+        "error": "connection closed: calling \"tools/call\": client is closing: invalid message version tag \"1.0\"; expected \"2.0\"",
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "fail",
+        "test": "malformed_version",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 120,
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "malformed_both",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 354,
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "late_cancellation",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 162,
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "baseline",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 169,
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "delay",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 215,
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "delay_timeout",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 234,
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "hang_timeout",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 178,
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "duplicate",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 136,
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "liveness",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 120,
+        "error": "connection closed: calling \"tools/call\": client is closing: invalid message version tag \"\"; expected \"2.0\"",
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "fail",
+        "test": "malformed_missing",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 118,
+        "error": "connection closed: calling \"tools/call\": client is closing: invalid message version tag \"1.0\"; expected \"2.0\"",
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "fail",
+        "test": "malformed_version",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 119,
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "malformed_both",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 356,
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "late_cancellation",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 145,
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "baseline",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 156,
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "delay",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 213,
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "delay_timeout",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 210,
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "hang_timeout",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 183,
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "duplicate",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 139,
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "liveness",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 128,
+        "error": "connection closed: calling \"tools/call\": client is closing: invalid message version tag \"\"; expected \"2.0\"",
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "fail",
+        "test": "malformed_missing",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 126,
+        "error": "connection closed: calling \"tools/call\": client is closing: invalid message version tag \"1.0\"; expected \"2.0\"",
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "fail",
+        "test": "malformed_version",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 123,
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "malformed_both",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 351,
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "late_cancellation",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 27,
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "baseline",
+        "transport": "http"
+      },
+      {
+        "durationMs": 36,
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "delay",
+        "transport": "http"
+      },
+      {
+        "durationMs": 88,
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "delay_timeout",
+        "transport": "http"
+      },
+      {
+        "durationMs": 85,
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "hang_timeout",
+        "transport": "http"
+      },
+      {
+        "durationMs": 55,
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "duplicate",
+        "transport": "http"
+      },
+      {
+        "durationMs": 16,
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "liveness",
+        "transport": "http"
+      },
+      {
+        "durationMs": 2,
+        "error": "connection closed: calling \"tools/call\": client is closing: sending \"tools/call\": failed to decode response: invalid message version tag \"\"; expected \"2.0\"",
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "fail",
+        "test": "malformed_missing",
+        "transport": "http"
+      },
+      {
+        "durationMs": 2,
+        "error": "connection closed: calling \"tools/call\": client is closing: sending \"tools/call\": failed to decode response: invalid message version tag \"1.0\"; expected \"2.0\"",
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "fail",
+        "test": "malformed_version",
+        "transport": "http"
+      },
+      {
+        "durationMs": 5,
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "malformed_both",
+        "transport": "http"
+      },
+      {
+        "durationMs": 2,
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "baseline",
+        "transport": "http"
+      },
+      {
+        "durationMs": 34,
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "delay",
+        "transport": "http"
+      },
+      {
+        "durationMs": 84,
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "delay_timeout",
+        "transport": "http"
+      },
+      {
+        "durationMs": 84,
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "hang_timeout",
+        "transport": "http"
+      },
+      {
+        "durationMs": 55,
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "duplicate",
+        "transport": "http"
+      },
+      {
+        "durationMs": 18,
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "liveness",
+        "transport": "http"
+      },
+      {
+        "durationMs": 1,
+        "error": "connection closed: calling \"tools/call\": client is closing: sending \"tools/call\": failed to decode response: invalid message version tag \"\"; expected \"2.0\"",
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "fail",
+        "test": "malformed_missing",
+        "transport": "http"
+      },
+      {
+        "durationMs": 2,
+        "error": "connection closed: calling \"tools/call\": client is closing: sending \"tools/call\": failed to decode response: invalid message version tag \"1.0\"; expected \"2.0\"",
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "fail",
+        "test": "malformed_version",
+        "transport": "http"
+      },
+      {
+        "durationMs": 3,
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "malformed_both",
+        "transport": "http"
+      },
+      {
+        "durationMs": 3,
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "baseline",
+        "transport": "http"
+      },
+      {
+        "durationMs": 35,
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "delay",
+        "transport": "http"
+      },
+      {
+        "durationMs": 84,
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "delay_timeout",
+        "transport": "http"
+      },
+      {
+        "durationMs": 86,
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "hang_timeout",
+        "transport": "http"
+      },
+      {
+        "durationMs": 55,
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "duplicate",
+        "transport": "http"
+      },
+      {
+        "durationMs": 14,
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "liveness",
+        "transport": "http"
+      },
+      {
+        "durationMs": 1,
+        "error": "connection closed: calling \"tools/call\": client is closing: sending \"tools/call\": failed to decode response: invalid message version tag \"\"; expected \"2.0\"",
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "fail",
+        "test": "malformed_missing",
+        "transport": "http"
+      },
+      {
+        "durationMs": 1,
+        "error": "connection closed: calling \"tools/call\": client is closing: sending \"tools/call\": failed to decode response: invalid message version tag \"1.0\"; expected \"2.0\"",
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "fail",
+        "test": "malformed_version",
+        "transport": "http"
+      },
+      {
+        "durationMs": 4,
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "malformed_both",
+        "transport": "http"
+      },
+      {
+        "durationMs": 286,
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "disconnect",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 239,
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "disconnect",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 243,
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "disconnect",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 24,
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "disconnect",
+        "transport": "http"
+      },
+      {
+        "durationMs": 3,
+        "repeat": 1,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "session_loss_availability",
+        "transport": "http"
+      },
+      {
+        "durationMs": 6,
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "disconnect",
+        "transport": "http"
+      },
+      {
+        "durationMs": 2,
+        "repeat": 2,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "session_loss_availability",
+        "transport": "http"
+      },
+      {
+        "durationMs": 2,
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "disconnect",
+        "transport": "http"
+      },
+      {
+        "durationMs": 1,
+        "repeat": 3,
+        "sdk": "Go 1.7.0",
+        "status": "pass",
+        "test": "session_loss_availability",
+        "transport": "http"
+      }
+    ],
+    "rust": [
+      {
+        "durationMs": 182,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "baseline",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 177,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "delay",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 225,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "delay_timeout",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 208,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "hang_timeout",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 184,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "duplicate",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 159,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "liveness_legacy",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 160,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "liveness_modern",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 327,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "malformed_missing",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 341,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "malformed_version",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 140,
+        "error": "fault unexpectedly succeeded: {\"content\":[{\"text\":\"{\\\"status\\\":\\\"fault-activated\\\",\\\"variant\\\":\\\"result-with-error\\\"}\",\"type\":\"text\"}]}",
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "fail",
+        "test": "malformed_both",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 361,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "late_cancellation",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 153,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "baseline",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 155,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "delay",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 206,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "delay_timeout",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 212,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "hang_timeout",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 187,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "duplicate",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 158,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "liveness_legacy",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 156,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "liveness_modern",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 328,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "malformed_missing",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 349,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "malformed_version",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 141,
+        "error": "fault unexpectedly succeeded: {\"content\":[{\"text\":\"{\\\"status\\\":\\\"fault-activated\\\",\\\"variant\\\":\\\"result-with-error\\\"}\",\"type\":\"text\"}]}",
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "fail",
+        "test": "malformed_both",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 363,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "late_cancellation",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 148,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "baseline",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 154,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "delay",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 204,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "delay_timeout",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 210,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "hang_timeout",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 180,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "duplicate",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 158,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "liveness_legacy",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 156,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "liveness_modern",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 327,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "malformed_missing",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 346,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "malformed_version",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 143,
+        "error": "fault unexpectedly succeeded: {\"content\":[{\"text\":\"{\\\"status\\\":\\\"fault-activated\\\",\\\"variant\\\":\\\"result-with-error\\\"}\",\"type\":\"text\"}]}",
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "fail",
+        "test": "malformed_both",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 362,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "late_cancellation",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 46,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "baseline",
+        "transport": "http"
+      },
+      {
+        "durationMs": 40,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "delay",
+        "transport": "http"
+      },
+      {
+        "durationMs": 87,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "delay_timeout",
+        "transport": "http"
+      },
+      {
+        "durationMs": 88,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "hang_timeout",
+        "transport": "http"
+      },
+      {
+        "durationMs": 61,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "duplicate",
+        "transport": "http"
+      },
+      {
+        "durationMs": 40,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "liveness_legacy",
+        "transport": "http"
+      },
+      {
+        "durationMs": 39,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "liveness_modern",
+        "transport": "http"
+      },
+      {
+        "durationMs": 5,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "malformed_missing",
+        "transport": "http"
+      },
+      {
+        "durationMs": 5,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "malformed_version",
+        "transport": "http"
+      },
+      {
+        "durationMs": 3,
+        "error": "fault unexpectedly succeeded: {\"content\":[{\"text\":\"{\\\"status\\\":\\\"fault-activated\\\",\\\"variant\\\":\\\"result-with-error\\\"}\",\"type\":\"text\"}]}",
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "fail",
+        "test": "malformed_both",
+        "transport": "http"
+      },
+      {
+        "durationMs": 5,
+        "error": "lost session remained usable",
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "fail",
+        "test": "session_loss",
+        "transport": "http"
+      },
+      {
+        "durationMs": 3,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "baseline",
+        "transport": "http"
+      },
+      {
+        "durationMs": 35,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "delay",
+        "transport": "http"
+      },
+      {
+        "durationMs": 87,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "delay_timeout",
+        "transport": "http"
+      },
+      {
+        "durationMs": 88,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "hang_timeout",
+        "transport": "http"
+      },
+      {
+        "durationMs": 60,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "duplicate",
+        "transport": "http"
+      },
+      {
+        "durationMs": 43,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "liveness_legacy",
+        "transport": "http"
+      },
+      {
+        "durationMs": 41,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "liveness_modern",
+        "transport": "http"
+      },
+      {
+        "durationMs": 7,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "malformed_missing",
+        "transport": "http"
+      },
+      {
+        "durationMs": 6,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "malformed_version",
+        "transport": "http"
+      },
+      {
+        "durationMs": 4,
+        "error": "fault unexpectedly succeeded: {\"content\":[{\"text\":\"{\\\"status\\\":\\\"fault-activated\\\",\\\"variant\\\":\\\"result-with-error\\\"}\",\"type\":\"text\"}]}",
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "fail",
+        "test": "malformed_both",
+        "transport": "http"
+      },
+      {
+        "durationMs": 9,
+        "error": "lost session remained usable",
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "fail",
+        "test": "session_loss",
+        "transport": "http"
+      },
+      {
+        "durationMs": 3,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "baseline",
+        "transport": "http"
+      },
+      {
+        "durationMs": 35,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "delay",
+        "transport": "http"
+      },
+      {
+        "durationMs": 87,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "delay_timeout",
+        "transport": "http"
+      },
+      {
+        "durationMs": 88,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "hang_timeout",
+        "transport": "http"
+      },
+      {
+        "durationMs": 60,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "duplicate",
+        "transport": "http"
+      },
+      {
+        "durationMs": 42,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "liveness_legacy",
+        "transport": "http"
+      },
+      {
+        "durationMs": 42,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "liveness_modern",
+        "transport": "http"
+      },
+      {
+        "durationMs": 6,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "malformed_missing",
+        "transport": "http"
+      },
+      {
+        "durationMs": 4,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "malformed_version",
+        "transport": "http"
+      },
+      {
+        "durationMs": 3,
+        "error": "fault unexpectedly succeeded: {\"content\":[{\"text\":\"{\\\"status\\\":\\\"fault-activated\\\",\\\"variant\\\":\\\"result-with-error\\\"}\",\"type\":\"text\"}]}",
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "fail",
+        "test": "malformed_both",
+        "transport": "http"
+      },
+      {
+        "durationMs": 5,
+        "error": "lost session remained usable",
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "fail",
+        "test": "session_loss",
+        "transport": "http"
+      },
+      {
+        "durationMs": 271,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "disconnect",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 239,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "disconnect",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 237,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "disconnect",
+        "transport": "stdio"
+      },
+      {
+        "durationMs": 28,
+        "repeat": 1,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "disconnect",
+        "transport": "http"
+      },
+      {
+        "durationMs": 7,
+        "repeat": 2,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "disconnect",
+        "transport": "http"
+      },
+      {
+        "durationMs": 5,
+        "repeat": 3,
+        "sdk": "Rust rmcp 3.4.0",
+        "status": "pass",
+        "test": "disconnect",
+        "transport": "http"
+      }
+    ],
+    "csharp": [
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "baseline",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 726
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "delay",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 712
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "delay_timeout",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 761
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "hang_timeout",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 772
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "duplicate",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 723
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "liveness_legacy",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 709
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "liveness_modern",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 697
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "malformed_missing",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 874
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "malformed_version",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 882
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "malformed_both",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 676
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "late_cancellation",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 909
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "baseline",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 669
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "delay",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 706
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "delay_timeout",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 754
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "hang_timeout",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 752
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "duplicate",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 724
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "liveness_legacy",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 795
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "liveness_modern",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 700
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "malformed_missing",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 874
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "malformed_version",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 876
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "malformed_both",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 674
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "late_cancellation",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 909
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "baseline",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 674
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "delay",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 696
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "delay_timeout",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 775
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "hang_timeout",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 763
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "duplicate",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 720
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "liveness_legacy",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 707
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "liveness_modern",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 686
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "malformed_missing",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 873
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "malformed_version",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 877
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "malformed_both",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 671
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "late_cancellation",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 906
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "baseline",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 65
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "delay",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 38
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "delay_timeout",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 87
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "hang_timeout",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 86
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "duplicate",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 58
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "liveness_legacy",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 40
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "liveness_modern",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 25
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "malformed_missing",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 4
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "malformed_version",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 3
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "malformed_both",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 3
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "session_loss",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 9
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "baseline",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 3
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "delay",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 35
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "delay_timeout",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 84
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "hang_timeout",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 84
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "duplicate",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 54
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "liveness_legacy",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 33
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "liveness_modern",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 13
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "malformed_missing",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 2
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "malformed_version",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 2
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "malformed_both",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 2
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "session_loss",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 6
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "baseline",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 2
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "delay",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 33
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "delay_timeout",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 85
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "hang_timeout",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 84
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "duplicate",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 54
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "liveness_legacy",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 36
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "liveness_modern",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 14
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "malformed_missing",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 2
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "malformed_version",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 3
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "malformed_both",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 2
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "session_loss",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 5
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "disconnect",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 862
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "disconnect",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 798
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "stdio",
+        "test": "disconnect",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 802
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "disconnect",
+        "repeat": 1,
+        "status": "pass",
+        "error": "",
+        "durationMs": 66
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "disconnect",
+        "repeat": 2,
+        "status": "pass",
+        "error": "",
+        "durationMs": 7
+      },
+      {
+        "sdk": "C# 2.2.0",
+        "transport": "http",
+        "test": "disconnect",
+        "repeat": 3,
+        "status": "pass",
+        "error": "",
+        "durationMs": 5
+      }
+    ],
+    "java": [
+      {
+        "run": 1,
+        "transport": "stdio",
+        "scenario": "protocol-liveness",
+        "passed": true,
+        "durationMs": 1040,
+        "observation": "Protocol ping succeeded and follow-up ping completed. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 1,
+        "transport": "stdio",
+        "scenario": "baseline",
+        "passed": true,
+        "durationMs": 635,
+        "observation": "Initialized, listed 8 tools, and completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 1,
+        "transport": "stdio",
+        "scenario": "bounded-delay",
+        "passed": true,
+        "durationMs": 858,
+        "observation": "A 250 ms delay completed successfully. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 1,
+        "transport": "stdio",
+        "scenario": "timeout-recovery",
+        "passed": true,
+        "durationMs": 1663,
+        "observation": "The delayed call timed out and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 1,
+        "transport": "stdio",
+        "scenario": "duplicate-response-recovery",
+        "passed": true,
+        "durationMs": 895,
+        "observation": "The first duplicate response result was accepted and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 1,
+        "transport": "stdio",
+        "scenario": "missing-jsonrpc-recovery",
+        "passed": false,
+        "durationMs": 4638,
+        "observation": "AssertionError: Same-client ping failed after malformed response"
+      },
+      {
+        "run": 1,
+        "transport": "stdio",
+        "scenario": "invalid-jsonrpc-version-recovery",
+        "passed": false,
+        "durationMs": 714,
+        "observation": "AssertionError: Malformed response was accepted"
+      },
+      {
+        "run": 1,
+        "transport": "stdio",
+        "scenario": "result-with-error-recovery",
+        "passed": false,
+        "durationMs": 4608,
+        "observation": "AssertionError: Same-client ping failed after malformed response"
+      },
+      {
+        "run": 1,
+        "transport": "stdio",
+        "scenario": "disconnect-reconnect",
+        "passed": true,
+        "durationMs": 5293,
+        "observation": "The forced disconnect was observed; same-client recovery was unavailable and a fresh client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 1,
+        "transport": "stdio",
+        "scenario": "response-after-cancellation-recovery",
+        "passed": true,
+        "durationMs": 2818,
+        "observation": "The request was cancelled, the late response settled, and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 2,
+        "transport": "stdio",
+        "scenario": "protocol-liveness",
+        "passed": true,
+        "durationMs": 897,
+        "observation": "Protocol ping succeeded and follow-up ping completed. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 2,
+        "transport": "stdio",
+        "scenario": "baseline",
+        "passed": true,
+        "durationMs": 605,
+        "observation": "Initialized, listed 8 tools, and completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 2,
+        "transport": "stdio",
+        "scenario": "bounded-delay",
+        "passed": true,
+        "durationMs": 837,
+        "observation": "A 250 ms delay completed successfully. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 2,
+        "transport": "stdio",
+        "scenario": "timeout-recovery",
+        "passed": true,
+        "durationMs": 1690,
+        "observation": "The delayed call timed out and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 2,
+        "transport": "stdio",
+        "scenario": "duplicate-response-recovery",
+        "passed": true,
+        "durationMs": 733,
+        "observation": "The first duplicate response result was accepted and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 2,
+        "transport": "stdio",
+        "scenario": "missing-jsonrpc-recovery",
+        "passed": false,
+        "durationMs": 4730,
+        "observation": "AssertionError: Same-client ping failed after malformed response"
+      },
+      {
+        "run": 2,
+        "transport": "stdio",
+        "scenario": "invalid-jsonrpc-version-recovery",
+        "passed": false,
+        "durationMs": 705,
+        "observation": "AssertionError: Malformed response was accepted"
+      },
+      {
+        "run": 2,
+        "transport": "stdio",
+        "scenario": "result-with-error-recovery",
+        "passed": false,
+        "durationMs": 4675,
+        "observation": "AssertionError: Same-client ping failed after malformed response"
+      },
+      {
+        "run": 2,
+        "transport": "stdio",
+        "scenario": "disconnect-reconnect",
+        "passed": true,
+        "durationMs": 5438,
+        "observation": "The forced disconnect was observed; same-client recovery was unavailable and a fresh client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 2,
+        "transport": "stdio",
+        "scenario": "response-after-cancellation-recovery",
+        "passed": true,
+        "durationMs": 2829,
+        "observation": "The request was cancelled, the late response settled, and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 3,
+        "transport": "stdio",
+        "scenario": "protocol-liveness",
+        "passed": true,
+        "durationMs": 920,
+        "observation": "Protocol ping succeeded and follow-up ping completed. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 3,
+        "transport": "stdio",
+        "scenario": "baseline",
+        "passed": true,
+        "durationMs": 608,
+        "observation": "Initialized, listed 8 tools, and completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 3,
+        "transport": "stdio",
+        "scenario": "bounded-delay",
+        "passed": true,
+        "durationMs": 916,
+        "observation": "A 250 ms delay completed successfully. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 3,
+        "transport": "stdio",
+        "scenario": "timeout-recovery",
+        "passed": true,
+        "durationMs": 1614,
+        "observation": "The delayed call timed out and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 3,
+        "transport": "stdio",
+        "scenario": "duplicate-response-recovery",
+        "passed": true,
+        "durationMs": 745,
+        "observation": "The first duplicate response result was accepted and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 3,
+        "transport": "stdio",
+        "scenario": "missing-jsonrpc-recovery",
+        "passed": false,
+        "durationMs": 4733,
+        "observation": "AssertionError: Same-client ping failed after malformed response"
+      },
+      {
+        "run": 3,
+        "transport": "stdio",
+        "scenario": "invalid-jsonrpc-version-recovery",
+        "passed": false,
+        "durationMs": 704,
+        "observation": "AssertionError: Malformed response was accepted"
+      },
+      {
+        "run": 3,
+        "transport": "stdio",
+        "scenario": "result-with-error-recovery",
+        "passed": false,
+        "durationMs": 4615,
+        "observation": "AssertionError: Same-client ping failed after malformed response"
+      },
+      {
+        "run": 3,
+        "transport": "stdio",
+        "scenario": "disconnect-reconnect",
+        "passed": true,
+        "durationMs": 5537,
+        "observation": "The forced disconnect was observed; same-client recovery was unavailable and a fresh client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 3,
+        "transport": "stdio",
+        "scenario": "response-after-cancellation-recovery",
+        "passed": true,
+        "durationMs": 2961,
+        "observation": "The request was cancelled, the late response settled, and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 1,
+        "transport": "streamable-http",
+        "scenario": "protocol-liveness",
+        "passed": true,
+        "durationMs": 366,
+        "observation": "Protocol ping succeeded and follow-up ping completed. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 1,
+        "transport": "streamable-http",
+        "scenario": "baseline",
+        "passed": true,
+        "durationMs": 21,
+        "observation": "Initialized, listed 8 tools, and completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 1,
+        "transport": "streamable-http",
+        "scenario": "bounded-delay",
+        "passed": true,
+        "durationMs": 270,
+        "observation": "A 250 ms delay completed successfully. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 1,
+        "transport": "streamable-http",
+        "scenario": "timeout-recovery",
+        "passed": true,
+        "durationMs": 1021,
+        "observation": "The delayed call timed out and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 1,
+        "transport": "streamable-http",
+        "scenario": "duplicate-response-recovery",
+        "passed": true,
+        "durationMs": 122,
+        "observation": "The first duplicate response result was accepted and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 1,
+        "transport": "streamable-http",
+        "scenario": "missing-jsonrpc-recovery",
+        "passed": true,
+        "durationMs": 20,
+        "observation": "The malformed response was rejected and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 1,
+        "transport": "streamable-http",
+        "scenario": "invalid-jsonrpc-version-recovery",
+        "passed": false,
+        "durationMs": 11,
+        "observation": "AssertionError: Malformed response was accepted"
+      },
+      {
+        "run": 1,
+        "transport": "streamable-http",
+        "scenario": "result-with-error-recovery",
+        "passed": true,
+        "durationMs": 35,
+        "observation": "The malformed response was rejected and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 1,
+        "transport": "streamable-http",
+        "scenario": "disconnect-reconnect",
+        "passed": true,
+        "durationMs": 15,
+        "observation": "The forced disconnect was observed; same-client recovery was successful and a fresh client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 2,
+        "transport": "streamable-http",
+        "scenario": "protocol-liveness",
+        "passed": true,
+        "durationMs": 223,
+        "observation": "Protocol ping succeeded and follow-up ping completed. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 2,
+        "transport": "streamable-http",
+        "scenario": "baseline",
+        "passed": true,
+        "durationMs": 16,
+        "observation": "Initialized, listed 8 tools, and completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 2,
+        "transport": "streamable-http",
+        "scenario": "bounded-delay",
+        "passed": true,
+        "durationMs": 265,
+        "observation": "A 250 ms delay completed successfully. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 2,
+        "transport": "streamable-http",
+        "scenario": "timeout-recovery",
+        "passed": true,
+        "durationMs": 1019,
+        "observation": "The delayed call timed out and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 2,
+        "transport": "streamable-http",
+        "scenario": "duplicate-response-recovery",
+        "passed": true,
+        "durationMs": 128,
+        "observation": "The first duplicate response result was accepted and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 2,
+        "transport": "streamable-http",
+        "scenario": "missing-jsonrpc-recovery",
+        "passed": true,
+        "durationMs": 15,
+        "observation": "The malformed response was rejected and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 2,
+        "transport": "streamable-http",
+        "scenario": "invalid-jsonrpc-version-recovery",
+        "passed": false,
+        "durationMs": 11,
+        "observation": "AssertionError: Malformed response was accepted"
+      },
+      {
+        "run": 2,
+        "transport": "streamable-http",
+        "scenario": "result-with-error-recovery",
+        "passed": true,
+        "durationMs": 10,
+        "observation": "The malformed response was rejected and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 2,
+        "transport": "streamable-http",
+        "scenario": "disconnect-reconnect",
+        "passed": true,
+        "durationMs": 44,
+        "observation": "The forced disconnect was observed; same-client recovery was successful and a fresh client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 3,
+        "transport": "streamable-http",
+        "scenario": "protocol-liveness",
+        "passed": true,
+        "durationMs": 224,
+        "observation": "Protocol ping succeeded and follow-up ping completed. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 3,
+        "transport": "streamable-http",
+        "scenario": "baseline",
+        "passed": true,
+        "durationMs": 19,
+        "observation": "Initialized, listed 8 tools, and completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 3,
+        "transport": "streamable-http",
+        "scenario": "bounded-delay",
+        "passed": true,
+        "durationMs": 268,
+        "observation": "A 250 ms delay completed successfully. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 3,
+        "transport": "streamable-http",
+        "scenario": "timeout-recovery",
+        "passed": true,
+        "durationMs": 1017,
+        "observation": "The delayed call timed out and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 3,
+        "transport": "streamable-http",
+        "scenario": "duplicate-response-recovery",
+        "passed": true,
+        "durationMs": 124,
+        "observation": "The first duplicate response result was accepted and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 3,
+        "transport": "streamable-http",
+        "scenario": "missing-jsonrpc-recovery",
+        "passed": true,
+        "durationMs": 14,
+        "observation": "The malformed response was rejected and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 3,
+        "transport": "streamable-http",
+        "scenario": "invalid-jsonrpc-version-recovery",
+        "passed": false,
+        "durationMs": 11,
+        "observation": "AssertionError: Malformed response was accepted"
+      },
+      {
+        "run": 3,
+        "transport": "streamable-http",
+        "scenario": "result-with-error-recovery",
+        "passed": true,
+        "durationMs": 9,
+        "observation": "The malformed response was rejected and the same client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 3,
+        "transport": "streamable-http",
+        "scenario": "disconnect-reconnect",
+        "passed": true,
+        "durationMs": 12,
+        "observation": "The forced disconnect was observed; same-client recovery was successful and a fresh client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 1,
+        "transport": "stdio",
+        "scenario": "hang-timeout-recovery",
+        "passed": true,
+        "durationMs": 1812,
+        "observation": "Hang timed out and same-client ping completed. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 2,
+        "transport": "stdio",
+        "scenario": "hang-timeout-recovery",
+        "passed": true,
+        "durationMs": 1612,
+        "observation": "Hang timed out and same-client ping completed. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 3,
+        "transport": "stdio",
+        "scenario": "hang-timeout-recovery",
+        "passed": true,
+        "durationMs": 1628,
+        "observation": "Hang timed out and same-client ping completed. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 1,
+        "transport": "streamable-http",
+        "scenario": "hang-timeout-recovery",
+        "passed": true,
+        "durationMs": 1107,
+        "observation": "Hang timed out and same-client ping completed. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 1,
+        "transport": "streamable-http",
+        "scenario": "session-loss-after-response",
+        "passed": true,
+        "durationMs": 37,
+        "observation": "Lost session rejected the next request; a fresh client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 2,
+        "transport": "streamable-http",
+        "scenario": "hang-timeout-recovery",
+        "passed": true,
+        "durationMs": 1020,
+        "observation": "Hang timed out and same-client ping completed. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 2,
+        "transport": "streamable-http",
+        "scenario": "session-loss-after-response",
+        "passed": true,
+        "durationMs": 29,
+        "observation": "Lost session rejected the next request; a fresh client completed ping. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 3,
+        "transport": "streamable-http",
+        "scenario": "hang-timeout-recovery",
+        "passed": true,
+        "durationMs": 1017,
+        "observation": "Hang timed out and same-client ping completed. Negotiated protocol 2025-11-25."
+      },
+      {
+        "run": 3,
+        "transport": "streamable-http",
+        "scenario": "session-loss-after-response",
+        "passed": true,
+        "durationMs": 47,
+        "observation": "Lost session rejected the next request; a fresh client completed ping. Negotiated protocol 2025-11-25."
+      }
+    ]
+  }
+}

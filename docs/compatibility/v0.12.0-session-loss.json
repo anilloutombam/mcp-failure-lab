@@ -1,0 +1,2856 @@
+{
+  "testedOn": "2026-10-04",
+  "purpose": "Controlled session-loss investigation; separate from the 432 original case executions.",
+  "transport": "Streamable HTTP via local forwarding proxy",
+  "protocol": "2025-11-25",
+  "clients": {
+    "python": "mcp 2.2.0, same Python environment for both server versions",
+    "rust": "rmcp 3.4.0, same Cargo.lock and dependency cache for both server versions"
+  },
+  "cases": [
+    {
+      "serverVersion": "0.11.0",
+      "client": "python",
+      "configuration": "uncached tool schema",
+      "diagnostics": "Session termination failed: 404\n{\"repeat\": 0, \"stage\": \"activation\", \"error\": \"ExceptionGroup('unhandled errors in a TaskGroup', [ExceptionGroup('unhandled errors in a TaskGroup', [MCPError(-32001, 'Session not found', None)])])\"}\nSession termination failed: 404\n{\"repeat\": 1, \"stage\": \"activation\", \"error\": \"ExceptionGroup('unhandled errors in a TaskGroup', [ExceptionGroup('unhandled errors in a TaskGroup', [MCPError(-32001, 'Session not found', None)])])\"}\nSession termination failed: 404\n{\"repeat\": 2, \"stage\": \"activation\", \"error\": \"ExceptionGroup('unhandled errors in a TaskGroup', [ExceptionGroup('unhandled errors in a TaskGroup', [MCPError(-32001, 'Session not found', None)])])\"}\n",
+      "wire": [
+        {
+          "id": 1,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{},\"clientInfo\":{\"name\":\"mcp\",\"version\":\"0.1.0\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 1,
+          "event": "response",
+          "status": 200,
+          "session": "3e94ef1b-b909-4a9c-b271-874bf8f3122d"
+        },
+        {
+          "id": 1,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.11.0\"}},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 2,
+          "event": "request",
+          "method": "POST",
+          "session": "3e94ef1b-b909-4a9c-b271-874bf8f3122d",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 3,
+          "event": "request",
+          "method": "GET",
+          "session": "3e94ef1b-b909-4a9c-b271-874bf8f3122d",
+          "body": ""
+        },
+        {
+          "id": 2,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 4,
+          "event": "request",
+          "method": "POST",
+          "session": "3e94ef1b-b909-4a9c-b271-874bf8f3122d",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"name\":\"session_loss\",\"arguments\":{\"activation\":\"after_response\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 4,
+          "event": "response",
+          "status": 200,
+          "session": "3e94ef1b-b909-4a9c-b271-874bf8f3122d"
+        },
+        {
+          "id": 4,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":2}\n\n"
+        },
+        {
+          "id": 3,
+          "event": "response",
+          "status": 200,
+          "session": "3e94ef1b-b909-4a9c-b271-874bf8f3122d"
+        },
+        {
+          "id": 5,
+          "event": "request",
+          "method": "POST",
+          "session": "3e94ef1b-b909-4a9c-b271-874bf8f3122d",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/list\",\"params\":{\"_meta\":{}}}"
+        },
+        {
+          "id": 5,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 5,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 6,
+          "event": "request",
+          "method": "DELETE",
+          "session": "3e94ef1b-b909-4a9c-b271-874bf8f3122d",
+          "body": ""
+        },
+        {
+          "id": 6,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 6,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 7,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{},\"clientInfo\":{\"name\":\"mcp\",\"version\":\"0.1.0\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 7,
+          "event": "response",
+          "status": 200,
+          "session": "1f3267e3-d015-4aab-b583-4573aff0267b"
+        },
+        {
+          "id": 7,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.11.0\"}},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 8,
+          "event": "request",
+          "method": "POST",
+          "session": "1f3267e3-d015-4aab-b583-4573aff0267b",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 9,
+          "event": "request",
+          "method": "GET",
+          "session": "1f3267e3-d015-4aab-b583-4573aff0267b",
+          "body": ""
+        },
+        {
+          "id": 8,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 10,
+          "event": "request",
+          "method": "POST",
+          "session": "1f3267e3-d015-4aab-b583-4573aff0267b",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"name\":\"session_loss\",\"arguments\":{\"activation\":\"after_response\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 10,
+          "event": "response",
+          "status": 200,
+          "session": "1f3267e3-d015-4aab-b583-4573aff0267b"
+        },
+        {
+          "id": 10,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":2}\n\n"
+        },
+        {
+          "id": 9,
+          "event": "response",
+          "status": 200,
+          "session": "1f3267e3-d015-4aab-b583-4573aff0267b"
+        },
+        {
+          "id": 11,
+          "event": "request",
+          "method": "POST",
+          "session": "1f3267e3-d015-4aab-b583-4573aff0267b",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/list\",\"params\":{\"_meta\":{}}}"
+        },
+        {
+          "id": 11,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 11,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 12,
+          "event": "request",
+          "method": "DELETE",
+          "session": "1f3267e3-d015-4aab-b583-4573aff0267b",
+          "body": ""
+        },
+        {
+          "id": 12,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 12,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 13,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{},\"clientInfo\":{\"name\":\"mcp\",\"version\":\"0.1.0\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 13,
+          "event": "response",
+          "status": 200,
+          "session": "ad85de16-12bb-4ac5-ac5a-c4b6f574055d"
+        },
+        {
+          "id": 13,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.11.0\"}},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 14,
+          "event": "request",
+          "method": "POST",
+          "session": "ad85de16-12bb-4ac5-ac5a-c4b6f574055d",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 15,
+          "event": "request",
+          "method": "GET",
+          "session": "ad85de16-12bb-4ac5-ac5a-c4b6f574055d",
+          "body": ""
+        },
+        {
+          "id": 14,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 16,
+          "event": "request",
+          "method": "POST",
+          "session": "ad85de16-12bb-4ac5-ac5a-c4b6f574055d",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"name\":\"session_loss\",\"arguments\":{\"activation\":\"after_response\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 16,
+          "event": "response",
+          "status": 200,
+          "session": "ad85de16-12bb-4ac5-ac5a-c4b6f574055d"
+        },
+        {
+          "id": 16,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":2}\n\n"
+        },
+        {
+          "id": 15,
+          "event": "response",
+          "status": 200,
+          "session": "ad85de16-12bb-4ac5-ac5a-c4b6f574055d"
+        },
+        {
+          "id": 17,
+          "event": "request",
+          "method": "POST",
+          "session": "ad85de16-12bb-4ac5-ac5a-c4b6f574055d",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/list\",\"params\":{\"_meta\":{}}}"
+        },
+        {
+          "id": 17,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 17,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 18,
+          "event": "request",
+          "method": "DELETE",
+          "session": "ad85de16-12bb-4ac5-ac5a-c4b6f574055d",
+          "body": ""
+        },
+        {
+          "id": 18,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 18,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        }
+      ]
+    },
+    {
+      "serverVersion": "0.11.0",
+      "client": "python",
+      "configuration": "list_tools before call_tool",
+      "diagnostics": "{\"repeat\": 0, \"stage\": \"activation\", \"result\": {\"meta\": null, \"content\": [{\"type\": \"text\", \"text\": \"session loss activated after_response\", \"annotations\": null, \"meta\": null}], \"structured_content\": null, \"is_error\": false, \"result_type\": \"complete\"}}\n{\"repeat\": 0, \"stage\": \"followup\", \"expectedError\": \"MCPError(-32001, 'Session not found', None)\"}\nSession termination failed: 404\n{\"repeat\": 1, \"stage\": \"activation\", \"result\": {\"meta\": null, \"content\": [{\"type\": \"text\", \"text\": \"session loss activated after_response\", \"annotations\": null, \"meta\": null}], \"structured_content\": null, \"is_error\": false, \"result_type\": \"complete\"}}\n{\"repeat\": 1, \"stage\": \"followup\", \"expectedError\": \"MCPError(-32001, 'Session not found', None)\"}\nSession termination failed: 404\n{\"repeat\": 2, \"stage\": \"activation\", \"result\": {\"meta\": null, \"content\": [{\"type\": \"text\", \"text\": \"session loss activated after_response\", \"annotations\": null, \"meta\": null}], \"structured_content\": null, \"is_error\": false, \"result_type\": \"complete\"}}\n{\"repeat\": 2, \"stage\": \"followup\", \"expectedError\": \"MCPError(-32001, 'Session not found', None)\"}\nSession termination failed: 404\n",
+      "wire": [
+        {
+          "id": 1,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{},\"clientInfo\":{\"name\":\"mcp\",\"version\":\"0.1.0\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 1,
+          "event": "response",
+          "status": 200,
+          "session": "caaf5ac1-8c59-44cd-9310-a38f50ae9995"
+        },
+        {
+          "id": 1,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.11.0\"}},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 2,
+          "event": "request",
+          "method": "POST",
+          "session": "caaf5ac1-8c59-44cd-9310-a38f50ae9995",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 3,
+          "event": "request",
+          "method": "GET",
+          "session": "caaf5ac1-8c59-44cd-9310-a38f50ae9995",
+          "body": ""
+        },
+        {
+          "id": 2,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 4,
+          "event": "request",
+          "method": "POST",
+          "session": "caaf5ac1-8c59-44cd-9310-a38f50ae9995",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/list\",\"params\":{\"_meta\":{}}}"
+        },
+        {
+          "id": 4,
+          "event": "response",
+          "status": 200,
+          "session": "caaf5ac1-8c59-44cd-9310-a38f50ae9995"
+        },
+        {
+          "id": 4,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"tools\":[{\"name\":\"ping\",\"description\":\"Check whether the MCP server is responsive.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"delay\",\"description\":\"Delay a successful MCP response to test client timeout behavior.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"delayMs\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":30000,\"description\":\"Response delay in milliseconds.\"}},\"required\":[\"delayMs\"]}},{\"name\":\"hang\",\"description\":\"Never respond unless the MCP request is cancelled.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"disconnect\",\"description\":\"Close the MCP transport before this request can receive a response.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"malformed_message\",\"description\":\"Return one deterministic response that violates a selected JSON-RPC rule.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"variant\":{\"type\":\"string\",\"enum\":[\"missing-jsonrpc\",\"invalid-jsonrpc-version\",\"result-with-error\"]}},\"required\":[\"variant\"]}},{\"name\":\"duplicate_response\",\"description\":\"Return the same JSON-RPC response twice for this request.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"session_loss\",\"description\":\"Invalidate this HTTP session during or after the current request.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"activation\":{\"type\":\"string\",\"enum\":[\"during_request\",\"after_response\"]}},\"required\":[\"activation\"]}}]},\"jsonrpc\":\"2.0\",\"id\":2}\n\n"
+        },
+        {
+          "id": 5,
+          "event": "request",
+          "method": "POST",
+          "session": "caaf5ac1-8c59-44cd-9310-a38f50ae9995",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/call\",\"params\":{\"name\":\"session_loss\",\"arguments\":{\"activation\":\"after_response\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 5,
+          "event": "response",
+          "status": 200,
+          "session": "caaf5ac1-8c59-44cd-9310-a38f50ae9995"
+        },
+        {
+          "id": 5,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":3}\n\n"
+        },
+        {
+          "id": 3,
+          "event": "response",
+          "status": 200,
+          "session": "caaf5ac1-8c59-44cd-9310-a38f50ae9995"
+        },
+        {
+          "id": 6,
+          "event": "request",
+          "method": "POST",
+          "session": "caaf5ac1-8c59-44cd-9310-a38f50ae9995",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":4,\"method\":\"tools/call\",\"params\":{\"name\":\"ping\",\"arguments\":{},\"_meta\":{}}}"
+        },
+        {
+          "id": 6,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 6,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 7,
+          "event": "request",
+          "method": "DELETE",
+          "session": "caaf5ac1-8c59-44cd-9310-a38f50ae9995",
+          "body": ""
+        },
+        {
+          "id": 7,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 7,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 8,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{},\"clientInfo\":{\"name\":\"mcp\",\"version\":\"0.1.0\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 8,
+          "event": "response",
+          "status": 200,
+          "session": "61519341-9737-44de-9804-122a2c5a105e"
+        },
+        {
+          "id": 8,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.11.0\"}},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 9,
+          "event": "request",
+          "method": "POST",
+          "session": "61519341-9737-44de-9804-122a2c5a105e",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 10,
+          "event": "request",
+          "method": "GET",
+          "session": "61519341-9737-44de-9804-122a2c5a105e",
+          "body": ""
+        },
+        {
+          "id": 9,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 11,
+          "event": "request",
+          "method": "POST",
+          "session": "61519341-9737-44de-9804-122a2c5a105e",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/list\",\"params\":{\"_meta\":{}}}"
+        },
+        {
+          "id": 11,
+          "event": "response",
+          "status": 200,
+          "session": "61519341-9737-44de-9804-122a2c5a105e"
+        },
+        {
+          "id": 11,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"tools\":[{\"name\":\"ping\",\"description\":\"Check whether the MCP server is responsive.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"delay\",\"description\":\"Delay a successful MCP response to test client timeout behavior.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"delayMs\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":30000,\"description\":\"Response delay in milliseconds.\"}},\"required\":[\"delayMs\"]}},{\"name\":\"hang\",\"description\":\"Never respond unless the MCP request is cancelled.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"disconnect\",\"description\":\"Close the MCP transport before this request can receive a response.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"malformed_message\",\"description\":\"Return one deterministic response that violates a selected JSON-RPC rule.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"variant\":{\"type\":\"string\",\"enum\":[\"missing-jsonrpc\",\"invalid-jsonrpc-version\",\"result-with-error\"]}},\"required\":[\"variant\"]}},{\"name\":\"duplicate_response\",\"description\":\"Return the same JSON-RPC response twice for this request.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"session_loss\",\"description\":\"Invalidate this HTTP session during or after the current request.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"activation\":{\"type\":\"string\",\"enum\":[\"during_request\",\"after_response\"]}},\"required\":[\"activation\"]}}]},\"jsonrpc\":\"2.0\",\"id\":2}\n\n"
+        },
+        {
+          "id": 12,
+          "event": "request",
+          "method": "POST",
+          "session": "61519341-9737-44de-9804-122a2c5a105e",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/call\",\"params\":{\"name\":\"session_loss\",\"arguments\":{\"activation\":\"after_response\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 12,
+          "event": "response",
+          "status": 200,
+          "session": "61519341-9737-44de-9804-122a2c5a105e"
+        },
+        {
+          "id": 12,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":3}\n\n"
+        },
+        {
+          "id": 10,
+          "event": "response",
+          "status": 200,
+          "session": "61519341-9737-44de-9804-122a2c5a105e"
+        },
+        {
+          "id": 13,
+          "event": "request",
+          "method": "POST",
+          "session": "61519341-9737-44de-9804-122a2c5a105e",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":4,\"method\":\"tools/call\",\"params\":{\"name\":\"ping\",\"arguments\":{},\"_meta\":{}}}"
+        },
+        {
+          "id": 13,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 13,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 14,
+          "event": "request",
+          "method": "DELETE",
+          "session": "61519341-9737-44de-9804-122a2c5a105e",
+          "body": ""
+        },
+        {
+          "id": 14,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 14,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 15,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{},\"clientInfo\":{\"name\":\"mcp\",\"version\":\"0.1.0\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 15,
+          "event": "response",
+          "status": 200,
+          "session": "16890978-43ac-409f-9586-2cd8f026da15"
+        },
+        {
+          "id": 15,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.11.0\"}},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 17,
+          "event": "request",
+          "method": "GET",
+          "session": "16890978-43ac-409f-9586-2cd8f026da15",
+          "body": ""
+        },
+        {
+          "id": 16,
+          "event": "request",
+          "method": "POST",
+          "session": "16890978-43ac-409f-9586-2cd8f026da15",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 16,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 18,
+          "event": "request",
+          "method": "POST",
+          "session": "16890978-43ac-409f-9586-2cd8f026da15",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/list\",\"params\":{\"_meta\":{}}}"
+        },
+        {
+          "id": 18,
+          "event": "response",
+          "status": 200,
+          "session": "16890978-43ac-409f-9586-2cd8f026da15"
+        },
+        {
+          "id": 18,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"tools\":[{\"name\":\"ping\",\"description\":\"Check whether the MCP server is responsive.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"delay\",\"description\":\"Delay a successful MCP response to test client timeout behavior.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"delayMs\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":30000,\"description\":\"Response delay in milliseconds.\"}},\"required\":[\"delayMs\"]}},{\"name\":\"hang\",\"description\":\"Never respond unless the MCP request is cancelled.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"disconnect\",\"description\":\"Close the MCP transport before this request can receive a response.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"malformed_message\",\"description\":\"Return one deterministic response that violates a selected JSON-RPC rule.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"variant\":{\"type\":\"string\",\"enum\":[\"missing-jsonrpc\",\"invalid-jsonrpc-version\",\"result-with-error\"]}},\"required\":[\"variant\"]}},{\"name\":\"duplicate_response\",\"description\":\"Return the same JSON-RPC response twice for this request.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"session_loss\",\"description\":\"Invalidate this HTTP session during or after the current request.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"activation\":{\"type\":\"string\",\"enum\":[\"during_request\",\"after_response\"]}},\"required\":[\"activation\"]}}]},\"jsonrpc\":\"2.0\",\"id\":2}\n\n"
+        },
+        {
+          "id": 19,
+          "event": "request",
+          "method": "POST",
+          "session": "16890978-43ac-409f-9586-2cd8f026da15",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/call\",\"params\":{\"name\":\"session_loss\",\"arguments\":{\"activation\":\"after_response\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 19,
+          "event": "response",
+          "status": 200,
+          "session": "16890978-43ac-409f-9586-2cd8f026da15"
+        },
+        {
+          "id": 19,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":3}\n\n"
+        },
+        {
+          "id": 17,
+          "event": "response",
+          "status": 200,
+          "session": "16890978-43ac-409f-9586-2cd8f026da15"
+        },
+        {
+          "id": 20,
+          "event": "request",
+          "method": "POST",
+          "session": "16890978-43ac-409f-9586-2cd8f026da15",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":4,\"method\":\"tools/call\",\"params\":{\"name\":\"ping\",\"arguments\":{},\"_meta\":{}}}"
+        },
+        {
+          "id": 20,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 20,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 21,
+          "event": "request",
+          "method": "DELETE",
+          "session": "16890978-43ac-409f-9586-2cd8f026da15",
+          "body": ""
+        },
+        {
+          "id": 21,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 21,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        }
+      ]
+    },
+    {
+      "serverVersion": "0.11.0",
+      "client": "rust",
+      "configuration": "reinit_on_expired_session true then false; three repeats each",
+      "diagnostics": "{\"activation\":\"Ok(Ok(CallToolResult { result_type: None, content: [Text(TextContent { text: \\\"session loss activated after_response\\\", meta: None, annotations: None })], structured_content: None, is_error: None, meta: None }))\",\"followup\":\"Ok(Ok(CallToolResult { result_type: None, content: [Text(TextContent { text: \\\"{\\\\\\\"status\\\\\\\":\\\\\\\"ok\\\\\\\",\\\\\\\"timestamp\\\\\\\":\\\\\\\"2026-10-04T16:49:09.035Z\\\\\\\"}\\\", meta: None, annotations: None })], structured_content: None, is_error: None, meta: None }))\",\"reinit\":true,\"repeat\":1}\n{\"activation\":\"Ok(Ok(CallToolResult { result_type: None, content: [Text(TextContent { text: \\\"session loss activated after_response\\\", meta: None, annotations: None })], structured_content: None, is_error: None, meta: None }))\",\"followup\":\"Ok(Ok(CallToolResult { result_type: None, content: [Text(TextContent { text: \\\"{\\\\\\\"status\\\\\\\":\\\\\\\"ok\\\\\\\",\\\\\\\"timestamp\\\\\\\":\\\\\\\"2026-10-04T16:49:09.047Z\\\\\\\"}\\\", meta: None, annotations: None })], structured_content: None, is_error: None, meta: None }))\",\"reinit\":true,\"repeat\":2}\n{\"activation\":\"Ok(Ok(CallToolResult { result_type: None, content: [Text(TextContent { text: \\\"session loss activated after_response\\\", meta: None, annotations: None })], structured_content: None, is_error: None, meta: None }))\",\"followup\":\"Ok(Ok(CallToolResult { result_type: None, content: [Text(TextContent { text: \\\"{\\\\\\\"status\\\\\\\":\\\\\\\"ok\\\\\\\",\\\\\\\"timestamp\\\\\\\":\\\\\\\"2026-10-04T16:49:09.055Z\\\\\\\"}\\\", meta: None, annotations: None })], structured_content: None, is_error: None, meta: None }))\",\"reinit\":true,\"repeat\":3}\n{\"activation\":\"Ok(Ok(CallToolResult { result_type: None, content: [Text(TextContent { text: \\\"session loss activated after_response\\\", meta: None, annotations: None })], structured_content: None, is_error: None, meta: None }))\",\"followup\":\"Ok(Err(TransportSend(DynamicTransportError { transport_name: \\\"rmcp::transport::worker::WorkerTransport<rmcp::transport::streamable_http_client::StreamableHttpClientWorker<reqwest::async_impl::client::Client>>\\\", transport_type_id: TypeId(0xf52db5919593decbc93e24d722f50c3f), error: SessionExpired })))\",\"reinit\":false,\"repeat\":1}\n{\"activation\":\"Ok(Ok(CallToolResult { result_type: None, content: [Text(TextContent { text: \\\"session loss activated after_response\\\", meta: None, annotations: None })], structured_content: None, is_error: None, meta: None }))\",\"followup\":\"Ok(Err(TransportSend(DynamicTransportError { transport_name: \\\"rmcp::transport::worker::WorkerTransport<rmcp::transport::streamable_http_client::StreamableHttpClientWorker<reqwest::async_impl::client::Client>>\\\", transport_type_id: TypeId(0xf52db5919593decbc93e24d722f50c3f), error: SessionExpired })))\",\"reinit\":false,\"repeat\":2}\n{\"activation\":\"Ok(Ok(CallToolResult { result_type: None, content: [Text(TextContent { text: \\\"session loss activated after_response\\\", meta: None, annotations: None })], structured_content: None, is_error: None, meta: None }))\",\"followup\":\"Ok(Err(TransportSend(DynamicTransportError { transport_name: \\\"rmcp::transport::worker::WorkerTransport<rmcp::transport::streamable_http_client::StreamableHttpClientWorker<reqwest::async_impl::client::Client>>\\\", transport_type_id: TypeId(0xf52db5919593decbc93e24d722f50c3f), error: SessionExpired })))\",\"reinit\":false,\"repeat\":3}\n",
+      "wire": [
+        {
+          "id": 1,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"capabilities\":{},\"clientInfo\":{\"name\":\"rmcp\",\"version\":\"3.4.0\"},\"protocolVersion\":\"2025-11-25\"}}"
+        },
+        {
+          "id": 1,
+          "event": "response",
+          "status": 200,
+          "session": "51ccf2af-88f1-44cb-8f07-9744fd4b3037"
+        },
+        {
+          "id": 1,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.11.0\"}},\"jsonrpc\":\"2.0\",\"id\":0}\n\n"
+        },
+        {
+          "id": 2,
+          "event": "request",
+          "method": "POST",
+          "session": "51ccf2af-88f1-44cb-8f07-9744fd4b3037",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 2,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 3,
+          "event": "request",
+          "method": "GET",
+          "session": "51ccf2af-88f1-44cb-8f07-9744fd4b3037",
+          "body": ""
+        },
+        {
+          "id": 4,
+          "event": "request",
+          "method": "POST",
+          "session": "51ccf2af-88f1-44cb-8f07-9744fd4b3037",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":0},\"arguments\":{\"activation\":\"after_response\"},\"name\":\"session_loss\"}}"
+        },
+        {
+          "id": 4,
+          "event": "response",
+          "status": 200,
+          "session": "51ccf2af-88f1-44cb-8f07-9744fd4b3037"
+        },
+        {
+          "id": 4,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 3,
+          "event": "response",
+          "status": 200,
+          "session": "51ccf2af-88f1-44cb-8f07-9744fd4b3037"
+        },
+        {
+          "id": 5,
+          "event": "request",
+          "method": "POST",
+          "session": "51ccf2af-88f1-44cb-8f07-9744fd4b3037",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":1},\"name\":\"ping\"}}"
+        },
+        {
+          "id": 5,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 5,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 6,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"capabilities\":{},\"clientInfo\":{\"name\":\"rmcp\",\"version\":\"3.4.0\"},\"protocolVersion\":\"2025-11-25\"}}"
+        },
+        {
+          "id": 6,
+          "event": "response",
+          "status": 200,
+          "session": "e678f6d9-4e2d-4a06-9543-680b6376ff90"
+        },
+        {
+          "id": 6,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.11.0\"}},\"jsonrpc\":\"2.0\",\"id\":0}\n\n"
+        },
+        {
+          "id": 7,
+          "event": "request",
+          "method": "POST",
+          "session": "e678f6d9-4e2d-4a06-9543-680b6376ff90",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 7,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 8,
+          "event": "request",
+          "method": "GET",
+          "session": "e678f6d9-4e2d-4a06-9543-680b6376ff90",
+          "body": ""
+        },
+        {
+          "id": 9,
+          "event": "request",
+          "method": "POST",
+          "session": "e678f6d9-4e2d-4a06-9543-680b6376ff90",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":1},\"name\":\"ping\"}}"
+        },
+        {
+          "id": 9,
+          "event": "response",
+          "status": 200,
+          "session": "e678f6d9-4e2d-4a06-9543-680b6376ff90"
+        },
+        {
+          "id": 9,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"status\\\":\\\"ok\\\",\\\"timestamp\\\":\\\"2026-10-04T16:49:09.035Z\\\"}\"}]},\"jsonrpc\":\"2.0\",\"id\":2}\n\n"
+        },
+        {
+          "id": 8,
+          "event": "error",
+          "error": "Error: socket hang up"
+        },
+        {
+          "id": 10,
+          "event": "request",
+          "method": "DELETE",
+          "session": "e678f6d9-4e2d-4a06-9543-680b6376ff90",
+          "body": ""
+        },
+        {
+          "id": 10,
+          "event": "response",
+          "status": 200,
+          "session": null
+        },
+        {
+          "id": 11,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"capabilities\":{},\"clientInfo\":{\"name\":\"rmcp\",\"version\":\"3.4.0\"},\"protocolVersion\":\"2025-11-25\"}}"
+        },
+        {
+          "id": 11,
+          "event": "response",
+          "status": 200,
+          "session": "3e3c4266-15df-4ff8-a547-f9c1e8f1a337"
+        },
+        {
+          "id": 11,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.11.0\"}},\"jsonrpc\":\"2.0\",\"id\":0}\n\n"
+        },
+        {
+          "id": 12,
+          "event": "request",
+          "method": "POST",
+          "session": "3e3c4266-15df-4ff8-a547-f9c1e8f1a337",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 12,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 13,
+          "event": "request",
+          "method": "GET",
+          "session": "3e3c4266-15df-4ff8-a547-f9c1e8f1a337",
+          "body": ""
+        },
+        {
+          "id": 14,
+          "event": "request",
+          "method": "POST",
+          "session": "3e3c4266-15df-4ff8-a547-f9c1e8f1a337",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":0},\"arguments\":{\"activation\":\"after_response\"},\"name\":\"session_loss\"}}"
+        },
+        {
+          "id": 14,
+          "event": "response",
+          "status": 200,
+          "session": "3e3c4266-15df-4ff8-a547-f9c1e8f1a337"
+        },
+        {
+          "id": 14,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 13,
+          "event": "response",
+          "status": 200,
+          "session": "3e3c4266-15df-4ff8-a547-f9c1e8f1a337"
+        },
+        {
+          "id": 15,
+          "event": "request",
+          "method": "POST",
+          "session": "3e3c4266-15df-4ff8-a547-f9c1e8f1a337",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":1},\"name\":\"ping\"}}"
+        },
+        {
+          "id": 15,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 15,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 16,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"capabilities\":{},\"clientInfo\":{\"name\":\"rmcp\",\"version\":\"3.4.0\"},\"protocolVersion\":\"2025-11-25\"}}"
+        },
+        {
+          "id": 16,
+          "event": "response",
+          "status": 200,
+          "session": "2753d982-b586-4079-b751-8f191d8679f6"
+        },
+        {
+          "id": 16,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.11.0\"}},\"jsonrpc\":\"2.0\",\"id\":0}\n\n"
+        },
+        {
+          "id": 17,
+          "event": "request",
+          "method": "POST",
+          "session": "2753d982-b586-4079-b751-8f191d8679f6",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 17,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 18,
+          "event": "request",
+          "method": "GET",
+          "session": "2753d982-b586-4079-b751-8f191d8679f6",
+          "body": ""
+        },
+        {
+          "id": 19,
+          "event": "request",
+          "method": "POST",
+          "session": "2753d982-b586-4079-b751-8f191d8679f6",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":1},\"name\":\"ping\"}}"
+        },
+        {
+          "id": 19,
+          "event": "response",
+          "status": 200,
+          "session": "2753d982-b586-4079-b751-8f191d8679f6"
+        },
+        {
+          "id": 19,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"status\\\":\\\"ok\\\",\\\"timestamp\\\":\\\"2026-10-04T16:49:09.047Z\\\"}\"}]},\"jsonrpc\":\"2.0\",\"id\":2}\n\n"
+        },
+        {
+          "id": 18,
+          "event": "error",
+          "error": "Error: socket hang up"
+        },
+        {
+          "id": 20,
+          "event": "request",
+          "method": "DELETE",
+          "session": "2753d982-b586-4079-b751-8f191d8679f6",
+          "body": ""
+        },
+        {
+          "id": 20,
+          "event": "response",
+          "status": 200,
+          "session": null
+        },
+        {
+          "id": 21,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"capabilities\":{},\"clientInfo\":{\"name\":\"rmcp\",\"version\":\"3.4.0\"},\"protocolVersion\":\"2025-11-25\"}}"
+        },
+        {
+          "id": 21,
+          "event": "response",
+          "status": 200,
+          "session": "3d1ca948-49ec-494f-9526-bd88746a6654"
+        },
+        {
+          "id": 21,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.11.0\"}},\"jsonrpc\":\"2.0\",\"id\":0}\n\n"
+        },
+        {
+          "id": 22,
+          "event": "request",
+          "method": "POST",
+          "session": "3d1ca948-49ec-494f-9526-bd88746a6654",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 22,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 23,
+          "event": "request",
+          "method": "GET",
+          "session": "3d1ca948-49ec-494f-9526-bd88746a6654",
+          "body": ""
+        },
+        {
+          "id": 24,
+          "event": "request",
+          "method": "POST",
+          "session": "3d1ca948-49ec-494f-9526-bd88746a6654",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":0},\"arguments\":{\"activation\":\"after_response\"},\"name\":\"session_loss\"}}"
+        },
+        {
+          "id": 24,
+          "event": "response",
+          "status": 200,
+          "session": "3d1ca948-49ec-494f-9526-bd88746a6654"
+        },
+        {
+          "id": 24,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 23,
+          "event": "response",
+          "status": 200,
+          "session": "3d1ca948-49ec-494f-9526-bd88746a6654"
+        },
+        {
+          "id": 25,
+          "event": "request",
+          "method": "POST",
+          "session": "3d1ca948-49ec-494f-9526-bd88746a6654",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":1},\"name\":\"ping\"}}"
+        },
+        {
+          "id": 25,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 25,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 26,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"capabilities\":{},\"clientInfo\":{\"name\":\"rmcp\",\"version\":\"3.4.0\"},\"protocolVersion\":\"2025-11-25\"}}"
+        },
+        {
+          "id": 26,
+          "event": "response",
+          "status": 200,
+          "session": "fe623124-fcd1-48ab-9001-4b69e4fd3848"
+        },
+        {
+          "id": 26,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.11.0\"}},\"jsonrpc\":\"2.0\",\"id\":0}\n\n"
+        },
+        {
+          "id": 27,
+          "event": "request",
+          "method": "POST",
+          "session": "fe623124-fcd1-48ab-9001-4b69e4fd3848",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 27,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 28,
+          "event": "request",
+          "method": "GET",
+          "session": "fe623124-fcd1-48ab-9001-4b69e4fd3848",
+          "body": ""
+        },
+        {
+          "id": 29,
+          "event": "request",
+          "method": "POST",
+          "session": "fe623124-fcd1-48ab-9001-4b69e4fd3848",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":1},\"name\":\"ping\"}}"
+        },
+        {
+          "id": 29,
+          "event": "response",
+          "status": 200,
+          "session": "fe623124-fcd1-48ab-9001-4b69e4fd3848"
+        },
+        {
+          "id": 29,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"status\\\":\\\"ok\\\",\\\"timestamp\\\":\\\"2026-10-04T16:49:09.055Z\\\"}\"}]},\"jsonrpc\":\"2.0\",\"id\":2}\n\n"
+        },
+        {
+          "id": 30,
+          "event": "request",
+          "method": "DELETE",
+          "session": "fe623124-fcd1-48ab-9001-4b69e4fd3848",
+          "body": ""
+        },
+        {
+          "id": 28,
+          "event": "error",
+          "error": "Error: socket hang up"
+        },
+        {
+          "id": 30,
+          "event": "response",
+          "status": 200,
+          "session": null
+        },
+        {
+          "id": 31,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"capabilities\":{},\"clientInfo\":{\"name\":\"rmcp\",\"version\":\"3.4.0\"},\"protocolVersion\":\"2025-11-25\"}}"
+        },
+        {
+          "id": 31,
+          "event": "response",
+          "status": 200,
+          "session": "26ed850b-74f6-4c8b-bf07-515a1f2e26f5"
+        },
+        {
+          "id": 31,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.11.0\"}},\"jsonrpc\":\"2.0\",\"id\":0}\n\n"
+        },
+        {
+          "id": 32,
+          "event": "request",
+          "method": "POST",
+          "session": "26ed850b-74f6-4c8b-bf07-515a1f2e26f5",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 32,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 33,
+          "event": "request",
+          "method": "GET",
+          "session": "26ed850b-74f6-4c8b-bf07-515a1f2e26f5",
+          "body": ""
+        },
+        {
+          "id": 34,
+          "event": "request",
+          "method": "POST",
+          "session": "26ed850b-74f6-4c8b-bf07-515a1f2e26f5",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":0},\"arguments\":{\"activation\":\"after_response\"},\"name\":\"session_loss\"}}"
+        },
+        {
+          "id": 34,
+          "event": "response",
+          "status": 200,
+          "session": "26ed850b-74f6-4c8b-bf07-515a1f2e26f5"
+        },
+        {
+          "id": 34,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 33,
+          "event": "response",
+          "status": 200,
+          "session": "26ed850b-74f6-4c8b-bf07-515a1f2e26f5"
+        },
+        {
+          "id": 35,
+          "event": "request",
+          "method": "POST",
+          "session": "26ed850b-74f6-4c8b-bf07-515a1f2e26f5",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":1},\"name\":\"ping\"}}"
+        },
+        {
+          "id": 35,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 35,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 36,
+          "event": "request",
+          "method": "DELETE",
+          "session": "26ed850b-74f6-4c8b-bf07-515a1f2e26f5",
+          "body": ""
+        },
+        {
+          "id": 36,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 36,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 37,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"capabilities\":{},\"clientInfo\":{\"name\":\"rmcp\",\"version\":\"3.4.0\"},\"protocolVersion\":\"2025-11-25\"}}"
+        },
+        {
+          "id": 37,
+          "event": "response",
+          "status": 200,
+          "session": "5f8bab8e-4d2c-47dd-9f5a-390619ebcc81"
+        },
+        {
+          "id": 37,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.11.0\"}},\"jsonrpc\":\"2.0\",\"id\":0}\n\n"
+        },
+        {
+          "id": 38,
+          "event": "request",
+          "method": "POST",
+          "session": "5f8bab8e-4d2c-47dd-9f5a-390619ebcc81",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 38,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 39,
+          "event": "request",
+          "method": "GET",
+          "session": "5f8bab8e-4d2c-47dd-9f5a-390619ebcc81",
+          "body": ""
+        },
+        {
+          "id": 40,
+          "event": "request",
+          "method": "POST",
+          "session": "5f8bab8e-4d2c-47dd-9f5a-390619ebcc81",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":0},\"arguments\":{\"activation\":\"after_response\"},\"name\":\"session_loss\"}}"
+        },
+        {
+          "id": 40,
+          "event": "response",
+          "status": 200,
+          "session": "5f8bab8e-4d2c-47dd-9f5a-390619ebcc81"
+        },
+        {
+          "id": 40,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 39,
+          "event": "response",
+          "status": 200,
+          "session": "5f8bab8e-4d2c-47dd-9f5a-390619ebcc81"
+        },
+        {
+          "id": 41,
+          "event": "request",
+          "method": "POST",
+          "session": "5f8bab8e-4d2c-47dd-9f5a-390619ebcc81",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":1},\"name\":\"ping\"}}"
+        },
+        {
+          "id": 41,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 41,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 42,
+          "event": "request",
+          "method": "DELETE",
+          "session": "5f8bab8e-4d2c-47dd-9f5a-390619ebcc81",
+          "body": ""
+        },
+        {
+          "id": 42,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 42,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 43,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"capabilities\":{},\"clientInfo\":{\"name\":\"rmcp\",\"version\":\"3.4.0\"},\"protocolVersion\":\"2025-11-25\"}}"
+        },
+        {
+          "id": 43,
+          "event": "response",
+          "status": 200,
+          "session": "8c87399c-7abf-4844-97b6-4b6515aecb77"
+        },
+        {
+          "id": 43,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.11.0\"}},\"jsonrpc\":\"2.0\",\"id\":0}\n\n"
+        },
+        {
+          "id": 44,
+          "event": "request",
+          "method": "POST",
+          "session": "8c87399c-7abf-4844-97b6-4b6515aecb77",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 44,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 45,
+          "event": "request",
+          "method": "GET",
+          "session": "8c87399c-7abf-4844-97b6-4b6515aecb77",
+          "body": ""
+        },
+        {
+          "id": 46,
+          "event": "request",
+          "method": "POST",
+          "session": "8c87399c-7abf-4844-97b6-4b6515aecb77",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":0},\"arguments\":{\"activation\":\"after_response\"},\"name\":\"session_loss\"}}"
+        },
+        {
+          "id": 46,
+          "event": "response",
+          "status": 200,
+          "session": "8c87399c-7abf-4844-97b6-4b6515aecb77"
+        },
+        {
+          "id": 46,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 45,
+          "event": "response",
+          "status": 200,
+          "session": "8c87399c-7abf-4844-97b6-4b6515aecb77"
+        },
+        {
+          "id": 47,
+          "event": "request",
+          "method": "POST",
+          "session": "8c87399c-7abf-4844-97b6-4b6515aecb77",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":1},\"name\":\"ping\"}}"
+        },
+        {
+          "id": 47,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 47,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 48,
+          "event": "request",
+          "method": "DELETE",
+          "session": "8c87399c-7abf-4844-97b6-4b6515aecb77",
+          "body": ""
+        },
+        {
+          "id": 48,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 48,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        }
+      ]
+    },
+    {
+      "serverVersion": "0.12.0",
+      "client": "python",
+      "configuration": "uncached tool schema",
+      "diagnostics": "Session termination failed: 404\n{\"repeat\": 0, \"stage\": \"activation\", \"error\": \"ExceptionGroup('unhandled errors in a TaskGroup', [ExceptionGroup('unhandled errors in a TaskGroup', [MCPError(-32001, 'Session not found', None)])])\"}\nSession termination failed: 404\n{\"repeat\": 1, \"stage\": \"activation\", \"error\": \"ExceptionGroup('unhandled errors in a TaskGroup', [ExceptionGroup('unhandled errors in a TaskGroup', [MCPError(-32001, 'Session not found', None)])])\"}\nSession termination failed: 404\n{\"repeat\": 2, \"stage\": \"activation\", \"error\": \"ExceptionGroup('unhandled errors in a TaskGroup', [ExceptionGroup('unhandled errors in a TaskGroup', [MCPError(-32001, 'Session not found', None)])])\"}\n",
+      "wire": [
+        {
+          "id": 1,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{},\"clientInfo\":{\"name\":\"mcp\",\"version\":\"0.1.0\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 1,
+          "event": "response",
+          "status": 200,
+          "session": "7d48b58e-3728-4ef2-b96b-5925e643fb02"
+        },
+        {
+          "id": 1,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.12.0\"}},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 2,
+          "event": "request",
+          "method": "POST",
+          "session": "7d48b58e-3728-4ef2-b96b-5925e643fb02",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 3,
+          "event": "request",
+          "method": "GET",
+          "session": "7d48b58e-3728-4ef2-b96b-5925e643fb02",
+          "body": ""
+        },
+        {
+          "id": 2,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 4,
+          "event": "request",
+          "method": "POST",
+          "session": "7d48b58e-3728-4ef2-b96b-5925e643fb02",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"name\":\"session_loss\",\"arguments\":{\"activation\":\"after_response\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 4,
+          "event": "response",
+          "status": 200,
+          "session": "7d48b58e-3728-4ef2-b96b-5925e643fb02"
+        },
+        {
+          "id": 4,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":2}\n\n"
+        },
+        {
+          "id": 3,
+          "event": "response",
+          "status": 200,
+          "session": "7d48b58e-3728-4ef2-b96b-5925e643fb02"
+        },
+        {
+          "id": 5,
+          "event": "request",
+          "method": "POST",
+          "session": "7d48b58e-3728-4ef2-b96b-5925e643fb02",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/list\",\"params\":{\"_meta\":{}}}"
+        },
+        {
+          "id": 5,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 5,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 6,
+          "event": "request",
+          "method": "DELETE",
+          "session": "7d48b58e-3728-4ef2-b96b-5925e643fb02",
+          "body": ""
+        },
+        {
+          "id": 6,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 6,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 7,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{},\"clientInfo\":{\"name\":\"mcp\",\"version\":\"0.1.0\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 7,
+          "event": "response",
+          "status": 200,
+          "session": "42278c2b-6cb8-47ca-9dfc-1099e935bced"
+        },
+        {
+          "id": 7,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.12.0\"}},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 8,
+          "event": "request",
+          "method": "POST",
+          "session": "42278c2b-6cb8-47ca-9dfc-1099e935bced",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 9,
+          "event": "request",
+          "method": "GET",
+          "session": "42278c2b-6cb8-47ca-9dfc-1099e935bced",
+          "body": ""
+        },
+        {
+          "id": 8,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 10,
+          "event": "request",
+          "method": "POST",
+          "session": "42278c2b-6cb8-47ca-9dfc-1099e935bced",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"name\":\"session_loss\",\"arguments\":{\"activation\":\"after_response\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 10,
+          "event": "response",
+          "status": 200,
+          "session": "42278c2b-6cb8-47ca-9dfc-1099e935bced"
+        },
+        {
+          "id": 10,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":2}\n\n"
+        },
+        {
+          "id": 9,
+          "event": "response",
+          "status": 200,
+          "session": "42278c2b-6cb8-47ca-9dfc-1099e935bced"
+        },
+        {
+          "id": 11,
+          "event": "request",
+          "method": "POST",
+          "session": "42278c2b-6cb8-47ca-9dfc-1099e935bced",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/list\",\"params\":{\"_meta\":{}}}"
+        },
+        {
+          "id": 11,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 11,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 12,
+          "event": "request",
+          "method": "DELETE",
+          "session": "42278c2b-6cb8-47ca-9dfc-1099e935bced",
+          "body": ""
+        },
+        {
+          "id": 12,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 12,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 13,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{},\"clientInfo\":{\"name\":\"mcp\",\"version\":\"0.1.0\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 13,
+          "event": "response",
+          "status": 200,
+          "session": "cf3ca641-08d2-4792-9ad0-5f08356a457b"
+        },
+        {
+          "id": 13,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.12.0\"}},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 14,
+          "event": "request",
+          "method": "POST",
+          "session": "cf3ca641-08d2-4792-9ad0-5f08356a457b",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 15,
+          "event": "request",
+          "method": "GET",
+          "session": "cf3ca641-08d2-4792-9ad0-5f08356a457b",
+          "body": ""
+        },
+        {
+          "id": 14,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 16,
+          "event": "request",
+          "method": "POST",
+          "session": "cf3ca641-08d2-4792-9ad0-5f08356a457b",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"name\":\"session_loss\",\"arguments\":{\"activation\":\"after_response\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 16,
+          "event": "response",
+          "status": 200,
+          "session": "cf3ca641-08d2-4792-9ad0-5f08356a457b"
+        },
+        {
+          "id": 16,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":2}\n\n"
+        },
+        {
+          "id": 15,
+          "event": "response",
+          "status": 200,
+          "session": "cf3ca641-08d2-4792-9ad0-5f08356a457b"
+        },
+        {
+          "id": 17,
+          "event": "request",
+          "method": "POST",
+          "session": "cf3ca641-08d2-4792-9ad0-5f08356a457b",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/list\",\"params\":{\"_meta\":{}}}"
+        },
+        {
+          "id": 17,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 17,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 18,
+          "event": "request",
+          "method": "DELETE",
+          "session": "cf3ca641-08d2-4792-9ad0-5f08356a457b",
+          "body": ""
+        },
+        {
+          "id": 18,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 18,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        }
+      ]
+    },
+    {
+      "serverVersion": "0.12.0",
+      "client": "python",
+      "configuration": "list_tools before call_tool",
+      "diagnostics": "{\"repeat\": 0, \"stage\": \"activation\", \"result\": {\"meta\": null, \"content\": [{\"type\": \"text\", \"text\": \"session loss activated after_response\", \"annotations\": null, \"meta\": null}], \"structured_content\": null, \"is_error\": false, \"result_type\": \"complete\"}}\n{\"repeat\": 0, \"stage\": \"followup\", \"expectedError\": \"MCPError(-32001, 'Session not found', None)\"}\nSession termination failed: 404\n{\"repeat\": 1, \"stage\": \"activation\", \"result\": {\"meta\": null, \"content\": [{\"type\": \"text\", \"text\": \"session loss activated after_response\", \"annotations\": null, \"meta\": null}], \"structured_content\": null, \"is_error\": false, \"result_type\": \"complete\"}}\n{\"repeat\": 1, \"stage\": \"followup\", \"expectedError\": \"MCPError(-32001, 'Session not found', None)\"}\nSession termination failed: 404\n{\"repeat\": 2, \"stage\": \"activation\", \"result\": {\"meta\": null, \"content\": [{\"type\": \"text\", \"text\": \"session loss activated after_response\", \"annotations\": null, \"meta\": null}], \"structured_content\": null, \"is_error\": false, \"result_type\": \"complete\"}}\n{\"repeat\": 2, \"stage\": \"followup\", \"expectedError\": \"MCPError(-32001, 'Session not found', None)\"}\nSession termination failed: 404\n",
+      "wire": [
+        {
+          "id": 1,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{},\"clientInfo\":{\"name\":\"mcp\",\"version\":\"0.1.0\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 1,
+          "event": "response",
+          "status": 200,
+          "session": "3bb8a99e-bb2a-4a1c-a8f2-38bab2b9ac0f"
+        },
+        {
+          "id": 1,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.12.0\"}},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 2,
+          "event": "request",
+          "method": "POST",
+          "session": "3bb8a99e-bb2a-4a1c-a8f2-38bab2b9ac0f",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 3,
+          "event": "request",
+          "method": "GET",
+          "session": "3bb8a99e-bb2a-4a1c-a8f2-38bab2b9ac0f",
+          "body": ""
+        },
+        {
+          "id": 2,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 4,
+          "event": "request",
+          "method": "POST",
+          "session": "3bb8a99e-bb2a-4a1c-a8f2-38bab2b9ac0f",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/list\",\"params\":{\"_meta\":{}}}"
+        },
+        {
+          "id": 4,
+          "event": "response",
+          "status": 200,
+          "session": "3bb8a99e-bb2a-4a1c-a8f2-38bab2b9ac0f"
+        },
+        {
+          "id": 4,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"tools\":[{\"name\":\"ping\",\"description\":\"Check whether the MCP server is responsive.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"protocol_ping_liveness\",\"description\":\"Send an MCP protocol ping during this in-flight call and apply a bounded liveness policy.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"pingAfterMs\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":30000},\"livenessTimeoutMs\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":30000},\"completionDelayMs\":{\"default\":0,\"type\":\"integer\",\"minimum\":0,\"maximum\":30000},\"closeOnFailure\":{\"default\":false,\"type\":\"boolean\"}},\"required\":[\"pingAfterMs\",\"livenessTimeoutMs\"]}},{\"name\":\"delay\",\"description\":\"Delay a successful MCP response to test client timeout behavior.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"delayMs\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":30000,\"description\":\"Response delay in milliseconds.\"}},\"required\":[\"delayMs\"]}},{\"name\":\"hang\",\"description\":\"Never respond unless the MCP request is cancelled.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"disconnect\",\"description\":\"Close the MCP transport before this request can receive a response.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"malformed_message\",\"description\":\"Return one deterministic response that violates a selected JSON-RPC rule.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"variant\":{\"type\":\"string\",\"enum\":[\"missing-jsonrpc\",\"invalid-jsonrpc-version\",\"result-with-error\"]}},\"required\":[\"variant\"]}},{\"name\":\"duplicate_response\",\"description\":\"Return the same JSON-RPC response twice for this request.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"session_loss\",\"description\":\"Invalidate this HTTP session during or after the current request.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"activation\":{\"type\":\"string\",\"enum\":[\"during_request\",\"after_response\"]}},\"required\":[\"activation\"]}}]},\"jsonrpc\":\"2.0\",\"id\":2}\n\n"
+        },
+        {
+          "id": 5,
+          "event": "request",
+          "method": "POST",
+          "session": "3bb8a99e-bb2a-4a1c-a8f2-38bab2b9ac0f",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/call\",\"params\":{\"name\":\"session_loss\",\"arguments\":{\"activation\":\"after_response\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 5,
+          "event": "response",
+          "status": 200,
+          "session": "3bb8a99e-bb2a-4a1c-a8f2-38bab2b9ac0f"
+        },
+        {
+          "id": 5,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":3}\n\n"
+        },
+        {
+          "id": 3,
+          "event": "response",
+          "status": 200,
+          "session": "3bb8a99e-bb2a-4a1c-a8f2-38bab2b9ac0f"
+        },
+        {
+          "id": 6,
+          "event": "request",
+          "method": "POST",
+          "session": "3bb8a99e-bb2a-4a1c-a8f2-38bab2b9ac0f",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":4,\"method\":\"tools/call\",\"params\":{\"name\":\"ping\",\"arguments\":{},\"_meta\":{}}}"
+        },
+        {
+          "id": 6,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 6,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 7,
+          "event": "request",
+          "method": "DELETE",
+          "session": "3bb8a99e-bb2a-4a1c-a8f2-38bab2b9ac0f",
+          "body": ""
+        },
+        {
+          "id": 7,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 7,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 8,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{},\"clientInfo\":{\"name\":\"mcp\",\"version\":\"0.1.0\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 8,
+          "event": "response",
+          "status": 200,
+          "session": "b73275a2-b626-4470-87c6-f0d9820a0474"
+        },
+        {
+          "id": 8,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.12.0\"}},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 9,
+          "event": "request",
+          "method": "POST",
+          "session": "b73275a2-b626-4470-87c6-f0d9820a0474",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 10,
+          "event": "request",
+          "method": "GET",
+          "session": "b73275a2-b626-4470-87c6-f0d9820a0474",
+          "body": ""
+        },
+        {
+          "id": 9,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 11,
+          "event": "request",
+          "method": "POST",
+          "session": "b73275a2-b626-4470-87c6-f0d9820a0474",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/list\",\"params\":{\"_meta\":{}}}"
+        },
+        {
+          "id": 11,
+          "event": "response",
+          "status": 200,
+          "session": "b73275a2-b626-4470-87c6-f0d9820a0474"
+        },
+        {
+          "id": 11,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"tools\":[{\"name\":\"ping\",\"description\":\"Check whether the MCP server is responsive.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"protocol_ping_liveness\",\"description\":\"Send an MCP protocol ping during this in-flight call and apply a bounded liveness policy.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"pingAfterMs\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":30000},\"livenessTimeoutMs\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":30000},\"completionDelayMs\":{\"default\":0,\"type\":\"integer\",\"minimum\":0,\"maximum\":30000},\"closeOnFailure\":{\"default\":false,\"type\":\"boolean\"}},\"required\":[\"pingAfterMs\",\"livenessTimeoutMs\"]}},{\"name\":\"delay\",\"description\":\"Delay a successful MCP response to test client timeout behavior.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"delayMs\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":30000,\"description\":\"Response delay in milliseconds.\"}},\"required\":[\"delayMs\"]}},{\"name\":\"hang\",\"description\":\"Never respond unless the MCP request is cancelled.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"disconnect\",\"description\":\"Close the MCP transport before this request can receive a response.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"malformed_message\",\"description\":\"Return one deterministic response that violates a selected JSON-RPC rule.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"variant\":{\"type\":\"string\",\"enum\":[\"missing-jsonrpc\",\"invalid-jsonrpc-version\",\"result-with-error\"]}},\"required\":[\"variant\"]}},{\"name\":\"duplicate_response\",\"description\":\"Return the same JSON-RPC response twice for this request.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"session_loss\",\"description\":\"Invalidate this HTTP session during or after the current request.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"activation\":{\"type\":\"string\",\"enum\":[\"during_request\",\"after_response\"]}},\"required\":[\"activation\"]}}]},\"jsonrpc\":\"2.0\",\"id\":2}\n\n"
+        },
+        {
+          "id": 12,
+          "event": "request",
+          "method": "POST",
+          "session": "b73275a2-b626-4470-87c6-f0d9820a0474",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/call\",\"params\":{\"name\":\"session_loss\",\"arguments\":{\"activation\":\"after_response\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 12,
+          "event": "response",
+          "status": 200,
+          "session": "b73275a2-b626-4470-87c6-f0d9820a0474"
+        },
+        {
+          "id": 12,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":3}\n\n"
+        },
+        {
+          "id": 10,
+          "event": "response",
+          "status": 200,
+          "session": "b73275a2-b626-4470-87c6-f0d9820a0474"
+        },
+        {
+          "id": 13,
+          "event": "request",
+          "method": "POST",
+          "session": "b73275a2-b626-4470-87c6-f0d9820a0474",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":4,\"method\":\"tools/call\",\"params\":{\"name\":\"ping\",\"arguments\":{},\"_meta\":{}}}"
+        },
+        {
+          "id": 13,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 13,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 14,
+          "event": "request",
+          "method": "DELETE",
+          "session": "b73275a2-b626-4470-87c6-f0d9820a0474",
+          "body": ""
+        },
+        {
+          "id": 14,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 14,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 15,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{},\"clientInfo\":{\"name\":\"mcp\",\"version\":\"0.1.0\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 15,
+          "event": "response",
+          "status": 200,
+          "session": "491b859f-8152-4649-b30e-1a67e402d6ce"
+        },
+        {
+          "id": 15,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.12.0\"}},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 16,
+          "event": "request",
+          "method": "POST",
+          "session": "491b859f-8152-4649-b30e-1a67e402d6ce",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 17,
+          "event": "request",
+          "method": "GET",
+          "session": "491b859f-8152-4649-b30e-1a67e402d6ce",
+          "body": ""
+        },
+        {
+          "id": 16,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 18,
+          "event": "request",
+          "method": "POST",
+          "session": "491b859f-8152-4649-b30e-1a67e402d6ce",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/list\",\"params\":{\"_meta\":{}}}"
+        },
+        {
+          "id": 18,
+          "event": "response",
+          "status": 200,
+          "session": "491b859f-8152-4649-b30e-1a67e402d6ce"
+        },
+        {
+          "id": 18,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"tools\":[{\"name\":\"ping\",\"description\":\"Check whether the MCP server is responsive.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"protocol_ping_liveness\",\"description\":\"Send an MCP protocol ping during this in-flight call and apply a bounded liveness policy.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"pingAfterMs\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":30000},\"livenessTimeoutMs\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":30000},\"completionDelayMs\":{\"default\":0,\"type\":\"integer\",\"minimum\":0,\"maximum\":30000},\"closeOnFailure\":{\"default\":false,\"type\":\"boolean\"}},\"required\":[\"pingAfterMs\",\"livenessTimeoutMs\"]}},{\"name\":\"delay\",\"description\":\"Delay a successful MCP response to test client timeout behavior.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"delayMs\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":30000,\"description\":\"Response delay in milliseconds.\"}},\"required\":[\"delayMs\"]}},{\"name\":\"hang\",\"description\":\"Never respond unless the MCP request is cancelled.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"disconnect\",\"description\":\"Close the MCP transport before this request can receive a response.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"malformed_message\",\"description\":\"Return one deterministic response that violates a selected JSON-RPC rule.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"variant\":{\"type\":\"string\",\"enum\":[\"missing-jsonrpc\",\"invalid-jsonrpc-version\",\"result-with-error\"]}},\"required\":[\"variant\"]}},{\"name\":\"duplicate_response\",\"description\":\"Return the same JSON-RPC response twice for this request.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{}}},{\"name\":\"session_loss\",\"description\":\"Invalidate this HTTP session during or after the current request.\",\"inputSchema\":{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{\"activation\":{\"type\":\"string\",\"enum\":[\"during_request\",\"after_response\"]}},\"required\":[\"activation\"]}}]},\"jsonrpc\":\"2.0\",\"id\":2}\n\n"
+        },
+        {
+          "id": 19,
+          "event": "request",
+          "method": "POST",
+          "session": "491b859f-8152-4649-b30e-1a67e402d6ce",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/call\",\"params\":{\"name\":\"session_loss\",\"arguments\":{\"activation\":\"after_response\"},\"_meta\":{}}}"
+        },
+        {
+          "id": 19,
+          "event": "response",
+          "status": 200,
+          "session": "491b859f-8152-4649-b30e-1a67e402d6ce"
+        },
+        {
+          "id": 19,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":3}\n\n"
+        },
+        {
+          "id": 17,
+          "event": "response",
+          "status": 200,
+          "session": "491b859f-8152-4649-b30e-1a67e402d6ce"
+        },
+        {
+          "id": 20,
+          "event": "request",
+          "method": "POST",
+          "session": "491b859f-8152-4649-b30e-1a67e402d6ce",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":4,\"method\":\"tools/call\",\"params\":{\"name\":\"ping\",\"arguments\":{},\"_meta\":{}}}"
+        },
+        {
+          "id": 20,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 20,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 21,
+          "event": "request",
+          "method": "DELETE",
+          "session": "491b859f-8152-4649-b30e-1a67e402d6ce",
+          "body": ""
+        },
+        {
+          "id": 21,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 21,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        }
+      ]
+    },
+    {
+      "serverVersion": "0.12.0",
+      "client": "rust",
+      "configuration": "reinit_on_expired_session true then false; three repeats each",
+      "diagnostics": "{\"activation\":\"Ok(Ok(CallToolResult { result_type: None, content: [Text(TextContent { text: \\\"session loss activated after_response\\\", meta: None, annotations: None })], structured_content: None, is_error: None, meta: None }))\",\"followup\":\"Ok(Ok(CallToolResult { result_type: None, content: [Text(TextContent { text: \\\"{\\\\\\\"status\\\\\\\":\\\\\\\"ok\\\\\\\",\\\\\\\"timestamp\\\\\\\":\\\\\\\"2026-10-04T16:49:11.436Z\\\\\\\"}\\\", meta: None, annotations: None })], structured_content: None, is_error: None, meta: None }))\",\"reinit\":true,\"repeat\":1}\n{\"activation\":\"Ok(Ok(CallToolResult { result_type: None, content: [Text(TextContent { text: \\\"session loss activated after_response\\\", meta: None, annotations: None })], structured_content: None, is_error: None, meta: None }))\",\"followup\":\"Ok(Ok(CallToolResult { result_type: None, content: [Text(TextContent { text: \\\"{\\\\\\\"status\\\\\\\":\\\\\\\"ok\\\\\\\",\\\\\\\"timestamp\\\\\\\":\\\\\\\"2026-10-04T16:49:11.449Z\\\\\\\"}\\\", meta: None, annotations: None })], structured_content: None, is_error: None, meta: None }))\",\"reinit\":true,\"repeat\":2}\n{\"activation\":\"Ok(Ok(CallToolResult { result_type: None, content: [Text(TextContent { text: \\\"session loss activated after_response\\\", meta: None, annotations: None })], structured_content: None, is_error: None, meta: None }))\",\"followup\":\"Ok(Ok(CallToolResult { result_type: None, content: [Text(TextContent { text: \\\"{\\\\\\\"status\\\\\\\":\\\\\\\"ok\\\\\\\",\\\\\\\"timestamp\\\\\\\":\\\\\\\"2026-10-04T16:49:11.458Z\\\\\\\"}\\\", meta: None, annotations: None })], structured_content: None, is_error: None, meta: None }))\",\"reinit\":true,\"repeat\":3}\n{\"activation\":\"Ok(Ok(CallToolResult { result_type: None, content: [Text(TextContent { text: \\\"session loss activated after_response\\\", meta: None, annotations: None })], structured_content: None, is_error: None, meta: None }))\",\"followup\":\"Ok(Err(TransportSend(DynamicTransportError { transport_name: \\\"rmcp::transport::worker::WorkerTransport<rmcp::transport::streamable_http_client::StreamableHttpClientWorker<reqwest::async_impl::client::Client>>\\\", transport_type_id: TypeId(0xf52db5919593decbc93e24d722f50c3f), error: SessionExpired })))\",\"reinit\":false,\"repeat\":1}\n{\"activation\":\"Ok(Ok(CallToolResult { result_type: None, content: [Text(TextContent { text: \\\"session loss activated after_response\\\", meta: None, annotations: None })], structured_content: None, is_error: None, meta: None }))\",\"followup\":\"Ok(Err(TransportSend(DynamicTransportError { transport_name: \\\"rmcp::transport::worker::WorkerTransport<rmcp::transport::streamable_http_client::StreamableHttpClientWorker<reqwest::async_impl::client::Client>>\\\", transport_type_id: TypeId(0xf52db5919593decbc93e24d722f50c3f), error: SessionExpired })))\",\"reinit\":false,\"repeat\":2}\n{\"activation\":\"Ok(Ok(CallToolResult { result_type: None, content: [Text(TextContent { text: \\\"session loss activated after_response\\\", meta: None, annotations: None })], structured_content: None, is_error: None, meta: None }))\",\"followup\":\"Ok(Err(TransportSend(DynamicTransportError { transport_name: \\\"rmcp::transport::worker::WorkerTransport<rmcp::transport::streamable_http_client::StreamableHttpClientWorker<reqwest::async_impl::client::Client>>\\\", transport_type_id: TypeId(0xf52db5919593decbc93e24d722f50c3f), error: SessionExpired })))\",\"reinit\":false,\"repeat\":3}\n",
+      "wire": [
+        {
+          "id": 1,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"capabilities\":{},\"clientInfo\":{\"name\":\"rmcp\",\"version\":\"3.4.0\"},\"protocolVersion\":\"2025-11-25\"}}"
+        },
+        {
+          "id": 1,
+          "event": "response",
+          "status": 200,
+          "session": "dee8b8f6-3689-47d3-bc8d-1516f080a6cf"
+        },
+        {
+          "id": 1,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.12.0\"}},\"jsonrpc\":\"2.0\",\"id\":0}\n\n"
+        },
+        {
+          "id": 2,
+          "event": "request",
+          "method": "POST",
+          "session": "dee8b8f6-3689-47d3-bc8d-1516f080a6cf",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 2,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 3,
+          "event": "request",
+          "method": "GET",
+          "session": "dee8b8f6-3689-47d3-bc8d-1516f080a6cf",
+          "body": ""
+        },
+        {
+          "id": 4,
+          "event": "request",
+          "method": "POST",
+          "session": "dee8b8f6-3689-47d3-bc8d-1516f080a6cf",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":0},\"arguments\":{\"activation\":\"after_response\"},\"name\":\"session_loss\"}}"
+        },
+        {
+          "id": 4,
+          "event": "response",
+          "status": 200,
+          "session": "dee8b8f6-3689-47d3-bc8d-1516f080a6cf"
+        },
+        {
+          "id": 4,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 3,
+          "event": "response",
+          "status": 200,
+          "session": "dee8b8f6-3689-47d3-bc8d-1516f080a6cf"
+        },
+        {
+          "id": 5,
+          "event": "request",
+          "method": "POST",
+          "session": "dee8b8f6-3689-47d3-bc8d-1516f080a6cf",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":1},\"name\":\"ping\"}}"
+        },
+        {
+          "id": 5,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 5,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 6,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"capabilities\":{},\"clientInfo\":{\"name\":\"rmcp\",\"version\":\"3.4.0\"},\"protocolVersion\":\"2025-11-25\"}}"
+        },
+        {
+          "id": 6,
+          "event": "response",
+          "status": 200,
+          "session": "d12f6f5d-6f9b-43d1-ab2e-87f96f054303"
+        },
+        {
+          "id": 6,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.12.0\"}},\"jsonrpc\":\"2.0\",\"id\":0}\n\n"
+        },
+        {
+          "id": 7,
+          "event": "request",
+          "method": "POST",
+          "session": "d12f6f5d-6f9b-43d1-ab2e-87f96f054303",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 7,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 8,
+          "event": "request",
+          "method": "GET",
+          "session": "d12f6f5d-6f9b-43d1-ab2e-87f96f054303",
+          "body": ""
+        },
+        {
+          "id": 9,
+          "event": "request",
+          "method": "POST",
+          "session": "d12f6f5d-6f9b-43d1-ab2e-87f96f054303",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":1},\"name\":\"ping\"}}"
+        },
+        {
+          "id": 9,
+          "event": "response",
+          "status": 200,
+          "session": "d12f6f5d-6f9b-43d1-ab2e-87f96f054303"
+        },
+        {
+          "id": 9,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"status\\\":\\\"ok\\\",\\\"timestamp\\\":\\\"2026-10-04T16:49:11.436Z\\\"}\"}]},\"jsonrpc\":\"2.0\",\"id\":2}\n\n"
+        },
+        {
+          "id": 8,
+          "event": "error",
+          "error": "Error: socket hang up"
+        },
+        {
+          "id": 10,
+          "event": "request",
+          "method": "DELETE",
+          "session": "d12f6f5d-6f9b-43d1-ab2e-87f96f054303",
+          "body": ""
+        },
+        {
+          "id": 10,
+          "event": "response",
+          "status": 200,
+          "session": null
+        },
+        {
+          "id": 11,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"capabilities\":{},\"clientInfo\":{\"name\":\"rmcp\",\"version\":\"3.4.0\"},\"protocolVersion\":\"2025-11-25\"}}"
+        },
+        {
+          "id": 11,
+          "event": "response",
+          "status": 200,
+          "session": "0a9ca007-d4af-43df-a57e-feaf9d7cd001"
+        },
+        {
+          "id": 11,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.12.0\"}},\"jsonrpc\":\"2.0\",\"id\":0}\n\n"
+        },
+        {
+          "id": 12,
+          "event": "request",
+          "method": "POST",
+          "session": "0a9ca007-d4af-43df-a57e-feaf9d7cd001",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 12,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 13,
+          "event": "request",
+          "method": "GET",
+          "session": "0a9ca007-d4af-43df-a57e-feaf9d7cd001",
+          "body": ""
+        },
+        {
+          "id": 14,
+          "event": "request",
+          "method": "POST",
+          "session": "0a9ca007-d4af-43df-a57e-feaf9d7cd001",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":0},\"arguments\":{\"activation\":\"after_response\"},\"name\":\"session_loss\"}}"
+        },
+        {
+          "id": 14,
+          "event": "response",
+          "status": 200,
+          "session": "0a9ca007-d4af-43df-a57e-feaf9d7cd001"
+        },
+        {
+          "id": 14,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 13,
+          "event": "response",
+          "status": 200,
+          "session": "0a9ca007-d4af-43df-a57e-feaf9d7cd001"
+        },
+        {
+          "id": 15,
+          "event": "request",
+          "method": "POST",
+          "session": "0a9ca007-d4af-43df-a57e-feaf9d7cd001",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":1},\"name\":\"ping\"}}"
+        },
+        {
+          "id": 15,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 15,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 16,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"capabilities\":{},\"clientInfo\":{\"name\":\"rmcp\",\"version\":\"3.4.0\"},\"protocolVersion\":\"2025-11-25\"}}"
+        },
+        {
+          "id": 16,
+          "event": "response",
+          "status": 200,
+          "session": "0d6d9b2f-8369-4f9c-a012-c9bc40cdb2d5"
+        },
+        {
+          "id": 16,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.12.0\"}},\"jsonrpc\":\"2.0\",\"id\":0}\n\n"
+        },
+        {
+          "id": 17,
+          "event": "request",
+          "method": "POST",
+          "session": "0d6d9b2f-8369-4f9c-a012-c9bc40cdb2d5",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 17,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 18,
+          "event": "request",
+          "method": "GET",
+          "session": "0d6d9b2f-8369-4f9c-a012-c9bc40cdb2d5",
+          "body": ""
+        },
+        {
+          "id": 19,
+          "event": "request",
+          "method": "POST",
+          "session": "0d6d9b2f-8369-4f9c-a012-c9bc40cdb2d5",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":1},\"name\":\"ping\"}}"
+        },
+        {
+          "id": 19,
+          "event": "response",
+          "status": 200,
+          "session": "0d6d9b2f-8369-4f9c-a012-c9bc40cdb2d5"
+        },
+        {
+          "id": 19,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"status\\\":\\\"ok\\\",\\\"timestamp\\\":\\\"2026-10-04T16:49:11.449Z\\\"}\"}]},\"jsonrpc\":\"2.0\",\"id\":2}\n\n"
+        },
+        {
+          "id": 20,
+          "event": "request",
+          "method": "DELETE",
+          "session": "0d6d9b2f-8369-4f9c-a012-c9bc40cdb2d5",
+          "body": ""
+        },
+        {
+          "id": 18,
+          "event": "error",
+          "error": "Error: socket hang up"
+        },
+        {
+          "id": 20,
+          "event": "response",
+          "status": 200,
+          "session": null
+        },
+        {
+          "id": 21,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"capabilities\":{},\"clientInfo\":{\"name\":\"rmcp\",\"version\":\"3.4.0\"},\"protocolVersion\":\"2025-11-25\"}}"
+        },
+        {
+          "id": 21,
+          "event": "response",
+          "status": 200,
+          "session": "18958293-a76d-427a-9879-c2943077329b"
+        },
+        {
+          "id": 21,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.12.0\"}},\"jsonrpc\":\"2.0\",\"id\":0}\n\n"
+        },
+        {
+          "id": 22,
+          "event": "request",
+          "method": "POST",
+          "session": "18958293-a76d-427a-9879-c2943077329b",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 22,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 23,
+          "event": "request",
+          "method": "GET",
+          "session": "18958293-a76d-427a-9879-c2943077329b",
+          "body": ""
+        },
+        {
+          "id": 24,
+          "event": "request",
+          "method": "POST",
+          "session": "18958293-a76d-427a-9879-c2943077329b",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":0},\"arguments\":{\"activation\":\"after_response\"},\"name\":\"session_loss\"}}"
+        },
+        {
+          "id": 24,
+          "event": "response",
+          "status": 200,
+          "session": "18958293-a76d-427a-9879-c2943077329b"
+        },
+        {
+          "id": 24,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 23,
+          "event": "response",
+          "status": 200,
+          "session": "18958293-a76d-427a-9879-c2943077329b"
+        },
+        {
+          "id": 25,
+          "event": "request",
+          "method": "POST",
+          "session": "18958293-a76d-427a-9879-c2943077329b",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":1},\"name\":\"ping\"}}"
+        },
+        {
+          "id": 25,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 25,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 26,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"capabilities\":{},\"clientInfo\":{\"name\":\"rmcp\",\"version\":\"3.4.0\"},\"protocolVersion\":\"2025-11-25\"}}"
+        },
+        {
+          "id": 26,
+          "event": "response",
+          "status": 200,
+          "session": "e51df761-3ad6-4615-b3cf-4ec03e8c523a"
+        },
+        {
+          "id": 26,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.12.0\"}},\"jsonrpc\":\"2.0\",\"id\":0}\n\n"
+        },
+        {
+          "id": 27,
+          "event": "request",
+          "method": "POST",
+          "session": "e51df761-3ad6-4615-b3cf-4ec03e8c523a",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 27,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 28,
+          "event": "request",
+          "method": "GET",
+          "session": "e51df761-3ad6-4615-b3cf-4ec03e8c523a",
+          "body": ""
+        },
+        {
+          "id": 29,
+          "event": "request",
+          "method": "POST",
+          "session": "e51df761-3ad6-4615-b3cf-4ec03e8c523a",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":1},\"name\":\"ping\"}}"
+        },
+        {
+          "id": 29,
+          "event": "response",
+          "status": 200,
+          "session": "e51df761-3ad6-4615-b3cf-4ec03e8c523a"
+        },
+        {
+          "id": 29,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"status\\\":\\\"ok\\\",\\\"timestamp\\\":\\\"2026-10-04T16:49:11.458Z\\\"}\"}]},\"jsonrpc\":\"2.0\",\"id\":2}\n\n"
+        },
+        {
+          "id": 28,
+          "event": "error",
+          "error": "Error: socket hang up"
+        },
+        {
+          "id": 30,
+          "event": "request",
+          "method": "DELETE",
+          "session": "e51df761-3ad6-4615-b3cf-4ec03e8c523a",
+          "body": ""
+        },
+        {
+          "id": 30,
+          "event": "response",
+          "status": 200,
+          "session": null
+        },
+        {
+          "id": 31,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"capabilities\":{},\"clientInfo\":{\"name\":\"rmcp\",\"version\":\"3.4.0\"},\"protocolVersion\":\"2025-11-25\"}}"
+        },
+        {
+          "id": 31,
+          "event": "response",
+          "status": 200,
+          "session": "490c8f9c-4f02-4a84-8aa0-f4f87f752f11"
+        },
+        {
+          "id": 31,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.12.0\"}},\"jsonrpc\":\"2.0\",\"id\":0}\n\n"
+        },
+        {
+          "id": 32,
+          "event": "request",
+          "method": "POST",
+          "session": "490c8f9c-4f02-4a84-8aa0-f4f87f752f11",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 32,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 33,
+          "event": "request",
+          "method": "GET",
+          "session": "490c8f9c-4f02-4a84-8aa0-f4f87f752f11",
+          "body": ""
+        },
+        {
+          "id": 34,
+          "event": "request",
+          "method": "POST",
+          "session": "490c8f9c-4f02-4a84-8aa0-f4f87f752f11",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":0},\"arguments\":{\"activation\":\"after_response\"},\"name\":\"session_loss\"}}"
+        },
+        {
+          "id": 34,
+          "event": "response",
+          "status": 200,
+          "session": "490c8f9c-4f02-4a84-8aa0-f4f87f752f11"
+        },
+        {
+          "id": 34,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 33,
+          "event": "response",
+          "status": 200,
+          "session": "490c8f9c-4f02-4a84-8aa0-f4f87f752f11"
+        },
+        {
+          "id": 35,
+          "event": "request",
+          "method": "POST",
+          "session": "490c8f9c-4f02-4a84-8aa0-f4f87f752f11",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":1},\"name\":\"ping\"}}"
+        },
+        {
+          "id": 35,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 35,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 36,
+          "event": "request",
+          "method": "DELETE",
+          "session": "490c8f9c-4f02-4a84-8aa0-f4f87f752f11",
+          "body": ""
+        },
+        {
+          "id": 36,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 36,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 37,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"capabilities\":{},\"clientInfo\":{\"name\":\"rmcp\",\"version\":\"3.4.0\"},\"protocolVersion\":\"2025-11-25\"}}"
+        },
+        {
+          "id": 37,
+          "event": "response",
+          "status": 200,
+          "session": "70e531a5-0630-417b-b9ef-35dd81229269"
+        },
+        {
+          "id": 37,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.12.0\"}},\"jsonrpc\":\"2.0\",\"id\":0}\n\n"
+        },
+        {
+          "id": 38,
+          "event": "request",
+          "method": "POST",
+          "session": "70e531a5-0630-417b-b9ef-35dd81229269",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 38,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 39,
+          "event": "request",
+          "method": "GET",
+          "session": "70e531a5-0630-417b-b9ef-35dd81229269",
+          "body": ""
+        },
+        {
+          "id": 40,
+          "event": "request",
+          "method": "POST",
+          "session": "70e531a5-0630-417b-b9ef-35dd81229269",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":0},\"arguments\":{\"activation\":\"after_response\"},\"name\":\"session_loss\"}}"
+        },
+        {
+          "id": 40,
+          "event": "response",
+          "status": 200,
+          "session": "70e531a5-0630-417b-b9ef-35dd81229269"
+        },
+        {
+          "id": 40,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 39,
+          "event": "response",
+          "status": 200,
+          "session": "70e531a5-0630-417b-b9ef-35dd81229269"
+        },
+        {
+          "id": 41,
+          "event": "request",
+          "method": "POST",
+          "session": "70e531a5-0630-417b-b9ef-35dd81229269",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":1},\"name\":\"ping\"}}"
+        },
+        {
+          "id": 41,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 41,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 42,
+          "event": "request",
+          "method": "DELETE",
+          "session": "70e531a5-0630-417b-b9ef-35dd81229269",
+          "body": ""
+        },
+        {
+          "id": 42,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 42,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 43,
+          "event": "request",
+          "method": "POST",
+          "session": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"capabilities\":{},\"clientInfo\":{\"name\":\"rmcp\",\"version\":\"3.4.0\"},\"protocolVersion\":\"2025-11-25\"}}"
+        },
+        {
+          "id": 43,
+          "event": "response",
+          "status": 200,
+          "session": "5e909426-22d9-43fa-801a-5a936b193b30"
+        },
+        {
+          "id": 43,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"protocolVersion\":\"2025-11-25\",\"capabilities\":{\"tools\":{\"listChanged\":true}},\"serverInfo\":{\"name\":\"mcp-failure-lab\",\"version\":\"0.12.0\"}},\"jsonrpc\":\"2.0\",\"id\":0}\n\n"
+        },
+        {
+          "id": 44,
+          "event": "request",
+          "method": "POST",
+          "session": "5e909426-22d9-43fa-801a-5a936b193b30",
+          "body": "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"
+        },
+        {
+          "id": 44,
+          "event": "response",
+          "status": 202,
+          "session": null
+        },
+        {
+          "id": 45,
+          "event": "request",
+          "method": "GET",
+          "session": "5e909426-22d9-43fa-801a-5a936b193b30",
+          "body": ""
+        },
+        {
+          "id": 46,
+          "event": "request",
+          "method": "POST",
+          "session": "5e909426-22d9-43fa-801a-5a936b193b30",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":0},\"arguments\":{\"activation\":\"after_response\"},\"name\":\"session_loss\"}}"
+        },
+        {
+          "id": 46,
+          "event": "response",
+          "status": 200,
+          "session": "5e909426-22d9-43fa-801a-5a936b193b30"
+        },
+        {
+          "id": 46,
+          "event": "data",
+          "body": "event: message\ndata: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"session loss activated after_response\"}]},\"jsonrpc\":\"2.0\",\"id\":1}\n\n"
+        },
+        {
+          "id": 45,
+          "event": "response",
+          "status": 200,
+          "session": "5e909426-22d9-43fa-801a-5a936b193b30"
+        },
+        {
+          "id": 47,
+          "event": "request",
+          "method": "POST",
+          "session": "5e909426-22d9-43fa-801a-5a936b193b30",
+          "body": "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"_meta\":{\"progressToken\":1},\"name\":\"ping\"}}"
+        },
+        {
+          "id": 47,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 47,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        },
+        {
+          "id": 48,
+          "event": "request",
+          "method": "DELETE",
+          "session": "5e909426-22d9-43fa-801a-5a936b193b30",
+          "body": ""
+        },
+        {
+          "id": 48,
+          "event": "response",
+          "status": 404,
+          "session": null
+        },
+        {
+          "id": 48,
+          "event": "data",
+          "body": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32001,\"message\":\"Session not found\"},\"id\":null}"
+        }
+      ]
+    }
+  ]
+}

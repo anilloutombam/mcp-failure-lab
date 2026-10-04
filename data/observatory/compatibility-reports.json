@@ -1028,6 +1028,3504 @@
           "reportedAt": "2026-10-02T12:43:12Z"
         }
       ]
+    },
+    {
+      "id": "failure-lab-0.12.0-typescript-sdk",
+      "testedOn": "2026-10-04",
+      "sourceUrl": "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/v0.12.0.md",
+      "implementation": {
+        "name": "TypeScript MCP SDK",
+        "slug": "typescript-sdk",
+        "version": "1.30.1",
+        "kind": "client",
+        "repositoryUrl": "https://github.com/modelcontextprotocol/typescript-sdk"
+      },
+      "outcomes": [
+        {
+          "scenario": ["Baseline", "baseline", "baseline"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              141,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              147,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              146,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              47,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              6,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              6,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Delay", "delay", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              151,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              151,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              151,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              42,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              36,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              37,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Delay Timeout", "delay-timeout", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              204,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              202,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              202,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              90,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              86,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              88,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Hang Timeout", "hang-timeout", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              205,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              206,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              206,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              88,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              87,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              91,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Duplicate", "duplicate", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              250,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              176,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              177,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              60,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              59,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              60,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Liveness Success", "liveness-success", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              157,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              156,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              157,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              42,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              41,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              43,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Liveness Rejected", "liveness-rejected", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              132,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              132,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              132,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              17,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              22,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              22,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Liveness Timeout", "liveness-timeout", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              215,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              214,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              212,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              98,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              101,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              101,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Malformed Missing", "malformed-missing", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              227,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              228,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              226,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              108,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              108,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              108,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Malformed Version", "malformed-version", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              229,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              226,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              230,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              108,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              110,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              107,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Malformed Both", "malformed-both", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              227,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              228,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              230,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              108,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              112,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              106,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Late Cancellation", "late-cancellation", "lifecycle"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              356,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              367,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              369,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Session Loss", "session-loss", "lifecycle"],
+          "runs": [
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              16,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              20,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              9,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Disconnect", "disconnect", "lifecycle"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              245,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              240,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              239,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              28,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              11,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              7,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ]
+          ]
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "failure-lab-0.12.0-python-sdk",
+      "testedOn": "2026-10-04",
+      "sourceUrl": "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/v0.12.0.md",
+      "implementation": {
+        "name": "Python MCP SDK",
+        "slug": "python-sdk",
+        "version": "2.2.0",
+        "kind": "client",
+        "repositoryUrl": "https://github.com/modelcontextprotocol/python-sdk"
+      },
+      "outcomes": [
+        {
+          "scenario": ["Baseline", "baseline", "baseline"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              176,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              147,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              148,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              74,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              6,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              7,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Delay", "delay", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              182,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              160,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              163,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              44,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              40,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              39,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Delay Timeout", "delay-timeout", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              213,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              212,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              213,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              95,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              91,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              90,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Hang Timeout", "hang-timeout", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              219,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              214,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              219,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              95,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              93,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              94,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Duplicate", "duplicate", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              186,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              187,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              188,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              64,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              63,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              63,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Liveness Success", "liveness-success", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              168,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              167,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              168,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              49,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              47,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              46,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Liveness Rejected", "liveness-rejected", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              146,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              146,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              144,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              24,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              24,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              23,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Liveness Timeout", "liveness-timeout", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              225,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              225,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              225,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              106,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              105,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              104,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Malformed Missing", "malformed-missing", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              293,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              293,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              292,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              16,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              12,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              12,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Malformed Version", "malformed-version", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              295,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              297,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              297,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              10,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              9,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              10,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Malformed Both", "malformed-both", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              143,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              143,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              141,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              9,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              9,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              9,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Late Cancellation", "late-cancellation", "lifecycle"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              365,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              365,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              367,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Session Loss", "session-loss", "lifecycle"],
+          "runs": [
+            [
+              "http-1",
+              "streamable-http",
+              "failed",
+              9,
+              "Original activation assertion failed. Controlled traces on 0.11.0 and 0.12.0 show successful tools/call followed by an internal tools/list schema lookup returning 404. Prelisting tools restores activation completion. No server regression established."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "failed",
+              10,
+              "Original activation assertion failed. Controlled traces on 0.11.0 and 0.12.0 show successful tools/call followed by an internal tools/list schema lookup returning 404. Prelisting tools restores activation completion. No server regression established."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "failed",
+              9,
+              "Original activation assertion failed. Controlled traces on 0.11.0 and 0.12.0 show successful tools/call followed by an internal tools/list schema lookup returning 404. Prelisting tools restores activation completion. No server regression established."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Disconnect", "disconnect", "lifecycle"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              299,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              254,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              256,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              59,
+              "HTTP disconnect surfaced a RemoteProtocolError through the session context; a fresh client completed ping."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              12,
+              "HTTP disconnect surfaced a RemoteProtocolError through the session context; a fresh client completed ping."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              12,
+              "HTTP disconnect surfaced a RemoteProtocolError through the session context; a fresh client completed ping."
+            ]
+          ]
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "failure-lab-0.12.0-go-sdk",
+      "testedOn": "2026-10-04",
+      "sourceUrl": "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/v0.12.0.md",
+      "implementation": {
+        "name": "Go MCP SDK",
+        "slug": "go-sdk",
+        "version": "1.7.0",
+        "kind": "client",
+        "repositoryUrl": "https://github.com/modelcontextprotocol/go-sdk"
+      },
+      "outcomes": [
+        {
+          "scenario": ["Baseline", "baseline", "baseline"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              156,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              162,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              145,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              27,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              2,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              3,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Delay", "delay", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              155,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              169,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              156,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              36,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              34,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              35,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Delay Timeout", "delay-timeout", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              205,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              215,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              213,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              88,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              84,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              84,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Hang Timeout", "hang-timeout", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              207,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              234,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              210,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              85,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              84,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              86,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Duplicate", "duplicate", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              177,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              178,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              183,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              55,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              55,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              55,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Liveness", "liveness", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              134,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              136,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              139,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              16,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              18,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              14,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Malformed Missing", "malformed-missing", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "failed",
+              117,
+              "connection closed: calling \"tools/call\": client is closing: invalid message version tag \"\"; expected \"2.0\""
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "failed",
+              120,
+              "connection closed: calling \"tools/call\": client is closing: invalid message version tag \"\"; expected \"2.0\""
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "failed",
+              128,
+              "connection closed: calling \"tools/call\": client is closing: invalid message version tag \"\"; expected \"2.0\""
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "failed",
+              2,
+              "connection closed: calling \"tools/call\": client is closing: sending \"tools/call\": failed to decode response: invalid message version tag \"\"; expected \"2.0\""
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "failed",
+              1,
+              "connection closed: calling \"tools/call\": client is closing: sending \"tools/call\": failed to decode response: invalid message version tag \"\"; expected \"2.0\""
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "failed",
+              1,
+              "connection closed: calling \"tools/call\": client is closing: sending \"tools/call\": failed to decode response: invalid message version tag \"\"; expected \"2.0\""
+            ]
+          ]
+        },
+        {
+          "scenario": ["Malformed Version", "malformed-version", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "failed",
+              118,
+              "connection closed: calling \"tools/call\": client is closing: invalid message version tag \"1.0\"; expected \"2.0\""
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "failed",
+              118,
+              "connection closed: calling \"tools/call\": client is closing: invalid message version tag \"1.0\"; expected \"2.0\""
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "failed",
+              126,
+              "connection closed: calling \"tools/call\": client is closing: invalid message version tag \"1.0\"; expected \"2.0\""
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "failed",
+              2,
+              "connection closed: calling \"tools/call\": client is closing: sending \"tools/call\": failed to decode response: invalid message version tag \"1.0\"; expected \"2.0\""
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "failed",
+              2,
+              "connection closed: calling \"tools/call\": client is closing: sending \"tools/call\": failed to decode response: invalid message version tag \"1.0\"; expected \"2.0\""
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "failed",
+              1,
+              "connection closed: calling \"tools/call\": client is closing: sending \"tools/call\": failed to decode response: invalid message version tag \"1.0\"; expected \"2.0\""
+            ]
+          ]
+        },
+        {
+          "scenario": ["Malformed Both", "malformed-both", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              120,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              119,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              123,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              5,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              3,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              4,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Late Cancellation", "late-cancellation", "lifecycle"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              354,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              356,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              351,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Disconnect", "disconnect", "lifecycle"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              286,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              239,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              243,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              24,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              6,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              2,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Session Loss Availability", "session-loss-availability", "baseline"],
+          "runs": [
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              3,
+              "session_loss was absent on the modern HTTP connection."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              2,
+              "session_loss was absent on the modern HTTP connection."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              1,
+              "session_loss was absent on the modern HTTP connection."
+            ]
+          ]
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "failure-lab-0.12.0-rust-sdk",
+      "testedOn": "2026-10-04",
+      "sourceUrl": "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/v0.12.0.md",
+      "implementation": {
+        "name": "Rust MCP SDK",
+        "slug": "rust-sdk",
+        "version": "3.4.0",
+        "kind": "client",
+        "repositoryUrl": "https://github.com/modelcontextprotocol/rust-sdk"
+      },
+      "outcomes": [
+        {
+          "scenario": ["Baseline", "baseline", "baseline"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              182,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              153,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              148,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              46,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              3,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              3,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Delay", "delay", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              177,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              155,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              154,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              40,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              35,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              35,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Delay Timeout", "delay-timeout", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              225,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              206,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              204,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              87,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              87,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              87,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Hang Timeout", "hang-timeout", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              208,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              212,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              210,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              88,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              88,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              88,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Duplicate", "duplicate", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              184,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              187,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              180,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              61,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              60,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              60,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Liveness Legacy", "liveness-legacy", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              159,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              158,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              158,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              40,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              43,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              42,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": [
+            "Requested Modern Liveness Fallback",
+            "requested-modern-liveness-fallback",
+            "protocol"
+          ],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              160,
+              "Requested modern config negotiated 2025-11-25. Legacy protocol ping and follow-up succeeded; not modern coverage."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              156,
+              "Requested modern config negotiated 2025-11-25. Legacy protocol ping and follow-up succeeded; not modern coverage."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              156,
+              "Requested modern config negotiated 2025-11-25. Legacy protocol ping and follow-up succeeded; not modern coverage."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              39,
+              "Requested modern config negotiated 2025-11-25. Legacy protocol ping and follow-up succeeded; not modern coverage."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              41,
+              "Requested modern config negotiated 2025-11-25. Legacy protocol ping and follow-up succeeded; not modern coverage."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              42,
+              "Requested modern config negotiated 2025-11-25. Legacy protocol ping and follow-up succeeded; not modern coverage."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Malformed Missing", "malformed-missing", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              327,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              328,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              327,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              5,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              7,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              6,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Malformed Version", "malformed-version", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              341,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              349,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              346,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              5,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              6,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              4,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Malformed Both", "malformed-both", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "failed",
+              140,
+              "fault unexpectedly succeeded: {\"content\":[{\"text\":\"{\\\"status\\\":\\\"fault-activated\\\",\\\"variant\\\":\\\"result-with-error\\\"}\",\"type\":\"text\"}]}"
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "failed",
+              141,
+              "fault unexpectedly succeeded: {\"content\":[{\"text\":\"{\\\"status\\\":\\\"fault-activated\\\",\\\"variant\\\":\\\"result-with-error\\\"}\",\"type\":\"text\"}]}"
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "failed",
+              143,
+              "fault unexpectedly succeeded: {\"content\":[{\"text\":\"{\\\"status\\\":\\\"fault-activated\\\",\\\"variant\\\":\\\"result-with-error\\\"}\",\"type\":\"text\"}]}"
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "failed",
+              3,
+              "fault unexpectedly succeeded: {\"content\":[{\"text\":\"{\\\"status\\\":\\\"fault-activated\\\",\\\"variant\\\":\\\"result-with-error\\\"}\",\"type\":\"text\"}]}"
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "failed",
+              4,
+              "fault unexpectedly succeeded: {\"content\":[{\"text\":\"{\\\"status\\\":\\\"fault-activated\\\",\\\"variant\\\":\\\"result-with-error\\\"}\",\"type\":\"text\"}]}"
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "failed",
+              3,
+              "fault unexpectedly succeeded: {\"content\":[{\"text\":\"{\\\"status\\\":\\\"fault-activated\\\",\\\"variant\\\":\\\"result-with-error\\\"}\",\"type\":\"text\"}]}"
+            ]
+          ]
+        },
+        {
+          "scenario": ["Late Cancellation", "late-cancellation", "lifecycle"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              361,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              363,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              362,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Session Loss", "session-loss", "lifecycle"],
+          "runs": [
+            [
+              "http-1",
+              "streamable-http",
+              "failed",
+              5,
+              "Original rejection assertion failed. Controlled traces show session expiry (404), new-session initialization, and successful ping retry. Disabling reinit_on_expired_session returns SessionExpired. Harness policy mismatch, not an upstream defect."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "failed",
+              9,
+              "Original rejection assertion failed. Controlled traces show session expiry (404), new-session initialization, and successful ping retry. Disabling reinit_on_expired_session returns SessionExpired. Harness policy mismatch, not an upstream defect."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "failed",
+              5,
+              "Original rejection assertion failed. Controlled traces show session expiry (404), new-session initialization, and successful ping retry. Disabling reinit_on_expired_session returns SessionExpired. Harness policy mismatch, not an upstream defect."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Disconnect", "disconnect", "lifecycle"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              271,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              239,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              237,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              28,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              7,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              5,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ]
+          ]
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "failure-lab-0.12.0-csharp-sdk",
+      "testedOn": "2026-10-04",
+      "sourceUrl": "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/v0.12.0.md",
+      "implementation": {
+        "name": "C# MCP SDK",
+        "slug": "csharp-sdk",
+        "version": "2.2.0",
+        "kind": "client",
+        "repositoryUrl": "https://github.com/modelcontextprotocol/csharp-sdk"
+      },
+      "outcomes": [
+        {
+          "scenario": ["Baseline", "baseline", "baseline"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              726,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              669,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              674,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              65,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              3,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              2,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Delay", "delay", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              712,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              706,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              696,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              38,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              35,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              33,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Delay Timeout", "delay-timeout", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              761,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              754,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              775,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              87,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              84,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              85,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Hang Timeout", "hang-timeout", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              772,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              752,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              763,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              86,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              84,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              84,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Duplicate", "duplicate", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              723,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              724,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              720,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              58,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              54,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              54,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Liveness Legacy", "liveness-legacy", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              709,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              795,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              707,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              40,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              33,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              36,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Liveness Modern", "liveness-modern", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              697,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              700,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              686,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              25,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              13,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              14,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Malformed Missing", "malformed-missing", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              874,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              874,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              873,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              4,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              2,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              2,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Malformed Version", "malformed-version", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              882,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              876,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              877,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              3,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              2,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              3,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Malformed Both", "malformed-both", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              676,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              674,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              671,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              3,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              2,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              2,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Late Cancellation", "late-cancellation", "lifecycle"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              909,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              909,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              906,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Session Loss", "session-loss", "lifecycle"],
+          "runs": [
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              9,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              6,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              5,
+              "Primary expectation and follow-up check completed; see report for scenario-specific scope."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Disconnect", "disconnect", "lifecycle"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              862,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              798,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              802,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              66,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              7,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              5,
+              "Disconnect rejected the request; a fresh client completed ping."
+            ]
+          ]
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "failure-lab-0.12.0-java-sdk",
+      "testedOn": "2026-10-04",
+      "sourceUrl": "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/v0.12.0.md",
+      "implementation": {
+        "name": "Java MCP SDK",
+        "slug": "java-sdk",
+        "version": "2.0.1",
+        "kind": "client",
+        "repositoryUrl": "https://github.com/modelcontextprotocol/java-sdk"
+      },
+      "outcomes": [
+        {
+          "scenario": ["Protocol Liveness", "protocol-liveness", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              1040,
+              "Protocol ping succeeded and follow-up ping completed. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              897,
+              "Protocol ping succeeded and follow-up ping completed. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              920,
+              "Protocol ping succeeded and follow-up ping completed. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              366,
+              "Protocol ping succeeded and follow-up ping completed. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              223,
+              "Protocol ping succeeded and follow-up ping completed. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              224,
+              "Protocol ping succeeded and follow-up ping completed. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Baseline", "baseline", "baseline"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              635,
+              "Initialized, listed 8 tools, and completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              605,
+              "Initialized, listed 8 tools, and completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              608,
+              "Initialized, listed 8 tools, and completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              21,
+              "Initialized, listed 8 tools, and completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              16,
+              "Initialized, listed 8 tools, and completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              19,
+              "Initialized, listed 8 tools, and completed ping. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Bounded Delay", "bounded-delay", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              858,
+              "A 250 ms delay completed successfully. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              837,
+              "A 250 ms delay completed successfully. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              916,
+              "A 250 ms delay completed successfully. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              270,
+              "A 250 ms delay completed successfully. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              265,
+              "A 250 ms delay completed successfully. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              268,
+              "A 250 ms delay completed successfully. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Timeout Recovery", "timeout-recovery", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              1663,
+              "The delayed call timed out and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              1690,
+              "The delayed call timed out and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              1614,
+              "The delayed call timed out and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              1021,
+              "The delayed call timed out and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              1019,
+              "The delayed call timed out and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              1017,
+              "The delayed call timed out and the same client completed ping. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Duplicate Response Recovery", "duplicate-response-recovery", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              895,
+              "The first duplicate response result was accepted and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              733,
+              "The first duplicate response result was accepted and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              745,
+              "The first duplicate response result was accepted and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              122,
+              "The first duplicate response result was accepted and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              128,
+              "The first duplicate response result was accepted and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              124,
+              "The first duplicate response result was accepted and the same client completed ping. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Missing Jsonrpc Recovery", "missing-jsonrpc-recovery", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "failed",
+              4638,
+              "AssertionError: Same-client ping failed after malformed response"
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "failed",
+              4730,
+              "AssertionError: Same-client ping failed after malformed response"
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "failed",
+              4733,
+              "AssertionError: Same-client ping failed after malformed response"
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              20,
+              "The malformed response was rejected and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              15,
+              "The malformed response was rejected and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              14,
+              "The malformed response was rejected and the same client completed ping. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": [
+            "Invalid Jsonrpc Version Recovery",
+            "invalid-jsonrpc-version-recovery",
+            "protocol"
+          ],
+          "runs": [
+            ["stdio-1", "stdio", "failed", 714, "AssertionError: Malformed response was accepted"],
+            ["stdio-2", "stdio", "failed", 705, "AssertionError: Malformed response was accepted"],
+            ["stdio-3", "stdio", "failed", 704, "AssertionError: Malformed response was accepted"],
+            [
+              "http-1",
+              "streamable-http",
+              "failed",
+              11,
+              "AssertionError: Malformed response was accepted"
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "failed",
+              11,
+              "AssertionError: Malformed response was accepted"
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "failed",
+              11,
+              "AssertionError: Malformed response was accepted"
+            ]
+          ]
+        },
+        {
+          "scenario": ["Result With Error Recovery", "result-with-error-recovery", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "failed",
+              4608,
+              "AssertionError: Same-client ping failed after malformed response"
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "failed",
+              4675,
+              "AssertionError: Same-client ping failed after malformed response"
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "failed",
+              4615,
+              "AssertionError: Same-client ping failed after malformed response"
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              35,
+              "The malformed response was rejected and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              10,
+              "The malformed response was rejected and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              9,
+              "The malformed response was rejected and the same client completed ping. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Disconnect Reconnect", "disconnect-reconnect", "lifecycle"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              5293,
+              "The forced disconnect was observed; same-client recovery was unavailable and a fresh client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              5438,
+              "The forced disconnect was observed; same-client recovery was unavailable and a fresh client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              5537,
+              "The forced disconnect was observed; same-client recovery was unavailable and a fresh client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              15,
+              "The forced disconnect was observed; same-client recovery was successful and a fresh client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              44,
+              "The forced disconnect was observed; same-client recovery was successful and a fresh client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              12,
+              "The forced disconnect was observed; same-client recovery was successful and a fresh client completed ping. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": [
+            "Response After Cancellation Recovery",
+            "response-after-cancellation-recovery",
+            "lifecycle"
+          ],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              2818,
+              "The request was cancelled, the late response settled, and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              2829,
+              "The request was cancelled, the late response settled, and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              2961,
+              "The request was cancelled, the late response settled, and the same client completed ping. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Hang Timeout Recovery", "hang-timeout-recovery", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              1812,
+              "Hang timed out and same-client ping completed. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              1612,
+              "Hang timed out and same-client ping completed. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              1628,
+              "Hang timed out and same-client ping completed. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              1107,
+              "Hang timed out and same-client ping completed. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              1020,
+              "Hang timed out and same-client ping completed. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              1017,
+              "Hang timed out and same-client ping completed. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Session Loss After Response", "session-loss-after-response", "lifecycle"],
+          "runs": [
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              37,
+              "Lost session rejected the next request; a fresh client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              29,
+              "Lost session rejected the next request; a fresh client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              47,
+              "Lost session rejected the next request; a fresh client completed ping. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        }
+      ],
+      "findings": []
     }
   ]
 }
