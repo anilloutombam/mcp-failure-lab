@@ -32,6 +32,22 @@ def call(client, name, arguments = {})
   client.call_tool(name: name, arguments: arguments)
 end
 
+def cancel_call(client, name)
+  cancellation = MCP::Cancellation.new
+  canceller = Thread.new do
+    sleep 0.25
+    cancellation.cancel(reason: "compatibility recovery check")
+  end
+  begin
+    client.call_tool(name: name, arguments: {}, cancellation: cancellation)
+    raise "Cancelled call unexpectedly returned"
+  rescue MCP::CancelledError
+    # Cancellation must surface as the SDK's cancellation error.
+  ensure
+    canceller.join
+  end
+end
+
 def execute(run, transport, scenario, timeout_seconds: 5)
   started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
   client = nil
@@ -45,8 +61,9 @@ def execute(run, transport, scenario, timeout_seconds: 5)
       protocol_version: "2025-11-25",
       mode: :legacy,
     )
+    protocol_version = client.protocol_version
     observation = yield(client)
-    observation = "#{observation} Negotiated protocol #{client.protocol_version}."
+    observation = "#{observation} Negotiated protocol #{protocol_version}."
     passed = true
   rescue StandardError => error
     observation = "#{error.class}: #{error.message}"
@@ -81,6 +98,59 @@ def run_matrix(run, transport)
     sleep 0.1
     call(client, "ping")
     "The primary response was accepted and the same client completed ping."
+  end
+
+  execute(run, transport, "hang-cancellation-recovery") do |client|
+    cancel_call(client, "hang")
+    call(client, "ping")
+    "The hanging call was cancelled and the same client completed ping."
+  end
+
+  if transport == "stdio"
+    execute(run, transport, "response-after-cancellation-recovery") do |client|
+      cancel_call(client, "response_after_cancellation")
+      sleep 1
+      call(client, "ping")
+      "Cancellation raised CancelledError; after the late response, the same client completed ping."
+    end
+  end
+
+  execute(run, transport, "protocol-ping-liveness") do |client|
+    response = call(client, "protocol_ping_liveness", {
+      pingAfterMs: 100, livenessTimeoutMs: 1000, completionDelayMs: 100,
+      closeOnFailure: false,
+    })
+    diagnostic = JSON.parse(response.dig("result", "content", 0, "text"))
+    outcome = diagnostic.dig("protocolPing", "outcome")
+    raise "Protocol ping outcome: #{outcome}" unless outcome == "success"
+
+    call(client, "ping")
+    "The server's protocol ping succeeded and the same client completed tool ping."
+  end
+
+  if transport == "streamable-http"
+    execute(run, transport, "session-loss-after-response") do |client|
+      call(client, "session_loss", { activation: "after_response" })
+      rejected = false
+      begin
+        call(client, "ping")
+      rescue StandardError
+        rejected = true
+      end
+      raise "Lost session unexpectedly accepted ping" unless rejected
+
+      fresh_client, fresh_adapter = client_for(transport, 5)
+      begin
+        fresh_client.connect(
+          client_info: { name: "mcp-failure-lab-ruby", version: "1.0.0" },
+          protocol_version: "2025-11-25", mode: :legacy,
+        )
+        call(fresh_client, "ping")
+      ensure
+        fresh_adapter.close
+      end
+      "The lost session rejected ping and a fresh client completed ping."
+    end
   end
 
   %w[missing-jsonrpc invalid-jsonrpc-version result-with-error].each do |variant|
