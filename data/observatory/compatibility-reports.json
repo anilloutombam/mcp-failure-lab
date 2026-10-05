@@ -4526,6 +4526,480 @@
         }
       ],
       "findings": []
+    },
+    {
+      "id": "official-ruby-sdk-1.6.1",
+      "testedOn": "2026-10-05",
+      "sourceUrl": "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/ruby-sdk-1.6.1.md",
+      "implementation": {
+        "name": "Ruby MCP SDK",
+        "slug": "ruby-sdk",
+        "version": "1.6.1",
+        "kind": "client",
+        "repositoryUrl": "https://github.com/modelcontextprotocol/ruby-sdk"
+      },
+      "outcomes": [
+        {
+          "scenario": ["Baseline", "baseline", "baseline"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              575,
+              "Initialized, listed 8 tools, and completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              511,
+              "Initialized, listed 8 tools, and completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              699,
+              "Initialized, listed 8 tools, and completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              31,
+              "Initialized, listed 8 tools, and completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              3,
+              "Initialized, listed 8 tools, and completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              8,
+              "Initialized, listed 8 tools, and completed ping. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Bounded Delay", "bounded-delay", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              787,
+              "A 250 ms delay and same-client ping completed. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              825,
+              "A 250 ms delay and same-client ping completed. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              847,
+              "A 250 ms delay and same-client ping completed. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              269,
+              "A 250 ms delay and same-client ping completed. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              265,
+              "A 250 ms delay and same-client ping completed. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              268,
+              "A 250 ms delay and same-client ping completed. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Duplicate Response Recovery", "duplicate-response-recovery", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              624,
+              "The primary response was accepted and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              619,
+              "The primary response was accepted and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              674,
+              "The primary response was accepted and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              123,
+              "The primary response was accepted and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              113,
+              "The primary response was accepted and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              117,
+              "The primary response was accepted and the same client completed ping. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Hang Cancellation Recovery", "hang-cancellation-recovery", "lifecycle"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              759,
+              "The hanging call was cancelled and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              827,
+              "The hanging call was cancelled and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              755,
+              "The hanging call was cancelled and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              259,
+              "The hanging call was cancelled and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              270,
+              "The hanging call was cancelled and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              268,
+              "The hanging call was cancelled and the same client completed ping. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": [
+            "Response After Cancellation Recovery",
+            "response-after-cancellation-recovery",
+            "lifecycle"
+          ],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              1830,
+              "Cancellation raised CancelledError; after the late response, the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              1830,
+              "Cancellation raised CancelledError; after the late response, the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              1830,
+              "Cancellation raised CancelledError; after the late response, the same client completed ping. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Protocol Ping Liveness", "protocol-ping-liveness", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              714,
+              "The server's protocol ping succeeded and the same client completed tool ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              822,
+              "The server's protocol ping succeeded and the same client completed tool ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              722,
+              "The server's protocol ping succeeded and the same client completed tool ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              216,
+              "The server's protocol ping succeeded and the same client completed tool ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              218,
+              "The server's protocol ping succeeded and the same client completed tool ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              226,
+              "The server's protocol ping succeeded and the same client completed tool ping. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Missing Jsonrpc Recovery", "missing-jsonrpc-recovery", "protocol"],
+          "runs": [
+            ["stdio-1", "stdio", "failed", 548, "RuntimeError: Malformed response was accepted"],
+            ["stdio-2", "stdio", "failed", 488, "RuntimeError: Malformed response was accepted"],
+            ["stdio-3", "stdio", "failed", 729, "RuntimeError: Malformed response was accepted"],
+            [
+              "http-1",
+              "streamable-http",
+              "failed",
+              3,
+              "RuntimeError: Malformed response was accepted"
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "failed",
+              2,
+              "RuntimeError: Malformed response was accepted"
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "failed",
+              7,
+              "RuntimeError: Malformed response was accepted"
+            ]
+          ]
+        },
+        {
+          "scenario": [
+            "Invalid Jsonrpc Version Recovery",
+            "invalid-jsonrpc-version-recovery",
+            "protocol"
+          ],
+          "runs": [
+            ["stdio-1", "stdio", "failed", 567, "RuntimeError: Malformed response was accepted"],
+            ["stdio-2", "stdio", "failed", 473, "RuntimeError: Malformed response was accepted"],
+            ["stdio-3", "stdio", "failed", 637, "RuntimeError: Malformed response was accepted"],
+            [
+              "http-1",
+              "streamable-http",
+              "failed",
+              3,
+              "RuntimeError: Malformed response was accepted"
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "failed",
+              2,
+              "RuntimeError: Malformed response was accepted"
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "failed",
+              12,
+              "RuntimeError: Malformed response was accepted"
+            ]
+          ]
+        },
+        {
+          "scenario": ["Result With Error Recovery", "result-with-error-recovery", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              544,
+              "The malformed response was rejected and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              542,
+              "The malformed response was rejected and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              497,
+              "The malformed response was rejected and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              3,
+              "The malformed response was rejected and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              3,
+              "The malformed response was rejected and the same client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              13,
+              "The malformed response was rejected and the same client completed ping. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Disconnect Reconnect", "disconnect-reconnect", "lifecycle"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              1068,
+              "The forced disconnect was observed and a fresh client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              1028,
+              "The forced disconnect was observed and a fresh client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              980,
+              "The forced disconnect was observed and a fresh client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              5,
+              "The forced disconnect was observed and a fresh client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              19,
+              "The forced disconnect was observed and a fresh client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              19,
+              "The forced disconnect was observed and a fresh client completed ping. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Session Loss After Response", "session-loss-after-response", "lifecycle"],
+          "runs": [
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              10,
+              "The lost session rejected ping and a fresh client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              6,
+              "The lost session rejected ping and a fresh client completed ping. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              14,
+              "The lost session rejected ping and a fresh client completed ping. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        }
+      ],
+      "findings": [
+        {
+          "id": "missing-or-invalid-jsonrpc-accepted",
+          "run": "missing-jsonrpc-recovery:stdio-1",
+          "statement": "Ruby MCP SDK 1.6.1 accepts tool responses missing jsonrpc or declaring jsonrpc \"1.0\" over stdio and Streamable HTTP in all three repeats.",
+          "category": "protocol-behavior",
+          "reportingStatus": "reported",
+          "repository": "modelcontextprotocol/ruby-sdk",
+          "issueNumber": 589,
+          "issueUrl": "https://github.com/modelcontextprotocol/ruby-sdk/issues/589",
+          "reportedAt": "2026-10-05T08:55:10Z"
+        }
+      ]
     }
   ]
 }

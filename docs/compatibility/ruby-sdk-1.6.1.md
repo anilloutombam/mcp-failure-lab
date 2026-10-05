@@ -42,7 +42,7 @@ Cancelling a hanging request after 250 ms raised `MCP::CancelledError`, and the 
 
 Server-initiated protocol ping succeeded on both transports with a 1,000 ms liveness deadline, followed by a successful tool `ping`. For HTTP session loss activated after the response, the next request failed and a fresh client completed `ping`.
 
-These observations require source review or a minimal reproducer before they should become reviewed Findings or upstream reports.
+The missing and invalid `jsonrpc` behavior was confirmed with a small reproducer and reported in [Ruby SDK #589](https://github.com/modelcontextprotocol/ruby-sdk/issues/589). All 60 measured runs and the linked finding are included in the [Observatory export](../../data/observatory/compatibility-reports.json).
 
 ## Reproduction
 

@@ -18,7 +18,7 @@ Published-package tests against independent MCP projects are documented separate
   cancellation checks using `mcp-failure-lab@0.11.0`.
 - [Official Ruby SDK 1.6.1](ruby-sdk-1.6.1.md) — stdio and Streamable HTTP baseline, delay,
   malformed-response validation, duplicate-response recovery, cancellation, protocol-ping
-  liveness, HTTP session loss, and reconnect checks.
+  liveness, HTTP session loss, and reconnect checks. All 60 runs and [Ruby SDK #589](https://github.com/modelcontextprotocol/ruby-sdk/issues/589) are included in the Observatory export.
 - [GitHub MCP Server 1.12.2](github-mcp-server-1.12.2.md) — hosted Streamable HTTP and local stdio
   authentication, tool allowlisting, repeated read-only calls, and lifecycle checks using
   `mcp-failure-lab@0.10.0`.
