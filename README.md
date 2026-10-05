@@ -45,6 +45,7 @@ Failure Lab makes those cases repeatable so you can check both the failed call a
 
 - [Python SDK #3522](https://github.com/modelcontextprotocol/python-sdk/issues/3522): Python `mcp` 2.2.0 stayed closed after an interrupted HTTP response, rejected the next request, and raised an `ExceptionGroup` during cleanup.
 - [Rust SDK #1283](https://github.com/modelcontextprotocol/rust-sdk/issues/1283): `rmcp` 3.4.0 accepted an invalid response containing both `result` and `error` over stdio and HTTP.
+- [Ruby SDK #589](https://github.com/modelcontextprotocol/ruby-sdk/issues/589): `mcp` 1.6.1 accepted responses missing `jsonrpc` or declaring `jsonrpc: "1.0"` over stdio and HTTP in all three repeats. The [Ruby report](docs/compatibility/ruby-sdk-1.6.1.md) records all 60 executions; the results and upstream finding are included in the Observatory export.
 - Java SDK 2.0.1 accepted `jsonrpc: "1.0"` over both transports ([#1156](https://github.com/modelcontextprotocol/java-sdk/issues/1156)). Over stdio, responses missing `jsonrpc` or containing both `result` and `error` left the next `ping` timing out ([#1157](https://github.com/modelcontextprotocol/java-sdk/issues/1157)). See the [Java report](docs/compatibility/java-sdk-2.0.1.md).
 - [Duplicate-response comparison](docs/compatibility/v0.10.0.md): all five tested SDKs completed the next `ping`. TypeScript reported the duplicate through its error callback; the other harnesses surfaced no call-level duplicate error.
 
