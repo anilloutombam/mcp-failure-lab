@@ -1,0 +1,17 @@
+{
+  "name": "late progress is ignored and the client remains usable",
+  "call": {
+    "tool": "invalid_progress",
+    "args": { "variant": "after-completion" }
+  },
+  "timeoutMs": 1000,
+  "expect": {
+    "outcome": "success",
+    "progressValues": []
+  },
+  "observe": {
+    "call": { "tool": "ping", "args": {} },
+    "timeoutMs": 1000,
+    "expect": { "outcome": "success" }
+  }
+}

@@ -11,7 +11,7 @@ import {
 import { isLegacyRequest, type McpHttpHandler } from "@modelcontextprotocol/server";
 import { isCanonicalHttpPath, isWildcardHost } from "./httpValidation.js";
 import { LegacyHttpSessions } from "./legacyHttpSessions.js";
-import { createResponseFaultHttpHandler } from "./malformedMessageHttp.js";
+import { createResponseFaultHttpHandler, type HttpResponseFaults } from "./malformedMessageHttp.js";
 import { createServer } from "./server.js";
 
 export interface HttpServerOptions {
@@ -65,34 +65,23 @@ export async function startHttpServer(options: HttpServerOptions): Promise<HttpS
   }
 
   const activeResponse = new AsyncLocalStorage<ServerResponse>();
-  const modernHandler = createResponseFaultHttpHandler(
-    (responseFaults) =>
-      createServer({
-        disconnect: async () => {
-          activeResponse.getStore()?.destroy();
-        },
-        malformedMessageFaults: responseFaults.malformedMessage,
-        duplicateResponseFaults: responseFaults.duplicateResponse,
-      }),
-    {
-      legacy: "reject",
-      onerror: (error) => console.error("Streamable HTTP request failed:", error),
-    },
-  );
-  const legacyStatelessHandler = createResponseFaultHttpHandler(
-    (responseFaults) =>
-      createServer({
-        disconnect: async () => {
-          activeResponse.getStore()?.destroy();
-        },
-        malformedMessageFaults: responseFaults.malformedMessage,
-        duplicateResponseFaults: responseFaults.duplicateResponse,
-      }),
-    {
-      legacy: "stateless",
-      onerror: (error) => console.error("Streamable HTTP request failed:", error),
-    },
-  );
+  const createFaultServer = (responseFaults: HttpResponseFaults) =>
+    createServer({
+      disconnect: async () => {
+        activeResponse.getStore()?.destroy();
+      },
+      malformedMessageFaults: responseFaults.malformedMessage,
+      duplicateResponseFaults: responseFaults.duplicateResponse,
+      invalidProgressFaults: responseFaults.invalidProgress,
+    });
+  const modernHandler = createResponseFaultHttpHandler(createFaultServer, {
+    legacy: "reject",
+    onerror: (error) => console.error("Streamable HTTP request failed:", error),
+  });
+  const legacyStatelessHandler = createResponseFaultHttpHandler(createFaultServer, {
+    legacy: "stateless",
+    onerror: (error) => console.error("Streamable HTTP request failed:", error),
+  });
   const legacySessions = new LegacyHttpSessions();
   const handler: McpHttpHandler = {
     fetch: async (request, requestOptions) => {

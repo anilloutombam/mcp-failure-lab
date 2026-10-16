@@ -1,6 +1,4 @@
 import {
-  isJSONRPCErrorResponse,
-  isJSONRPCResultResponse,
   type JSONRPCMessage,
   type McpServer,
   type RequestId,
@@ -8,6 +6,7 @@ import {
   type TransportSendOptions,
 } from "@modelcontextprotocol/server";
 import { z } from "zod";
+import { responseId } from "./responseMessage.js";
 
 export const MALFORMED_MESSAGE_VARIANTS = [
   "missing-jsonrpc",
@@ -108,12 +107,6 @@ export function registerMalformedMessageTool(
       };
     },
   );
-}
-
-function responseId(message: JSONRPCMessage): RequestId | undefined {
-  return isJSONRPCResultResponse(message) || isJSONRPCErrorResponse(message)
-    ? message.id
-    : undefined;
 }
 
 function corruptMessage(message: JSONRPCMessage, variant: MalformedMessageVariant): JSONRPCMessage {

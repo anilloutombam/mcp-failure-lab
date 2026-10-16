@@ -14,6 +14,7 @@ export interface JsonScenarioReport {
   failures: string[];
   result?: ScenarioResult["result"];
   error?: string;
+  progressValues?: number[];
   observer?: {
     outcome: ScenarioResult["outcome"];
     durationMs: number;
@@ -21,6 +22,7 @@ export interface JsonScenarioReport {
     failures: string[];
     result?: ScenarioResult["result"];
     error?: string;
+    progressValues?: number[];
   };
   execution?: ScenarioResult["execution"];
 }
@@ -43,6 +45,9 @@ export class ConsoleScenarioReporter implements ScenarioReporter {
         `Observer duration: ${result.observer.durationMs.toFixed(2)} ms`,
         `Observer assertions: ${result.observer.passed ? "passed" : "failed"}`,
       );
+    }
+    if (result.progressValues?.length) {
+      lines.push(`Progress values: ${result.progressValues.join(", ")}`);
     }
     if (result.execution !== undefined)
       lines.push(
@@ -74,6 +79,7 @@ export class JsonScenarioReporter implements ScenarioReporter {
       durationMs: result.durationMs,
       passed: result.passed,
       failures: [...result.failures],
+      ...(result.progressValues?.length ? { progressValues: result.progressValues } : {}),
       ...(result.execution === undefined ? {} : { execution: result.execution }),
       ...(result.result === undefined ? {} : { result: result.result }),
       ...(result.error === undefined ? {} : { error: errorMessage(result.error) }),
@@ -85,6 +91,9 @@ export class JsonScenarioReporter implements ScenarioReporter {
               durationMs: result.observer.durationMs,
               passed: result.observer.passed,
               failures: [...result.observer.failures],
+              ...(result.observer.progressValues?.length
+                ? { progressValues: result.observer.progressValues }
+                : {}),
               ...(result.observer.result === undefined ? {} : { result: result.observer.result }),
               ...(result.observer.error === undefined
                 ? {}
