@@ -46,6 +46,7 @@ const resultExpectationSchema = z
   .object({
     isError: z.boolean().optional(),
     textContains: z.string().optional(),
+    textBytes: z.number().int().nonnegative().optional(),
   })
   .strict();
 
@@ -93,6 +94,9 @@ function toScenarioExpectation(expectation: ValidatedExpectation): Scenario["exp
             ...(expectation.result.textContains === undefined
               ? {}
               : { textContains: expectation.result.textContains }),
+            ...(expectation.result.textBytes === undefined
+              ? {}
+              : { textBytes: expectation.result.textBytes }),
           },
         }),
   };

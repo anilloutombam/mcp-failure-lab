@@ -9,6 +9,7 @@ export const DEFAULT_SCENARIO_TIMEOUT_MS = 30_000;
 export interface ScenarioResultExpectation {
   isError?: boolean;
   textContains?: string;
+  textBytes?: number;
 }
 
 export interface ScenarioCall {
@@ -144,6 +145,17 @@ function evaluateExpectation(
     )
   ) {
     failures.push(`expected result text to contain "${expectedText}"`);
+  }
+
+  const expectedBytes = resultExpectation.textBytes;
+  if (expectedBytes !== undefined) {
+    const text = observation.result.content.find((content) => content.type === "text");
+    const actualBytes = text?.type === "text" ? Buffer.byteLength(text.text, "utf8") : undefined;
+    if (actualBytes !== expectedBytes) {
+      failures.push(
+        `expected result text to be ${expectedBytes} bytes, received ${actualBytes ?? "none"}`,
+      );
+    }
   }
 
   return failures;

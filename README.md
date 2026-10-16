@@ -119,12 +119,23 @@ The built-in server exposes these tools for testing client behavior:
 | `duplicate_response`          | Sends the same JSON-RPC response twice for one request       |
 | `response_after_cancellation` | Sends one late response for a cancelled stdio request        |
 | `session_loss`                | Invalidates the caller's legacy HTTP session                 |
+| `oversized_response`          | Returns a deterministic text payload up to 256 KiB           |
 
 Protocol `ping` is distinct from the `ping` tool. Built-in scenarios default to MCP `2026-07-28`;
 protocol liveness requires scenario `protocolVersion: "2025-11-25"`.
 Both public transports accept legacy clients.
 
 See the [fault tools reference](https://mcplab.dev/docs/fault-tools/) for timing bounds, activation, cancellation, cleanup, and transport limits.
+
+`oversized_response` accepts `sizeBytes` from 0 through 262,144. It generates only ASCII `x`
+characters, so the text size is exact in UTF-8 bytes and contains no external data. The cap
+applies on both stdio and HTTP. Choose a size below your client's configured response limit to
+check success, then a size above that limit (but no more than 262,144) to check client rejection.
+The included [64 KiB scenario](examples/scenarios/oversized-response.json) checks the exact
+returned text size and a follow-up request. The JSON-RPC and transport framing add bytes around
+the text, so a client's whole-message limit may trigger before `sizeBytes` reaches its threshold.
+The integration test confirms that a stdio client with a 4 KiB message limit accepts a 1 KiB
+payload and rejects an 8 KiB payload.
 
 ## How recovery testing works
 
