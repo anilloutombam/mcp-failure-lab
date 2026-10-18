@@ -9,6 +9,7 @@ import {
 import { registerMalformedMessageTool, type MalformedMessageFaults } from "./malformedMessage.js";
 import { registerPingTool, type Clock } from "./ping.js";
 import { registerOversizedResponseTool } from "./oversizedResponse.js";
+import { registerInvalidProgressTool, type InvalidProgressFaults } from "./invalidProgress.js";
 import {
   registerProtocolPingLivenessTool,
   type LivenessSleeper,
@@ -31,6 +32,7 @@ export interface ServerDependencies {
   sessionLoss?: SessionLossController;
   livenessSleeper?: LivenessSleeper;
   protocolPingRecorder?: ProtocolPingRecorder;
+  invalidProgressFaults?: InvalidProgressFaults;
 }
 
 export function createServer(dependencies: ServerDependencies = {}): McpServer {
@@ -41,6 +43,9 @@ export function createServer(dependencies: ServerDependencies = {}): McpServer {
 
   registerPingTool(server, dependencies.clock);
   registerOversizedResponseTool(server);
+  if (dependencies.invalidProgressFaults !== undefined) {
+    registerInvalidProgressTool(server, dependencies.invalidProgressFaults);
+  }
   registerProtocolPingLivenessTool(
     server,
     dependencies.disconnect,

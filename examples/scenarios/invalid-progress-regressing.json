@@ -1,0 +1,17 @@
+{
+  "name": "regressing progress leaves the client usable",
+  "call": {
+    "tool": "invalid_progress",
+    "args": { "variant": "regressing-progress" }
+  },
+  "timeoutMs": 1000,
+  "expect": {
+    "outcome": "success",
+    "progressValues": [2, 1]
+  },
+  "observe": {
+    "call": { "tool": "ping", "args": {} },
+    "timeoutMs": 1000,
+    "expect": { "outcome": "success" }
+  }
+}

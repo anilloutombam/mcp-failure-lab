@@ -15,6 +15,10 @@ import {
   RequestScopedMalformedMessageFaults,
   type MalformedMessageFaults,
 } from "./malformedMessage.js";
+import {
+  RequestScopedInvalidProgressFaults,
+  type InvalidProgressFaults,
+} from "./invalidProgress.js";
 import { createServer } from "./server.js";
 import type { SessionLossActivation, SessionLossController } from "./sessionLoss.js";
 
@@ -30,6 +34,7 @@ interface LegacySession {
   server: McpServer;
   malformedMessage: MalformedMessageFaults;
   duplicateResponse: DuplicateResponseFaults;
+  invalidProgress: InvalidProgressFaults;
   loss?: SessionLossActivation;
   lastActivity: number;
   activeRequests: number;
@@ -99,6 +104,7 @@ export class LegacyHttpSessions {
     });
     const malformedMessage = new RequestScopedMalformedMessageFaults();
     const duplicateResponse = new RequestScopedDuplicateResponseFaults();
+    const invalidProgress = new RequestScopedInvalidProgressFaults();
     const controller: SessionLossController = {
       lose: async (activation) => {
         if (session.loss !== undefined) throw new Error("Session loss is already active");
@@ -118,6 +124,7 @@ export class LegacyHttpSessions {
       },
       malformedMessageFaults: malformedMessage,
       duplicateResponseFaults: duplicateResponse,
+      invalidProgressFaults: invalidProgress,
       sessionLoss: controller,
     });
     session = {
@@ -125,6 +132,7 @@ export class LegacyHttpSessions {
       server,
       malformedMessage,
       duplicateResponse,
+      invalidProgress,
       lastActivity: this.now(),
       activeRequests: 0,
       closed: false,
@@ -162,6 +170,7 @@ export class LegacyHttpSessions {
         response,
         session.malformedMessage,
         session.duplicateResponse,
+        session.invalidProgress,
       );
     } catch (error) {
       this.finishRequest(session);
@@ -253,6 +262,7 @@ export class LegacyHttpSessions {
     if (id !== undefined) this.sessions.delete(id);
     session.malformedMessage.clear();
     session.duplicateResponse.clear();
+    session.invalidProgress.clear();
     await session.server.close();
   }
 }

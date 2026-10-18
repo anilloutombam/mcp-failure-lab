@@ -10,6 +10,7 @@ import {
   DuplicateResponseTransport,
   RequestScopedDuplicateResponseFaults,
 } from "./duplicateResponse.js";
+import { InvalidProgressTransport, RequestScopedInvalidProgressFaults } from "./invalidProgress.js";
 
 import {
   ConsoleScenarioReporter,
@@ -55,6 +56,7 @@ const expectationSchema = z
     outcome: z.enum(["success", "error", "timeout"]),
     maxDurationMs: z.number().nonnegative().optional(),
     result: resultExpectationSchema.optional(),
+    progressValues: z.array(z.number().finite().nonnegative()).max(16).optional(),
   })
   .strict();
 
@@ -99,6 +101,9 @@ function toScenarioExpectation(expectation: ValidatedExpectation): Scenario["exp
               : { textBytes: expectation.result.textBytes }),
           },
         }),
+    ...(expectation.progressValues === undefined
+      ? {}
+      : { progressValues: expectation.progressValues }),
   };
 }
 
@@ -222,7 +227,12 @@ export async function executeScenario(scenario: Scenario): Promise<ScenarioResul
   if (scenario.protocolVersion === "2025-11-25") {
     const malformedMessageFaults = new RequestScopedMalformedMessageFaults();
     const duplicateResponseFaults = new RequestScopedDuplicateResponseFaults();
-    const server = createServer({ malformedMessageFaults, duplicateResponseFaults });
+    const invalidProgressFaults = new RequestScopedInvalidProgressFaults();
+    const server = createServer({
+      malformedMessageFaults,
+      duplicateResponseFaults,
+      invalidProgressFaults,
+    });
     const client = new Client(
       { name: "mcp-failure-lab-scenario-client", version: "0.1.0" },
       { supportedProtocolVersions: ["2025-11-25"], versionNegotiation: { mode: "legacy" } },
@@ -230,9 +240,12 @@ export async function executeScenario(scenario: Scenario): Promise<ScenarioResul
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
     try {
       await server.connect(
-        new MalformedMessageTransport(
-          new DuplicateResponseTransport(serverTransport, duplicateResponseFaults),
-          malformedMessageFaults,
+        new InvalidProgressTransport(
+          new MalformedMessageTransport(
+            new DuplicateResponseTransport(serverTransport, duplicateResponseFaults),
+            malformedMessageFaults,
+          ),
+          invalidProgressFaults,
         ),
       );
       await client.connect(clientTransport);
@@ -250,6 +263,7 @@ export async function executeScenario(scenario: Scenario): Promise<ScenarioResul
       createServer({
         malformedMessageFaults: responseFaults.malformedMessage,
         duplicateResponseFaults: responseFaults.duplicateResponse,
+        invalidProgressFaults: responseFaults.invalidProgress,
       }),
     { legacy: "reject" },
   );
@@ -301,6 +315,19 @@ export async function runScenarioCommand(
     writeScenarioCommandError(
       "invalid_arguments",
       "scenario protocolVersion is supported only by the built-in runner; external targets negotiate their own protocol",
+      format,
+      output,
+    );
+    return 1;
+  }
+  if (
+    targetPath !== undefined &&
+    (scenario.expect.progressValues !== undefined ||
+      scenario.observe?.expect.progressValues !== undefined)
+  ) {
+    writeScenarioCommandError(
+      "invalid_arguments",
+      "progressValues assertions are supported only by the built-in runner; external adapters do not report progress notifications",
       format,
       output,
     );

@@ -115,6 +115,20 @@ describe("scenario files", () => {
     });
   });
 
+  it("loads progress value assertions", async () => {
+    const path = await writeScenario(
+      JSON.stringify({
+        name: "progress",
+        call: { tool: "ping", args: {} },
+        expect: { outcome: "success", progressValues: [2, 1] },
+      }),
+    );
+
+    await expect(loadScenario(path)).resolves.toMatchObject({
+      expect: { progressValues: [2, 1] },
+    });
+  });
+
   it("rejects invalid result expectation fields", async () => {
     const path = await writeScenario(
       JSON.stringify({
@@ -400,6 +414,24 @@ describe("scenario command", () => {
     ).resolves.toBe(0);
     expect(run).toHaveBeenCalledOnce();
     expect(output.writeError).not.toHaveBeenCalled();
+  });
+
+  it("rejects progress assertions for external adapters that cannot observe notifications", async () => {
+    const scenarioPath = await writeScenario(
+      JSON.stringify({
+        name: "external progress",
+        call: { tool: "invalid_progress", args: { variant: "unknown-token" } },
+        expect: { outcome: "success", progressValues: [] },
+      }),
+    );
+    const output = { write: vi.fn(), writeError: vi.fn() };
+
+    await expect(
+      runScenarioCommand(scenarioPath, "json", output, "unused-target.json"),
+    ).resolves.toBe(1);
+    expect(JSON.parse(output.write.mock.calls[0]?.[0] as string)).toMatchObject({
+      error: { code: "invalid_arguments", message: expect.stringContaining("progressValues") },
+    });
   });
 
   it("reports target configuration failures", async () => {

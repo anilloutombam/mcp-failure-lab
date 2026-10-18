@@ -71,6 +71,12 @@ describe("console scenario reporter", () => {
     );
   });
 
+  it("reports observed progress values", () => {
+    expect(consoleReporter.report(result({ progressValues: [2, 1] }))).toContain(
+      "Progress values: 2, 1",
+    );
+  });
+
   it("reports external adapter lifecycle diagnostics", () => {
     expect(
       consoleReporter.report(
@@ -109,6 +115,27 @@ describe("console scenario reporter", () => {
 });
 
 describe("JSON scenario reporter", () => {
+  it("serializes primary and observer progress values", () => {
+    const report = JSON.parse(
+      jsonReporter.report(
+        result({
+          progressValues: [2, 1],
+          observer: {
+            outcome: "success",
+            durationMs: 2,
+            passed: true,
+            failures: [],
+            progressValues: [1],
+          },
+        }),
+      ),
+    );
+    expect(report).toMatchObject({
+      progressValues: [2, 1],
+      observer: { progressValues: [1] },
+    });
+  });
+
   it("reports an errored result with a stable serializable error", () => {
     expect(
       JSON.parse(jsonReporter.report(result({ outcome: "error", error: new Error("closed") }))),

@@ -3,6 +3,7 @@ import { AsyncLocalStorage } from "node:async_hooks";
 import {
   createMcpHandler,
   type CreateMcpHandlerOptions,
+  type JSONRPCMessage,
   type McpHttpHandler,
   type McpServer,
 } from "@modelcontextprotocol/server";
@@ -15,10 +16,15 @@ import {
   RequestScopedDuplicateResponseFaults,
   type DuplicateResponseFaults,
 } from "./duplicateResponse.js";
+import {
+  RequestScopedInvalidProgressFaults,
+  type InvalidProgressFaults,
+} from "./invalidProgress.js";
 
 export interface HttpResponseFaults {
   malformedMessage: MalformedMessageFaults;
   duplicateResponse: DuplicateResponseFaults;
+  invalidProgress: InvalidProgressFaults;
 }
 
 export type ResponseFaultServerFactory = (faults: HttpResponseFaults) => McpServer;
@@ -44,6 +50,7 @@ export function createResponseFaultHttpHandler(
       const faults: HttpResponseFaults = {
         malformedMessage: new RequestScopedMalformedMessageFaults(),
         duplicateResponse: new RequestScopedDuplicateResponseFaults(),
+        invalidProgress: new RequestScopedInvalidProgressFaults(),
       };
       return requestFaults.run(faults, async () => {
         const response = await handler.fetch(request, requestOptions);
@@ -51,6 +58,7 @@ export function createResponseFaultHttpHandler(
           response,
           faults.malformedMessage,
           faults.duplicateResponse,
+          faults.invalidProgress,
         );
       });
     },
@@ -61,11 +69,12 @@ export async function applyMalformedMessageResponse(
   response: Response,
   faults: MalformedMessageFaults,
   duplicateFaults?: DuplicateResponseFaults,
+  progressFaults?: InvalidProgressFaults,
 ): Promise<Response> {
   if (response.headers.get("content-type")?.includes("text/event-stream") && response.body) {
     return replaceResponseBody(
       response,
-      transformSseResponse(response.body, faults, duplicateFaults),
+      transformSseResponse(response.body, faults, duplicateFaults, progressFaults),
     );
   }
   if (!response.headers.get("content-type")?.includes("application/json")) {
@@ -78,9 +87,8 @@ export async function applyMalformedMessageResponse(
   } catch {
     return response;
   }
-  const malformed = faults.apply(message);
-  const messages = duplicateFaults?.apply(malformed) ?? [malformed];
-  if (malformed === message && messages.length === 1) {
+  const messages = applyResponseFaults(message, faults, duplicateFaults, progressFaults);
+  if (messages.length === 1 && messages[0] === message) {
     return response;
   }
   if (messages.length === 1) return replaceResponseBody(response, JSON.stringify(messages[0]));
@@ -115,6 +123,7 @@ function transformSseResponse(
   body: ReadableStream<Uint8Array>,
   faults: MalformedMessageFaults,
   duplicateFaults?: DuplicateResponseFaults,
+  progressFaults?: InvalidProgressFaults,
 ): ReadableStream<Uint8Array> {
   let pending = "";
   const decoder = new TextDecoder();
@@ -137,7 +146,8 @@ function transformSseResponse(
           while (separator !== null) {
             const event = pending.slice(0, separator.index);
             controller.enqueue(
-              transformSseEvent(event, faults, duplicateFaults).join(separator[0]) + separator[0],
+              transformSseEvent(event, faults, duplicateFaults, progressFaults).join(separator[0]) +
+                separator[0],
             );
             pending = pending.slice(separator.index + separator[0].length);
             separator = SSE_EVENT_SEPARATOR.exec(pending);
@@ -150,6 +160,7 @@ function transformSseResponse(
           if (pending !== "") controller.enqueue(pending);
           faults.clear();
           duplicateFaults?.clear();
+          progressFaults?.clear();
         },
       }),
     )
@@ -160,6 +171,7 @@ function transformSseEvent(
   event: string,
   faults: MalformedMessageFaults,
   duplicateFaults?: DuplicateResponseFaults,
+  progressFaults?: InvalidProgressFaults,
 ): string[] {
   const lines = event.split(/\r\n|\r|\n/);
   const data = lines.filter((line) => line.startsWith("data:") || line === "data");
@@ -173,9 +185,8 @@ function transformSseEvent(
   } catch {
     return [event];
   }
-  const malformed = faults.apply(message);
-  const messages = duplicateFaults?.apply(malformed) ?? [malformed];
-  if (malformed === message && messages.length === 1) return [event];
+  const messages = applyResponseFaults(message, faults, duplicateFaults, progressFaults);
+  if (messages.length === 1 && messages[0] === message) return [event];
 
   let replaced = false;
   const template = lines
@@ -187,4 +198,17 @@ function transformSseEvent(
     })
     .join("\n");
   return messages.map((item) => template.replace("__RESPONSE__", JSON.stringify(item)));
+}
+
+function applyResponseFaults(
+  message: JSONRPCMessage,
+  malformedFaults: MalformedMessageFaults,
+  duplicateFaults?: DuplicateResponseFaults,
+  progressFaults?: InvalidProgressFaults,
+): JSONRPCMessage[] {
+  const malformed = malformedFaults.apply(message);
+  const messages = [...(duplicateFaults?.apply(malformed) ?? [malformed])];
+  const lateProgress = progressFaults?.takeAfterCompletion(message);
+  if (lateProgress !== undefined) messages.push(lateProgress);
+  return messages;
 }

@@ -21,6 +21,7 @@ export interface ScenarioExpectation {
   outcome: ScenarioOutcome;
   maxDurationMs?: number;
   result?: ScenarioResultExpectation;
+  progressValues?: number[];
 }
 
 export interface ScenarioObserver {
@@ -45,6 +46,7 @@ export interface ScenarioObservationResult {
   failures: string[];
   result?: CallToolResult;
   error?: unknown;
+  progressValues?: number[];
 }
 
 export interface ExternalExecutionDiagnostic {
@@ -70,6 +72,7 @@ export interface ScenarioResult {
   failures: string[];
   result?: CallToolResult;
   error?: unknown;
+  progressValues?: number[];
   observer?: ScenarioObservationResult;
   execution?: ExternalExecutionResult;
 }
@@ -97,6 +100,7 @@ interface ScenarioObservation {
   durationMs: number;
   result?: CallToolResult;
   error?: unknown;
+  progressValues: number[];
 }
 
 function evaluateExpectation(
@@ -107,6 +111,15 @@ function evaluateExpectation(
 
   if (observation.outcome !== expectation.outcome) {
     failures.push(`expected outcome ${expectation.outcome}, received ${observation.outcome}`);
+  }
+
+  if (
+    expectation.progressValues !== undefined &&
+    JSON.stringify(observation.progressValues) !== JSON.stringify(expectation.progressValues)
+  ) {
+    failures.push(
+      `expected progress values ${JSON.stringify(expectation.progressValues)}, received ${JSON.stringify(observation.progressValues)}`,
+    );
   }
 
   if (
@@ -171,11 +184,15 @@ async function executeCall(
   let outcome: ScenarioOutcome;
   let result: CallToolResult | undefined;
   let error: unknown;
+  const progressValues: number[] = [];
 
   try {
     const response = await client.callTool(
       { name: call.tool, arguments: call.args },
-      timeoutMs === undefined ? undefined : { timeout: timeoutMs },
+      {
+        ...(timeoutMs === undefined ? {} : { timeout: timeoutMs }),
+        onprogress: (progress) => progressValues.push(progress.progress),
+      },
     );
     result = CallToolResultSchema.parse(response);
     outcome = result.isError ? "error" : "success";
@@ -187,6 +204,7 @@ async function executeCall(
   return {
     outcome,
     durationMs: clock.now() - startedAt,
+    progressValues,
     ...(result === undefined ? {} : { result }),
     ...(error === undefined ? {} : { error }),
   };
@@ -220,6 +238,7 @@ export async function runScenario(
       ...observerObservation,
       passed: observerFailures.length === 0,
       failures: observerFailures,
+      progressValues: observerObservation.progressValues,
     };
   }
 
@@ -234,6 +253,7 @@ export async function runScenario(
     durationMs: primaryObservation.durationMs,
     passed: failures.length === 0,
     failures,
+    progressValues: primaryObservation.progressValues,
     ...(primaryObservation.result === undefined ? {} : { result: primaryObservation.result }),
     ...(primaryObservation.error === undefined ? {} : { error: primaryObservation.error }),
     ...(observer === undefined ? {} : { observer }),

@@ -13,6 +13,7 @@ import {
   RequestScopedMalformedMessageFaults,
 } from "./malformedMessage.js";
 import { createServer } from "./server.js";
+import { InvalidProgressTransport, RequestScopedInvalidProgressFaults } from "./invalidProgress.js";
 import {
   ResponseAfterCancellationFaults,
   ResponseAfterCancellationTransport,
@@ -22,9 +23,10 @@ import type { ServeOptions } from "./serveArguments.js";
 async function serve(options: ServeOptions): Promise<void> {
   const malformedMessageFaults = new RequestScopedMalformedMessageFaults();
   const duplicateResponseFaults = new RequestScopedDuplicateResponseFaults();
+  const invalidProgressFaults = new RequestScopedInvalidProgressFaults();
   const serverHandle =
     options.transport === "stdio"
-      ? startStdioServer(malformedMessageFaults, duplicateResponseFaults)
+      ? startStdioServer(malformedMessageFaults, duplicateResponseFaults, invalidProgressFaults)
       : await startHttpServer(options).then((handle) => {
           console.error(`MCP Failure Lab listening at ${handle.url.toString()}`);
           return handle;
@@ -63,6 +65,7 @@ async function serve(options: ServeOptions): Promise<void> {
 function startStdioServer(
   malformedMessageFaults: RequestScopedMalformedMessageFaults,
   duplicateResponseFaults: RequestScopedDuplicateResponseFaults,
+  invalidProgressFaults: RequestScopedInvalidProgressFaults,
 ): { close(): Promise<void> } {
   const stdioTransport = new StdioServerTransport();
   const responseAfterCancellationFaults = new ResponseAfterCancellationFaults(stdioTransport);
@@ -72,21 +75,26 @@ function startStdioServer(
         malformedMessageFaults,
         duplicateResponseFaults,
         responseAfterCancellationFaults,
+        invalidProgressFaults,
       }),
     {
       legacy: "serve",
-      transport: new ResponseAfterCancellationTransport(
-        new MalformedMessageTransport(
-          new DuplicateResponseTransport(stdioTransport, duplicateResponseFaults),
-          malformedMessageFaults,
+      transport: new InvalidProgressTransport(
+        new ResponseAfterCancellationTransport(
+          new MalformedMessageTransport(
+            new DuplicateResponseTransport(stdioTransport, duplicateResponseFaults),
+            malformedMessageFaults,
+          ),
+          responseAfterCancellationFaults,
         ),
-        responseAfterCancellationFaults,
+        invalidProgressFaults,
       ),
     },
   );
   return {
     close: async () => {
       responseAfterCancellationFaults.clear();
+      invalidProgressFaults.clear();
       await handle.close();
     },
   };

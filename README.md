@@ -120,6 +120,7 @@ The built-in server exposes these tools for testing client behavior:
 | `response_after_cancellation` | Sends one late response for a cancelled stdio request        |
 | `session_loss`                | Invalidates the caller's legacy HTTP session                 |
 | `oversized_response`          | Returns a deterministic text payload up to 256 KiB           |
+| `invalid_progress`            | Sends an unknown, regressing, or late progress notification  |
 
 Protocol `ping` is distinct from the `ping` tool. Built-in scenarios default to MCP `2026-07-28`;
 protocol liveness requires scenario `protocolVersion: "2025-11-25"`.
@@ -136,6 +137,20 @@ returned text size and a follow-up request. The JSON-RPC and transport framing a
 the text, so a client's whole-message limit may trigger before `sizeBytes` reaches its threshold.
 The integration test confirms that a stdio client with a 4 KiB message limit accepts a 1 KiB
 payload and rejects an 8 KiB payload.
+
+`invalid_progress` requires a client progress token and accepts `unknown-token`,
+`regressing-progress`, or `after-completion`. These are protocol notifications associated with
+one tool call; they are not tool result content. The unknown-token variant sends one notification
+with a different token. The regressing variant sends progress 2 followed by 1. The late variant
+sends one notification after the matching response on stdio or in the HTTP response stream.
+These violate request-token correlation, monotonic progress, and the completed-request lifecycle,
+respectively.
+Each variant is bounded and consumed once. See the
+[regressing](examples/scenarios/invalid-progress-regressing.json),
+[unknown-token](examples/scenarios/invalid-progress-unknown-token.json), and
+[after-completion](examples/scenarios/invalid-progress-after-completion.json) scenarios.
+The built-in runner can assert callback values with `expect.progressValues`; external target
+adapters do not report progress notifications and cannot use that assertion.
 
 ## How recovery testing works
 

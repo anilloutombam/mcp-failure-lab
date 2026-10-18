@@ -1,6 +1,4 @@
 import {
-  isJSONRPCErrorResponse,
-  isJSONRPCResultResponse,
   type JSONRPCMessage,
   type McpServer,
   type RequestId,
@@ -8,6 +6,7 @@ import {
   type TransportSendOptions,
 } from "@modelcontextprotocol/server";
 import { z } from "zod";
+import { responseId } from "./responseMessage.js";
 
 export const MAX_PENDING_DUPLICATE_RESPONSES = 128;
 
@@ -90,10 +89,4 @@ export function registerDuplicateResponseTool(
       return { content: [{ type: "text", text: "duplicate response activated" }] };
     },
   );
-}
-
-function responseId(message: JSONRPCMessage): RequestId | undefined {
-  return isJSONRPCResultResponse(message) || isJSONRPCErrorResponse(message)
-    ? message.id
-    : undefined;
 }
