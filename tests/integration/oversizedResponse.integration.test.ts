@@ -95,6 +95,8 @@ describe("bounded oversized response", () => {
       stderr: "pipe",
       maxBufferSize: 4_096,
     });
+    const transportErrors: Error[] = [];
+    transport.onerror = (error) => transportErrors.push(error);
     try {
       await client.connect(transport);
       const below = await client.callTool(
@@ -108,6 +110,9 @@ describe("bounded oversized response", () => {
           { timeout: 2_000 },
         ),
       ).rejects.toThrow();
+      expect(transportErrors.map((error) => error.message)).toContain(
+        "ReadBuffer exceeded maximum size of 4096 bytes",
+      );
     } finally {
       await client.close().catch(() => undefined);
     }

@@ -114,6 +114,62 @@ describe("scenario result assertions", () => {
     });
   });
 
+  it("checks UTF-8 bytes in the first text content item", async () => {
+    const client = {
+      callTool: vi.fn(async () => ({
+        content: [
+          { type: "image" as const, data: "AA==", mimeType: "image/png" },
+          { type: "text" as const, text: "é" },
+          { type: "text" as const, text: "longer text" },
+        ],
+      })),
+    };
+
+    const recording = await runScenario(
+      client,
+      scenarioWithResultExpectation({ textBytes: 2 }),
+      clockReturning(10, 15),
+    );
+
+    expect(recording).toMatchObject({ passed: true, failures: [] });
+  });
+
+  it("reports a text byte-count mismatch", async () => {
+    const client = {
+      callTool: vi.fn(async () => ({ content: [{ type: "text" as const, text: "é" }] })),
+    };
+
+    const recording = await runScenario(
+      client,
+      scenarioWithResultExpectation({ textBytes: 3 }),
+      clockReturning(10, 15),
+    );
+
+    expect(recording).toMatchObject({
+      passed: false,
+      failures: ["expected result text to be 3 bytes, received 2"],
+    });
+  });
+
+  it("reports when no text content is available for a byte-count assertion", async () => {
+    const client = {
+      callTool: vi.fn(async () => ({
+        content: [{ type: "image" as const, data: "AA==", mimeType: "image/png" }],
+      })),
+    };
+
+    const recording = await runScenario(
+      client,
+      scenarioWithResultExpectation({ textBytes: 0 }),
+      clockReturning(10, 15),
+    );
+
+    expect(recording).toMatchObject({
+      passed: false,
+      failures: ["expected result text to be 0 bytes, received none"],
+    });
+  });
+
   it("reports a missing result when execution throws", async () => {
     const client = {
       callTool: vi.fn(async () => {
