@@ -1,0 +1,17 @@
+{
+  "name": "bounded 64 KiB response leaves the client usable",
+  "call": {
+    "tool": "oversized_response",
+    "args": { "sizeBytes": 65536 }
+  },
+  "timeoutMs": 1000,
+  "expect": {
+    "outcome": "success",
+    "result": { "textBytes": 65536 }
+  },
+  "observe": {
+    "call": { "tool": "ping", "args": {} },
+    "timeoutMs": 1000,
+    "expect": { "outcome": "success" }
+  }
+}

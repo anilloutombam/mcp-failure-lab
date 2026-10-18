@@ -8,6 +8,7 @@ import {
 } from "./duplicateResponse.js";
 import { registerMalformedMessageTool, type MalformedMessageFaults } from "./malformedMessage.js";
 import { registerPingTool, type Clock } from "./ping.js";
+import { registerOversizedResponseTool } from "./oversizedResponse.js";
 import {
   registerProtocolPingLivenessTool,
   type LivenessSleeper,
@@ -39,6 +40,7 @@ export function createServer(dependencies: ServerDependencies = {}): McpServer {
   });
 
   registerPingTool(server, dependencies.clock);
+  registerOversizedResponseTool(server);
   registerProtocolPingLivenessTool(
     server,
     dependencies.disconnect,

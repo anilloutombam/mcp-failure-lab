@@ -101,6 +101,20 @@ describe("scenario files", () => {
     });
   });
 
+  it("loads exact text byte assertions", async () => {
+    const path = await writeScenario(
+      JSON.stringify({
+        name: "bounded response",
+        call: { tool: "ping", args: {} },
+        expect: { outcome: "success", result: { textBytes: 1024 } },
+      }),
+    );
+
+    await expect(loadScenario(path)).resolves.toMatchObject({
+      expect: { result: { textBytes: 1024 } },
+    });
+  });
+
   it("rejects invalid result expectation fields", async () => {
     const path = await writeScenario(
       JSON.stringify({
