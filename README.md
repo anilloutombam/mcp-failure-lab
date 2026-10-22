@@ -56,7 +56,7 @@ See the [versioned reports](docs/compatibility/README.md) for reproduction steps
 
 ## Quick start
 
-Requires Node.js 22.19.0 or newer and npm.
+Requires Node.js 22.23.4 or newer and npm.
 
 ```bash
 npx mcp-failure-lab demo
