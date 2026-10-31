@@ -4,6 +4,7 @@ import { join } from "node:path";
 
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import { MAX_CONFIG_FILE_BYTES } from "../../src/boundedFile.js";
 import {
   formatScenarioResult,
   loadScenario,
@@ -29,8 +30,19 @@ afterEach(async () => {
 });
 
 describe("scenario files", () => {
+  it("accepts a valid scenario exactly at the configuration limit", async () => {
+    const scenario = JSON.stringify({
+      name: "boundary",
+      call: { tool: "ping", args: {} },
+      expect: { outcome: "success" },
+    });
+    const path = await writeScenario(scenario.padEnd(MAX_CONFIG_FILE_BYTES, " "));
+
+    await expect(loadScenario(path)).resolves.toMatchObject({ name: "boundary" });
+  });
+
   it("rejects files larger than the configuration limit", async () => {
-    const path = await writeScenario(" ".repeat(1024 * 1024 + 1));
+    const path = await writeScenario(" ".repeat(MAX_CONFIG_FILE_BYTES + 1));
 
     await expect(loadScenario(path)).rejects.toThrow("file exceeds the 1048576-byte limit");
   });

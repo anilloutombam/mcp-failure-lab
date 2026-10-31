@@ -4,6 +4,7 @@ import { join } from "node:path";
 
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { StdioClientTransport } from "@modelcontextprotocol/client/stdio";
+import { MAX_CONFIG_FILE_BYTES } from "../../src/boundedFile.js";
 import {
   DefaultMcpTransportFactory,
   mcpTargetConfigSchema,
@@ -33,7 +34,7 @@ afterEach(async () => {
 
 describe("target-client adapter registry", () => {
   it("rejects files larger than the configuration limit", async () => {
-    const path = await writeTarget(" ".repeat(1024 * 1024 + 1));
+    const path = await writeTarget(" ".repeat(MAX_CONFIG_FILE_BYTES + 1));
 
     await expect(loadTargetClient(path, new TargetClientAdapterRegistry())).rejects.toThrow(
       "file exceeds the 1048576-byte limit",
