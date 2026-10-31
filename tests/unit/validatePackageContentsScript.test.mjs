@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   expectedPackagePaths,
+  npmPackCommand,
   validatePackageContents,
 } from "../../scripts/validate-package-contents.mjs";
 
@@ -20,6 +21,19 @@ function packResult(files = packFiles()) {
 }
 
 describe("npm package-content validation", () => {
+  it("launches the npm CLI through Node for Windows compatibility", () => {
+    expect(npmPackCommand("C:\\Program Files\\nodejs\\node.exe", "C:\\npm\\npm-cli.js")).toEqual({
+      file: "C:\\Program Files\\nodejs\\node.exe",
+      arguments: ["C:\\npm\\npm-cli.js", "pack", "--dry-run", "--json"],
+    });
+  });
+
+  it("requires the npm-provided CLI path", () => {
+    expect(() => npmPackCommand("node", "")).toThrow(
+      "run this validator through npm run package:validate",
+    );
+  });
+
   it("accepts the expected compiled package", () => {
     expect(() => validatePackageContents(packResult(), packageJson, sources)).not.toThrow();
   });

@@ -65,11 +65,27 @@ export function validatePackageContents(packResult, packageJson, sources) {
   }
 }
 
+export function npmPackCommand(
+  execPath = process.execPath,
+  npmExecPath = process.env.npm_execpath,
+) {
+  if (npmExecPath === undefined || npmExecPath.length === 0) {
+    throw new Error(
+      "npm CLI path is unavailable; run this validator through npm run package:validate",
+    );
+  }
+  return {
+    file: execPath,
+    arguments: [npmExecPath, "pack", "--dry-run", "--json"],
+  };
+}
+
 export async function validateCurrentPackage(rootDirectory) {
+  const npm = npmPackCommand();
   const [packageSource, sources, pack] = await Promise.all([
     readFile(path.join(rootDirectory, "package.json"), "utf8"),
     sourceFiles(path.join(rootDirectory, "src")),
-    execFileAsync("npm", ["pack", "--dry-run", "--json"], {
+    execFileAsync(npm.file, npm.arguments, {
       cwd: rootDirectory,
       maxBuffer: 10 * 1024 * 1024,
     }),
