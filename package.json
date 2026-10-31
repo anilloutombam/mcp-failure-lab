@@ -34,6 +34,7 @@
     "registry:validate": "npm run registry:sync && mcp-publisher validate",
     "observatory:prepare": "node scripts/prepare-observatory-report.mjs",
     "observatory:validate": "node scripts/validate-observatory-manifest.mjs",
+    "example:client-recovery": "node examples/ci/client-timeout-recovery/run.mjs",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
