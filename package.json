@@ -1,6 +1,6 @@
 {
   "name": "mcp-failure-lab",
-  "version": "0.13.1",
+  "version": "0.13.2",
   "mcpName": "io.github.anilloutombam/mcp-failure-lab",
   "description": "Deterministic fault-injection server for testing how MCP clients handle failures and recover.",
   "type": "module",
