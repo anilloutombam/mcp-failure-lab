@@ -1,4 +1,3 @@
-import { readFile } from "node:fs/promises";
 import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/client";
 import { z } from "zod";
 import { InMemoryTransport } from "@modelcontextprotocol/server";
@@ -11,6 +10,7 @@ import {
   RequestScopedDuplicateResponseFaults,
 } from "./duplicateResponse.js";
 import { InvalidProgressTransport, RequestScopedInvalidProgressFaults } from "./invalidProgress.js";
+import { readBoundedTextFile } from "./boundedFile.js";
 
 import {
   ConsoleScenarioReporter,
@@ -166,7 +166,7 @@ export async function loadScenario(path: string): Promise<Scenario> {
   let source: string;
 
   try {
-    source = await readFile(path, "utf8");
+    source = await readBoundedTextFile(path);
   } catch (error) {
     throw new Error(`cannot read scenario file ${path}: ${errorMessage(error)}`, { cause: error });
   }

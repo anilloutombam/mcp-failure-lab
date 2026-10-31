@@ -1,5 +1,5 @@
-import { readFile } from "node:fs/promises";
 import { z } from "zod";
+import { readBoundedTextFile } from "./boundedFile.js";
 import type { Scenario, ScenarioResult } from "./scenario.js";
 
 export interface ResolvedTargetClient {
@@ -42,7 +42,7 @@ export async function loadTargetClient(
 ): Promise<ResolvedTargetClient> {
   let source: string;
   try {
-    source = await readFile(path, "utf8");
+    source = await readBoundedTextFile(path);
   } catch (error) {
     throw new Error(`cannot read target file ${path}: ${errorMessage(error)}`, { cause: error });
   }

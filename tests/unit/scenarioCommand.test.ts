@@ -29,6 +29,12 @@ afterEach(async () => {
 });
 
 describe("scenario files", () => {
+  it("rejects files larger than the configuration limit", async () => {
+    const path = await writeScenario(" ".repeat(1024 * 1024 + 1));
+
+    await expect(loadScenario(path)).rejects.toThrow("file exceeds the 1048576-byte limit");
+  });
+
   it.each(["2025-11-25", "2026-07-28"])("preserves protocolVersion %s", async (protocolVersion) => {
     const path = await writeScenario(
       JSON.stringify({
