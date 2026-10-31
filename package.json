@@ -37,7 +37,8 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
-    "release:verify": "npm run format:check && npm run typecheck && npm test && npm run build",
+    "audit:prod": "npm audit --omit=dev --audit-level=high",
+    "release:verify": "npm run format:check && npm run typecheck && npm test && npm run build && npm run audit:prod",
     "prepublishOnly": "npm run release:verify"
   },
   "keywords": [
@@ -58,10 +59,10 @@
     "vitest": "^4.1.12"
   },
   "dependencies": {
-    "@modelcontextprotocol/client": "^2.3.1",
-    "@modelcontextprotocol/core": "^2.3.1",
-    "@modelcontextprotocol/node": "^2.1.1",
-    "@modelcontextprotocol/server": "^2.3.1",
-    "zod": "^4.4.3"
+    "@modelcontextprotocol/client": "^2.4.0",
+    "@modelcontextprotocol/core": "^2.4.0",
+    "@modelcontextprotocol/node": "^2.1.2",
+    "@modelcontextprotocol/server": "^2.4.0",
+    "zod": "^4.6.7"
   }
 }

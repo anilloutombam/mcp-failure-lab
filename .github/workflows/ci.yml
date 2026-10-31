@@ -43,6 +43,9 @@ jobs:
       - name: Run tests with coverage
         run: npm run test:coverage
 
+      - name: Audit production dependencies
+        run: npm run audit:prod
+
       - name: Upload coverage to Codecov
         continue-on-error: true
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
