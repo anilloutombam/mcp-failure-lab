@@ -5000,6 +5000,1485 @@
           "reportedAt": "2026-10-05T08:55:10Z"
         }
       ]
+    },
+    {
+      "id": "failure-lab-0.13.2-typescript-sdk-v2",
+      "testedOn": "2026-11-04",
+      "sourceUrl": "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/v0.13.2.md",
+      "implementation": {
+        "name": "Official TypeScript MCP SDK",
+        "slug": "typescript-sdk-v2",
+        "version": "2.4.0",
+        "kind": "client",
+        "repositoryUrl": "https://github.com/modelcontextprotocol/typescript-sdk"
+      },
+      "outcomes": [
+        {
+          "scenario": ["Baseline ping", "baseline-ping", "baseline"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              180,
+              "The primary call and same-session ping succeeded. Negotiated protocol null."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              123,
+              "The primary call and same-session ping succeeded. Negotiated protocol null."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              120,
+              "The primary call and same-session ping succeeded. Negotiated protocol null."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              51,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              9,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              6,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Bounded delay", "delay-success", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              150,
+              "The primary call and same-session ping succeeded. Negotiated protocol null."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              147,
+              "The primary call and same-session ping succeeded. Negotiated protocol null."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              149,
+              "The primary call and same-session ping succeeded. Negotiated protocol null."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              31,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              31,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              30,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Missing JSON-RPC recovery", "missing-jsonrpc-recovery", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              1632,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol null."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              1657,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol null."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              1662,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol null."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              1510,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              1515,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              1515,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": [
+            "Invalid JSON-RPC version recovery",
+            "invalid-jsonrpc-version-recovery",
+            "protocol"
+          ],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              1651,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol null."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              1661,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol null."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              1658,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol null."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              1512,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              1518,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              1513,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Result with error recovery", "result-with-error-recovery", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              1657,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol null."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              1657,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol null."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              1650,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol null."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              1514,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              1512,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              1512,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Duplicate response recovery", "duplicate-response-recovery", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              146,
+              "The primary result was accepted and the same-session ping succeeded. Negotiated protocol null."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              120,
+              "The primary result was accepted and the same-session ping succeeded. Negotiated protocol null."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              121,
+              "The primary result was accepted and the same-session ping succeeded. Negotiated protocol null."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              8,
+              "The primary result was accepted and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              9,
+              "The primary result was accepted and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              6,
+              "The primary result was accepted and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["64 KiB response recovery", "oversized-response-64-kib", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              122,
+              "The 65,536-byte tool payload and same-session ping succeeded with default client limits. Negotiated protocol null."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              122,
+              "The 65,536-byte tool payload and same-session ping succeeded with default client limits. Negotiated protocol null."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              121,
+              "The 65,536-byte tool payload and same-session ping succeeded with default client limits. Negotiated protocol null."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              13,
+              "The 65,536-byte tool payload and same-session ping succeeded with default client limits. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              6,
+              "The 65,536-byte tool payload and same-session ping succeeded with default client limits. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              7,
+              "The 65,536-byte tool payload and same-session ping succeeded with default client limits. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Unknown progress token", "invalid-progress-unknown-token", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "needs-review",
+              118,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol null."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "needs-review",
+              120,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol null."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "needs-review",
+              118,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol null."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "needs-review",
+              4,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "needs-review",
+              4,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "needs-review",
+              3,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Regressing progress", "invalid-progress-regressing", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "needs-review",
+              120,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: [{\"progress\":2,\"total\":3},{\"progress\":1,\"total\":3}]. Negotiated protocol null."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "needs-review",
+              119,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: [{\"progress\":2,\"total\":3},{\"progress\":1,\"total\":3}]. Negotiated protocol null."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "needs-review",
+              119,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: [{\"progress\":2,\"total\":3},{\"progress\":1,\"total\":3}]. Negotiated protocol null."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "needs-review",
+              4,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: [{\"progress\":2,\"total\":3},{\"progress\":1,\"total\":3}]. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "needs-review",
+              4,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: [{\"progress\":2,\"total\":3},{\"progress\":1,\"total\":3}]. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "needs-review",
+              3,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: [{\"progress\":2,\"total\":3},{\"progress\":1,\"total\":3}]. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": [
+            "Progress after completion",
+            "invalid-progress-after-completion",
+            "protocol"
+          ],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "needs-review",
+              120,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol null."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "needs-review",
+              120,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol null."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "needs-review",
+              121,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol null."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "needs-review",
+              3,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "needs-review",
+              3,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "needs-review",
+              7,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "failure-lab-0.13.2-python-sdk",
+      "testedOn": "2026-11-04",
+      "sourceUrl": "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/v0.13.2.md",
+      "implementation": {
+        "name": "Official Python MCP SDK",
+        "slug": "python-sdk",
+        "version": "2.3.0",
+        "kind": "client",
+        "repositoryUrl": "https://github.com/modelcontextprotocol/python-sdk"
+      },
+      "outcomes": [
+        {
+          "scenario": ["Baseline ping", "baseline-ping", "baseline"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              180,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              137,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              132,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              55,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              10,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              7,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Bounded delay", "delay-success", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              158,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              159,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              162,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              34,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              35,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              34,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Missing JSON-RPC recovery", "missing-jsonrpc-recovery", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              1653,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              1659,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              1666,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              12,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              8,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              8,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": [
+            "Invalid JSON-RPC version recovery",
+            "invalid-jsonrpc-version-recovery",
+            "protocol"
+          ],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              1675,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              1684,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              1658,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              8,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              7,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              7,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Result with error recovery", "result-with-error-recovery", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              159,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              133,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              132,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              7,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              7,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              7,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Duplicate response recovery", "duplicate-response-recovery", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              137,
+              "The primary result was accepted and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              136,
+              "The primary result was accepted and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              134,
+              "The primary result was accepted and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              7,
+              "The primary result was accepted and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              6,
+              "The primary result was accepted and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              7,
+              "The primary result was accepted and the same-session ping succeeded. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["64 KiB response recovery", "oversized-response-64-kib", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              136,
+              "The 65,536-byte tool payload and same-session ping succeeded with default client limits. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              135,
+              "The 65,536-byte tool payload and same-session ping succeeded with default client limits. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              135,
+              "The 65,536-byte tool payload and same-session ping succeeded with default client limits. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              8,
+              "The 65,536-byte tool payload and same-session ping succeeded with default client limits. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              7,
+              "The 65,536-byte tool payload and same-session ping succeeded with default client limits. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              8,
+              "The 65,536-byte tool payload and same-session ping succeeded with default client limits. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Unknown progress token", "invalid-progress-unknown-token", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "needs-review",
+              134,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "needs-review",
+              133,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "needs-review",
+              132,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "needs-review",
+              7,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "needs-review",
+              7,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "needs-review",
+              7,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Regressing progress", "invalid-progress-regressing", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "needs-review",
+              133,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: [{\"progress\":2,\"total\":3,\"message\":null},{\"progress\":1,\"total\":3,\"message\":null}]. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "needs-review",
+              133,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: [{\"progress\":2,\"total\":3,\"message\":null},{\"progress\":1,\"total\":3,\"message\":null}]. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "needs-review",
+              133,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: [{\"progress\":2,\"total\":3,\"message\":null},{\"progress\":1,\"total\":3,\"message\":null}]. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "needs-review",
+              7,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: [{\"progress\":2,\"total\":3,\"message\":null},{\"progress\":1,\"total\":3,\"message\":null}]. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "needs-review",
+              7,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: [{\"progress\":2,\"total\":3,\"message\":null},{\"progress\":1,\"total\":3,\"message\":null}]. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "needs-review",
+              7,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: [{\"progress\":2,\"total\":3,\"message\":null},{\"progress\":1,\"total\":3,\"message\":null}]. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        },
+        {
+          "scenario": [
+            "Progress after completion",
+            "invalid-progress-after-completion",
+            "protocol"
+          ],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "needs-review",
+              132,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "needs-review",
+              132,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "needs-review",
+              131,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "needs-review",
+              7,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "needs-review",
+              7,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol 2025-11-25."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "needs-review",
+              7,
+              "The invalid-progress tool call and same-session ping succeeded. Callback progress: []. Negotiated protocol 2025-11-25."
+            ]
+          ]
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "failure-lab-0.13.2-go-sdk",
+      "testedOn": "2026-11-04",
+      "sourceUrl": "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/v0.13.2.md",
+      "implementation": {
+        "name": "Official Go MCP SDK",
+        "slug": "go-sdk",
+        "version": "1.8.0",
+        "kind": "client",
+        "repositoryUrl": "https://github.com/modelcontextprotocol/go-sdk"
+      },
+      "outcomes": [
+        {
+          "scenario": ["Baseline ping", "baseline-ping", "baseline"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              180,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              121,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              118,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              21,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              2,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              4,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Bounded delay", "delay-success", "timing"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              145,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              164,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              153,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              29,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              28,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              28,
+              "The primary call and same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Missing JSON-RPC recovery", "missing-jsonrpc-recovery", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "failed",
+              123,
+              "The malformed response was rejected, but the same-session ping failed: null"
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "failed",
+              121,
+              "The malformed response was rejected, but the same-session ping failed: null"
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "failed",
+              121,
+              "The malformed response was rejected, but the same-session ping failed: null"
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "failed",
+              2,
+              "The malformed response was rejected, but the same-session ping failed: null"
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "failed",
+              1,
+              "The malformed response was rejected, but the same-session ping failed: null"
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "failed",
+              1,
+              "The malformed response was rejected, but the same-session ping failed: null"
+            ]
+          ]
+        },
+        {
+          "scenario": [
+            "Invalid JSON-RPC version recovery",
+            "invalid-jsonrpc-version-recovery",
+            "protocol"
+          ],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "failed",
+              122,
+              "The malformed response was rejected, but the same-session ping failed: null"
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "failed",
+              127,
+              "The malformed response was rejected, but the same-session ping failed: null"
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "failed",
+              120,
+              "The malformed response was rejected, but the same-session ping failed: null"
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "failed",
+              1,
+              "The malformed response was rejected, but the same-session ping failed: null"
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "failed",
+              1,
+              "The malformed response was rejected, but the same-session ping failed: null"
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "failed",
+              1,
+              "The malformed response was rejected, but the same-session ping failed: null"
+            ]
+          ]
+        },
+        {
+          "scenario": ["Result with error recovery", "result-with-error-recovery", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              128,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              121,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              121,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              2,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              1,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              1,
+              "The malformed response was rejected and the same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Duplicate response recovery", "duplicate-response-recovery", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              123,
+              "The primary result was accepted and the same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              119,
+              "The primary result was accepted and the same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              119,
+              "The primary result was accepted and the same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              1,
+              "The primary result was accepted and the same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              1,
+              "The primary result was accepted and the same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              1,
+              "The primary result was accepted and the same-session ping succeeded. Negotiated protocol 2026-07-28."
+            ]
+          ]
+        },
+        {
+          "scenario": ["64 KiB response recovery", "oversized-response-64-kib", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "passed",
+              120,
+              "The 65,536-byte tool payload and same-session ping succeeded with default client limits. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "passed",
+              121,
+              "The 65,536-byte tool payload and same-session ping succeeded with default client limits. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "passed",
+              121,
+              "The 65,536-byte tool payload and same-session ping succeeded with default client limits. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "passed",
+              2,
+              "The 65,536-byte tool payload and same-session ping succeeded with default client limits. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "passed",
+              2,
+              "The 65,536-byte tool payload and same-session ping succeeded with default client limits. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "passed",
+              2,
+              "The 65,536-byte tool payload and same-session ping succeeded with default client limits. Negotiated protocol 2026-07-28."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Unknown progress token", "invalid-progress-unknown-token", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "needs-review",
+              121,
+              "The invalid-progress tool call and same-session ping succeeded. The Go harness did not record callback values. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "needs-review",
+              121,
+              "The invalid-progress tool call and same-session ping succeeded. The Go harness did not record callback values. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "needs-review",
+              122,
+              "The invalid-progress tool call and same-session ping succeeded. The Go harness did not record callback values. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "needs-review",
+              3,
+              "The invalid-progress tool call and same-session ping succeeded. The Go harness did not record callback values. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "needs-review",
+              1,
+              "The invalid-progress tool call and same-session ping succeeded. The Go harness did not record callback values. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "needs-review",
+              1,
+              "The invalid-progress tool call and same-session ping succeeded. The Go harness did not record callback values. Negotiated protocol 2026-07-28."
+            ]
+          ]
+        },
+        {
+          "scenario": ["Regressing progress", "invalid-progress-regressing", "protocol"],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "needs-review",
+              120,
+              "The invalid-progress tool call and same-session ping succeeded. The Go harness did not record callback values. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "needs-review",
+              121,
+              "The invalid-progress tool call and same-session ping succeeded. The Go harness did not record callback values. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "needs-review",
+              120,
+              "The invalid-progress tool call and same-session ping succeeded. The Go harness did not record callback values. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "needs-review",
+              1,
+              "The invalid-progress tool call and same-session ping succeeded. The Go harness did not record callback values. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "needs-review",
+              1,
+              "The invalid-progress tool call and same-session ping succeeded. The Go harness did not record callback values. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "needs-review",
+              1,
+              "The invalid-progress tool call and same-session ping succeeded. The Go harness did not record callback values. Negotiated protocol 2026-07-28."
+            ]
+          ]
+        },
+        {
+          "scenario": [
+            "Progress after completion",
+            "invalid-progress-after-completion",
+            "protocol"
+          ],
+          "runs": [
+            [
+              "stdio-1",
+              "stdio",
+              "needs-review",
+              120,
+              "The invalid-progress tool call and same-session ping succeeded. The Go harness did not record callback values. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "stdio-2",
+              "stdio",
+              "needs-review",
+              121,
+              "The invalid-progress tool call and same-session ping succeeded. The Go harness did not record callback values. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "stdio-3",
+              "stdio",
+              "needs-review",
+              121,
+              "The invalid-progress tool call and same-session ping succeeded. The Go harness did not record callback values. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-1",
+              "streamable-http",
+              "needs-review",
+              1,
+              "The invalid-progress tool call and same-session ping succeeded. The Go harness did not record callback values. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-2",
+              "streamable-http",
+              "needs-review",
+              1,
+              "The invalid-progress tool call and same-session ping succeeded. The Go harness did not record callback values. Negotiated protocol 2026-07-28."
+            ],
+            [
+              "http-3",
+              "streamable-http",
+              "needs-review",
+              2,
+              "The invalid-progress tool call and same-session ping succeeded. The Go harness did not record callback values. Negotiated protocol 2026-07-28."
+            ]
+          ]
+        }
+      ],
+      "findings": []
     }
   ]
 }
