@@ -49,6 +49,42 @@ describe("Observatory manifest validation", () => {
     expect(() => validateObservatoryManifest(manifest)).toThrow("Duplicate run alias");
   });
 
+  it("rejects conflicting metadata for a shared scenario slug", () => {
+    const manifest = validManifest();
+    manifest.reports.push({
+      ...manifest.reports[0],
+      id: "example-server-2.0.0",
+      implementation: { ...manifest.reports[0].implementation, version: "2.0.0" },
+      outcomes: [
+        {
+          scenario: ["Baseline ping", "baseline-ping", "baseline"],
+          runs: [["http", "streamable-http", "passed", 3.1, "Baseline ping passed."]],
+        },
+      ],
+    });
+
+    expect(() => validateObservatoryManifest(manifest)).toThrow(
+      "Conflicting scenario metadata: baseline-ping",
+    );
+  });
+
+  it("rejects conflicting metadata for a shared implementation slug", () => {
+    const manifest = validManifest();
+    manifest.reports.push({
+      ...manifest.reports[0],
+      id: "example-server-2.0.0",
+      implementation: {
+        ...manifest.reports[0].implementation,
+        name: "Official Example Server",
+        version: "2.0.0",
+      },
+    });
+
+    expect(() => validateObservatoryManifest(manifest)).toThrow(
+      "Conflicting implementation metadata: example-server",
+    );
+  });
+
   it("rejects findings linked to an unknown run", () => {
     const manifest = validManifest();
     manifest.reports[0].findings.push({
