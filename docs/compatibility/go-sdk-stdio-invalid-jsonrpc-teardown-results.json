@@ -1,0 +1,328 @@
+{
+  "schemaVersion": 1,
+  "testedOn": "2026-11-04",
+  "server": {
+    "package": "mcp-failure-lab",
+    "version": "0.13.2",
+    "node": "22.23.4"
+  },
+  "method": {
+    "transport": "stdio",
+    "variants": ["missing-jsonrpc", "invalid-jsonrpc-version"],
+    "repeats": 3,
+    "inFlightCall": {
+      "tool": "delay",
+      "delayMs": 750,
+      "startBeforeFaultMs": 100,
+      "timeoutMs": 2500
+    },
+    "primaryTimeoutMs": 1500,
+    "childStateCheckAfterMs": 50
+  },
+  "runs": {
+    "release": [
+      {
+        "sdkVersion": "v1.8.0",
+        "variant": "missing-jsonrpc",
+        "repeat": 1,
+        "protocol": "2026-07-28",
+        "primary": {
+          "outcome": "error",
+          "error": "calling \"tools/call\": invalid message version tag \"\"; expected \"2.0\"",
+          "durationMs": 2
+        },
+        "childAliveAfterPrimary": false,
+        "childReapedAfterPrimary": true,
+        "inFlight": {
+          "outcome": "error",
+          "error": "calling \"tools/call\": invalid message version tag \"\"; expected \"2.0\"",
+          "durationMs": 103
+        },
+        "childAliveAfterInFlight": false,
+        "childReapedAfterInFlight": true,
+        "followUp": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": client is closing: invalid message version tag \"\"; expected \"2.0\"",
+          "durationMs": 0
+        }
+      },
+      {
+        "sdkVersion": "v1.8.0",
+        "variant": "missing-jsonrpc",
+        "repeat": 2,
+        "protocol": "2026-07-28",
+        "primary": {
+          "outcome": "error",
+          "error": "calling \"tools/call\": invalid message version tag \"\"; expected \"2.0\"",
+          "durationMs": 1
+        },
+        "childAliveAfterPrimary": false,
+        "childReapedAfterPrimary": true,
+        "inFlight": {
+          "outcome": "error",
+          "error": "calling \"tools/call\": invalid message version tag \"\"; expected \"2.0\"",
+          "durationMs": 102
+        },
+        "childAliveAfterInFlight": false,
+        "childReapedAfterInFlight": true,
+        "followUp": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": client is closing: invalid message version tag \"\"; expected \"2.0\"",
+          "durationMs": 0
+        }
+      },
+      {
+        "sdkVersion": "v1.8.0",
+        "variant": "missing-jsonrpc",
+        "repeat": 3,
+        "protocol": "2026-07-28",
+        "primary": {
+          "outcome": "error",
+          "error": "calling \"tools/call\": invalid message version tag \"\"; expected \"2.0\"",
+          "durationMs": 1
+        },
+        "childAliveAfterPrimary": false,
+        "childReapedAfterPrimary": true,
+        "inFlight": {
+          "outcome": "error",
+          "error": "calling \"tools/call\": invalid message version tag \"\"; expected \"2.0\"",
+          "durationMs": 102
+        },
+        "childAliveAfterInFlight": false,
+        "childReapedAfterInFlight": true,
+        "followUp": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": client is closing: invalid message version tag \"\"; expected \"2.0\"",
+          "durationMs": 0
+        }
+      },
+      {
+        "sdkVersion": "v1.8.0",
+        "variant": "invalid-jsonrpc-version",
+        "repeat": 1,
+        "protocol": "2026-07-28",
+        "primary": {
+          "outcome": "error",
+          "error": "calling \"tools/call\": invalid message version tag \"1.0\"; expected \"2.0\"",
+          "durationMs": 1
+        },
+        "childAliveAfterPrimary": false,
+        "childReapedAfterPrimary": true,
+        "inFlight": {
+          "outcome": "error",
+          "error": "calling \"tools/call\": invalid message version tag \"1.0\"; expected \"2.0\"",
+          "durationMs": 102
+        },
+        "childAliveAfterInFlight": false,
+        "childReapedAfterInFlight": true,
+        "followUp": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": client is closing: invalid message version tag \"1.0\"; expected \"2.0\"",
+          "durationMs": 0
+        }
+      },
+      {
+        "sdkVersion": "v1.8.0",
+        "variant": "invalid-jsonrpc-version",
+        "repeat": 2,
+        "protocol": "2026-07-28",
+        "primary": {
+          "outcome": "error",
+          "error": "calling \"tools/call\": invalid message version tag \"1.0\"; expected \"2.0\"",
+          "durationMs": 1
+        },
+        "childAliveAfterPrimary": false,
+        "childReapedAfterPrimary": true,
+        "inFlight": {
+          "outcome": "error",
+          "error": "calling \"tools/call\": invalid message version tag \"1.0\"; expected \"2.0\"",
+          "durationMs": 102
+        },
+        "childAliveAfterInFlight": false,
+        "childReapedAfterInFlight": true,
+        "followUp": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": client is closing: invalid message version tag \"1.0\"; expected \"2.0\"",
+          "durationMs": 0
+        }
+      },
+      {
+        "sdkVersion": "v1.8.0",
+        "variant": "invalid-jsonrpc-version",
+        "repeat": 3,
+        "protocol": "2026-07-28",
+        "primary": {
+          "outcome": "error",
+          "error": "calling \"tools/call\": invalid message version tag \"1.0\"; expected \"2.0\"",
+          "durationMs": 1
+        },
+        "childAliveAfterPrimary": false,
+        "childReapedAfterPrimary": true,
+        "inFlight": {
+          "outcome": "error",
+          "error": "calling \"tools/call\": invalid message version tag \"1.0\"; expected \"2.0\"",
+          "durationMs": 102
+        },
+        "childAliveAfterInFlight": false,
+        "childReapedAfterInFlight": true,
+        "followUp": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": client is closing: invalid message version tag \"1.0\"; expected \"2.0\"",
+          "durationMs": 0
+        }
+      }
+    ],
+    "main": [
+      {
+        "sdkVersion": "v1.8.1-0.20261104135342-f91620f5289e",
+        "variant": "missing-jsonrpc",
+        "repeat": 1,
+        "protocol": "2026-07-28",
+        "primary": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": invalid message version tag \"\"; expected \"2.0\"",
+          "durationMs": 1
+        },
+        "childAliveAfterPrimary": false,
+        "childReapedAfterPrimary": true,
+        "inFlight": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": invalid message version tag \"\"; expected \"2.0\"",
+          "durationMs": 102
+        },
+        "childAliveAfterInFlight": false,
+        "childReapedAfterInFlight": true,
+        "followUp": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": invalid message version tag \"\"; expected \"2.0\"",
+          "durationMs": 0
+        }
+      },
+      {
+        "sdkVersion": "v1.8.1-0.20261104135342-f91620f5289e",
+        "variant": "missing-jsonrpc",
+        "repeat": 2,
+        "protocol": "2026-07-28",
+        "primary": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": invalid message version tag \"\"; expected \"2.0\"",
+          "durationMs": 1
+        },
+        "childAliveAfterPrimary": false,
+        "childReapedAfterPrimary": true,
+        "inFlight": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": invalid message version tag \"\"; expected \"2.0\"",
+          "durationMs": 103
+        },
+        "childAliveAfterInFlight": false,
+        "childReapedAfterInFlight": true,
+        "followUp": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": invalid message version tag \"\"; expected \"2.0\"",
+          "durationMs": 0
+        }
+      },
+      {
+        "sdkVersion": "v1.8.1-0.20261104135342-f91620f5289e",
+        "variant": "missing-jsonrpc",
+        "repeat": 3,
+        "protocol": "2026-07-28",
+        "primary": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": invalid message version tag \"\"; expected \"2.0\"",
+          "durationMs": 1
+        },
+        "childAliveAfterPrimary": false,
+        "childReapedAfterPrimary": true,
+        "inFlight": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": invalid message version tag \"\"; expected \"2.0\"",
+          "durationMs": 102
+        },
+        "childAliveAfterInFlight": false,
+        "childReapedAfterInFlight": true,
+        "followUp": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": invalid message version tag \"\"; expected \"2.0\"",
+          "durationMs": 0
+        }
+      },
+      {
+        "sdkVersion": "v1.8.1-0.20261104135342-f91620f5289e",
+        "variant": "invalid-jsonrpc-version",
+        "repeat": 1,
+        "protocol": "2026-07-28",
+        "primary": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": invalid message version tag \"1.0\"; expected \"2.0\"",
+          "durationMs": 1
+        },
+        "childAliveAfterPrimary": false,
+        "childReapedAfterPrimary": true,
+        "inFlight": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": invalid message version tag \"1.0\"; expected \"2.0\"",
+          "durationMs": 102
+        },
+        "childAliveAfterInFlight": false,
+        "childReapedAfterInFlight": true,
+        "followUp": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": invalid message version tag \"1.0\"; expected \"2.0\"",
+          "durationMs": 0
+        }
+      },
+      {
+        "sdkVersion": "v1.8.1-0.20261104135342-f91620f5289e",
+        "variant": "invalid-jsonrpc-version",
+        "repeat": 2,
+        "protocol": "2026-07-28",
+        "primary": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": invalid message version tag \"1.0\"; expected \"2.0\"",
+          "durationMs": 1
+        },
+        "childAliveAfterPrimary": false,
+        "childReapedAfterPrimary": true,
+        "inFlight": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": invalid message version tag \"1.0\"; expected \"2.0\"",
+          "durationMs": 102
+        },
+        "childAliveAfterInFlight": false,
+        "childReapedAfterInFlight": true,
+        "followUp": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": invalid message version tag \"1.0\"; expected \"2.0\"",
+          "durationMs": 0
+        }
+      },
+      {
+        "sdkVersion": "v1.8.1-0.20261104135342-f91620f5289e",
+        "variant": "invalid-jsonrpc-version",
+        "repeat": 3,
+        "protocol": "2026-07-28",
+        "primary": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": invalid message version tag \"1.0\"; expected \"2.0\"",
+          "durationMs": 1
+        },
+        "childAliveAfterPrimary": false,
+        "childReapedAfterPrimary": true,
+        "inFlight": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": invalid message version tag \"1.0\"; expected \"2.0\"",
+          "durationMs": 102
+        },
+        "childAliveAfterInFlight": false,
+        "childReapedAfterInFlight": true,
+        "followUp": {
+          "outcome": "error",
+          "error": "connection closed: calling \"tools/call\": invalid message version tag \"1.0\"; expected \"2.0\"",
+          "durationMs": 0
+        }
+      }
+    ]
+  }
+}

@@ -14,6 +14,9 @@ tests; they are not a permanent compatibility guarantee for later client release
 
 Published-package tests against independent MCP projects are documented separately:
 
+- [Go MCP SDK stdio connection teardown after invalid JSON-RPC responses](go-sdk-stdio-invalid-jsonrpc-teardown.md) —
+  verifies child-process exit, in-flight request settlement, and same-session recovery after
+  responses with a missing or invalid JSON-RPC version field on SDK 1.8.0 and current `main`.
 - [Official Java SDK 2.0.1](java-sdk-2.0.1.md) — stdio and Streamable HTTP baseline, delay,
   timeout recovery, malformed and duplicate responses, disconnect recovery, and late-response
   cancellation checks using `mcp-failure-lab@0.11.0`.
