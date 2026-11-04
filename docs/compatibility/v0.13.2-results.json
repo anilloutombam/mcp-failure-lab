@@ -1,0 +1,3458 @@
+{
+  "schemaVersion": 1,
+  "testedOn": "2026-11-04",
+  "server": {
+    "package": "mcp-failure-lab",
+    "version": "0.13.2",
+    "npmTag": "latest",
+    "npmSha1": "5dd188b3855f03bba5908e11f966e0f5253d9d27",
+    "node": "22.23.4",
+    "source": "published npm package; no repository clone"
+  },
+  "clients": [
+    {
+      "key": "typescript",
+      "implementation": {
+        "name": "Official TypeScript MCP SDK",
+        "slug": "typescript-sdk-v2",
+        "version": "2.4.0",
+        "kind": "client",
+        "repositoryUrl": "https://github.com/modelcontextprotocol/typescript-sdk"
+      },
+      "rows": [
+        {
+          "transport": "stdio",
+          "scenario": "baseline-ping",
+          "repeat": 1,
+          "durationMs": 180,
+          "negotiatedProtocol": null,
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "baseline-ping",
+          "repeat": 2,
+          "durationMs": 123,
+          "negotiatedProtocol": null,
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "baseline-ping",
+          "repeat": 3,
+          "durationMs": 120,
+          "negotiatedProtocol": null,
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "delay-success",
+          "repeat": 1,
+          "durationMs": 150,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "delayMs": 25
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "delay-success",
+          "repeat": 2,
+          "durationMs": 147,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "delayMs": 25
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "delay-success",
+          "repeat": 3,
+          "durationMs": 149,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "delayMs": 25
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "missing-jsonrpc-recovery",
+          "repeat": 1,
+          "durationMs": 1632,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "variant": "missing-jsonrpc"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "missing-jsonrpc-recovery",
+          "repeat": 2,
+          "durationMs": 1657,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "variant": "missing-jsonrpc"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "missing-jsonrpc-recovery",
+          "repeat": 3,
+          "durationMs": 1662,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "variant": "missing-jsonrpc"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-jsonrpc-version-recovery",
+          "repeat": 1,
+          "durationMs": 1651,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "variant": "invalid-jsonrpc-version"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-jsonrpc-version-recovery",
+          "repeat": 2,
+          "durationMs": 1661,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "variant": "invalid-jsonrpc-version"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-jsonrpc-version-recovery",
+          "repeat": 3,
+          "durationMs": 1658,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "variant": "invalid-jsonrpc-version"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "result-with-error-recovery",
+          "repeat": 1,
+          "durationMs": 1657,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "variant": "result-with-error"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "result-with-error-recovery",
+          "repeat": 2,
+          "durationMs": 1657,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "variant": "result-with-error"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "result-with-error-recovery",
+          "repeat": 3,
+          "durationMs": 1650,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "variant": "result-with-error"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "duplicate-response-recovery",
+          "repeat": 1,
+          "durationMs": 146,
+          "negotiatedProtocol": null,
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "duplicate-response-recovery",
+          "repeat": 2,
+          "durationMs": 120,
+          "negotiatedProtocol": null,
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "duplicate-response-recovery",
+          "repeat": 3,
+          "durationMs": 121,
+          "negotiatedProtocol": null,
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "oversized-response-64-kib",
+          "repeat": 1,
+          "durationMs": 122,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "sizeBytes": 65536
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "oversized-response-64-kib",
+          "repeat": 2,
+          "durationMs": 122,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "sizeBytes": 65536
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "oversized-response-64-kib",
+          "repeat": 3,
+          "durationMs": 121,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "sizeBytes": 65536
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-unknown-token",
+          "repeat": 1,
+          "durationMs": 118,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "variant": "unknown-token"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-unknown-token",
+          "repeat": 2,
+          "durationMs": 120,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "variant": "unknown-token"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-unknown-token",
+          "repeat": 3,
+          "durationMs": 118,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "variant": "unknown-token"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-regressing",
+          "repeat": 1,
+          "durationMs": 120,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "variant": "regressing-progress"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": [
+              {
+                "progress": 2,
+                "total": 3
+              },
+              {
+                "progress": 1,
+                "total": 3
+              }
+            ]
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-regressing",
+          "repeat": 2,
+          "durationMs": 119,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "variant": "regressing-progress"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": [
+              {
+                "progress": 2,
+                "total": 3
+              },
+              {
+                "progress": 1,
+                "total": 3
+              }
+            ]
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-regressing",
+          "repeat": 3,
+          "durationMs": 119,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "variant": "regressing-progress"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": [
+              {
+                "progress": 2,
+                "total": 3
+              },
+              {
+                "progress": 1,
+                "total": 3
+              }
+            ]
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-after-completion",
+          "repeat": 1,
+          "durationMs": 120,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "variant": "after-completion"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-after-completion",
+          "repeat": 2,
+          "durationMs": 120,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "variant": "after-completion"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-after-completion",
+          "repeat": 3,
+          "durationMs": 121,
+          "negotiatedProtocol": null,
+          "arguments": {
+            "variant": "after-completion"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "baseline-ping",
+          "repeat": 1,
+          "durationMs": 51,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "baseline-ping",
+          "repeat": 2,
+          "durationMs": 9,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "baseline-ping",
+          "repeat": 3,
+          "durationMs": 6,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "delay-success",
+          "repeat": 1,
+          "durationMs": 31,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "delayMs": 25
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "delay-success",
+          "repeat": 2,
+          "durationMs": 31,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "delayMs": 25
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "delay-success",
+          "repeat": 3,
+          "durationMs": 30,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "delayMs": 25
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "missing-jsonrpc-recovery",
+          "repeat": 1,
+          "durationMs": 1510,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "missing-jsonrpc"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "missing-jsonrpc-recovery",
+          "repeat": 2,
+          "durationMs": 1515,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "missing-jsonrpc"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "missing-jsonrpc-recovery",
+          "repeat": 3,
+          "durationMs": 1515,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "missing-jsonrpc"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-jsonrpc-version-recovery",
+          "repeat": 1,
+          "durationMs": 1512,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "invalid-jsonrpc-version"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-jsonrpc-version-recovery",
+          "repeat": 2,
+          "durationMs": 1518,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "invalid-jsonrpc-version"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-jsonrpc-version-recovery",
+          "repeat": 3,
+          "durationMs": 1513,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "invalid-jsonrpc-version"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "result-with-error-recovery",
+          "repeat": 1,
+          "durationMs": 1514,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "result-with-error"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "result-with-error-recovery",
+          "repeat": 2,
+          "durationMs": 1512,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "result-with-error"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "result-with-error-recovery",
+          "repeat": 3,
+          "durationMs": 1512,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "result-with-error"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "duplicate-response-recovery",
+          "repeat": 1,
+          "durationMs": 8,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "duplicate-response-recovery",
+          "repeat": 2,
+          "durationMs": 9,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "duplicate-response-recovery",
+          "repeat": 3,
+          "durationMs": 6,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "oversized-response-64-kib",
+          "repeat": 1,
+          "durationMs": 13,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "sizeBytes": 65536
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "oversized-response-64-kib",
+          "repeat": 2,
+          "durationMs": 6,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "sizeBytes": 65536
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "oversized-response-64-kib",
+          "repeat": 3,
+          "durationMs": 7,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "sizeBytes": 65536
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-unknown-token",
+          "repeat": 1,
+          "durationMs": 4,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "unknown-token"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-unknown-token",
+          "repeat": 2,
+          "durationMs": 4,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "unknown-token"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-unknown-token",
+          "repeat": 3,
+          "durationMs": 3,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "unknown-token"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-regressing",
+          "repeat": 1,
+          "durationMs": 4,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "regressing-progress"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": [
+              {
+                "progress": 2,
+                "total": 3
+              },
+              {
+                "progress": 1,
+                "total": 3
+              }
+            ]
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-regressing",
+          "repeat": 2,
+          "durationMs": 4,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "regressing-progress"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": [
+              {
+                "progress": 2,
+                "total": 3
+              },
+              {
+                "progress": 1,
+                "total": 3
+              }
+            ]
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-regressing",
+          "repeat": 3,
+          "durationMs": 3,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "regressing-progress"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": [
+              {
+                "progress": 2,
+                "total": 3
+              },
+              {
+                "progress": 1,
+                "total": 3
+              }
+            ]
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-after-completion",
+          "repeat": 1,
+          "durationMs": 3,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "after-completion"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-after-completion",
+          "repeat": 2,
+          "durationMs": 3,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "after-completion"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-after-completion",
+          "repeat": 3,
+          "durationMs": 7,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "after-completion"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        }
+      ]
+    },
+    {
+      "key": "python",
+      "implementation": {
+        "name": "Official Python MCP SDK",
+        "slug": "python-sdk",
+        "version": "2.3.0",
+        "kind": "client",
+        "repositoryUrl": "https://github.com/modelcontextprotocol/python-sdk"
+      },
+      "rows": [
+        {
+          "transport": "stdio",
+          "scenario": "baseline-ping",
+          "repeat": 1,
+          "durationMs": 180,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "baseline-ping",
+          "repeat": 2,
+          "durationMs": 137,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "baseline-ping",
+          "repeat": 3,
+          "durationMs": 132,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "delay-success",
+          "repeat": 1,
+          "durationMs": 158,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "delayMs": 25
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "delay-success",
+          "repeat": 2,
+          "durationMs": 159,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "delayMs": 25
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "delay-success",
+          "repeat": 3,
+          "durationMs": 162,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "delayMs": 25
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "missing-jsonrpc-recovery",
+          "repeat": 1,
+          "durationMs": 1653,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "missing-jsonrpc"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request 'tools/call' timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "missing-jsonrpc-recovery",
+          "repeat": 2,
+          "durationMs": 1659,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "missing-jsonrpc"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request 'tools/call' timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "missing-jsonrpc-recovery",
+          "repeat": 3,
+          "durationMs": 1666,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "missing-jsonrpc"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request 'tools/call' timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-jsonrpc-version-recovery",
+          "repeat": 1,
+          "durationMs": 1675,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "invalid-jsonrpc-version"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request 'tools/call' timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-jsonrpc-version-recovery",
+          "repeat": 2,
+          "durationMs": 1684,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "invalid-jsonrpc-version"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request 'tools/call' timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-jsonrpc-version-recovery",
+          "repeat": 3,
+          "durationMs": 1658,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "invalid-jsonrpc-version"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Request 'tools/call' timed out",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "result-with-error-recovery",
+          "repeat": 1,
+          "durationMs": 159,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "result-with-error"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Injected response contains both result and error",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "result-with-error-recovery",
+          "repeat": 2,
+          "durationMs": 133,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "result-with-error"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Injected response contains both result and error",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "result-with-error-recovery",
+          "repeat": 3,
+          "durationMs": 132,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "result-with-error"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Injected response contains both result and error",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "duplicate-response-recovery",
+          "repeat": 1,
+          "durationMs": 137,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "duplicate-response-recovery",
+          "repeat": 2,
+          "durationMs": 136,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "duplicate-response-recovery",
+          "repeat": 3,
+          "durationMs": 134,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "oversized-response-64-kib",
+          "repeat": 1,
+          "durationMs": 136,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "sizeBytes": 65536
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "oversized-response-64-kib",
+          "repeat": 2,
+          "durationMs": 135,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "sizeBytes": 65536
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "oversized-response-64-kib",
+          "repeat": 3,
+          "durationMs": 135,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "sizeBytes": 65536
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-unknown-token",
+          "repeat": 1,
+          "durationMs": 134,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "unknown-token"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-unknown-token",
+          "repeat": 2,
+          "durationMs": 133,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "unknown-token"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-unknown-token",
+          "repeat": 3,
+          "durationMs": 132,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "unknown-token"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-regressing",
+          "repeat": 1,
+          "durationMs": 133,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "regressing-progress"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": [
+              {
+                "progress": 2,
+                "total": 3,
+                "message": null
+              },
+              {
+                "progress": 1,
+                "total": 3,
+                "message": null
+              }
+            ]
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-regressing",
+          "repeat": 2,
+          "durationMs": 133,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "regressing-progress"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": [
+              {
+                "progress": 2,
+                "total": 3,
+                "message": null
+              },
+              {
+                "progress": 1,
+                "total": 3,
+                "message": null
+              }
+            ]
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-regressing",
+          "repeat": 3,
+          "durationMs": 133,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "regressing-progress"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": [
+              {
+                "progress": 2,
+                "total": 3,
+                "message": null
+              },
+              {
+                "progress": 1,
+                "total": 3,
+                "message": null
+              }
+            ]
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-after-completion",
+          "repeat": 1,
+          "durationMs": 132,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "after-completion"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-after-completion",
+          "repeat": 2,
+          "durationMs": 132,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "after-completion"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-after-completion",
+          "repeat": 3,
+          "durationMs": 131,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "after-completion"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "baseline-ping",
+          "repeat": 1,
+          "durationMs": 55,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "baseline-ping",
+          "repeat": 2,
+          "durationMs": 10,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "baseline-ping",
+          "repeat": 3,
+          "durationMs": 7,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "delay-success",
+          "repeat": 1,
+          "durationMs": 34,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "delayMs": 25
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "delay-success",
+          "repeat": 2,
+          "durationMs": 35,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "delayMs": 25
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "delay-success",
+          "repeat": 3,
+          "durationMs": 34,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "delayMs": 25
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "missing-jsonrpc-recovery",
+          "repeat": 1,
+          "durationMs": 12,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "missing-jsonrpc"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Failed to parse SSE message: 7 validation errors for union[JSONRPCRequest,JSONRPCNotification,JSONRPCResponse,JSONRPCError]\nJSONRPCRequest.jsonrpc\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCRequest.method\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCNotification.jsonrpc\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCNotification.method\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCResponse.jsonrpc\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCError.jsonrpc\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCError.error\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "missing-jsonrpc-recovery",
+          "repeat": 2,
+          "durationMs": 8,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "missing-jsonrpc"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Failed to parse SSE message: 7 validation errors for union[JSONRPCRequest,JSONRPCNotification,JSONRPCResponse,JSONRPCError]\nJSONRPCRequest.jsonrpc\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCRequest.method\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCNotification.jsonrpc\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCNotification.method\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCResponse.jsonrpc\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCError.jsonrpc\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCError.error\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "missing-jsonrpc-recovery",
+          "repeat": 3,
+          "durationMs": 8,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "missing-jsonrpc"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Failed to parse SSE message: 7 validation errors for union[JSONRPCRequest,JSONRPCNotification,JSONRPCResponse,JSONRPCError]\nJSONRPCRequest.jsonrpc\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCRequest.method\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCNotification.jsonrpc\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCNotification.method\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCResponse.jsonrpc\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCError.jsonrpc\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCError.error\n  Field required [type=missing, input_value={'result': {'content': [{...-jsonrpc\"}'}]}, 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-jsonrpc-version-recovery",
+          "repeat": 1,
+          "durationMs": 8,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "invalid-jsonrpc-version"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Failed to parse SSE message: 7 validation errors for union[JSONRPCRequest,JSONRPCNotification,JSONRPCResponse,JSONRPCError]\nJSONRPCRequest.jsonrpc\n  Input should be '2.0' [type=literal_error, input_value='1.0', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\nJSONRPCRequest.method\n  Field required [type=missing, input_value={'result': {'content': [{...sonrpc': '1.0', 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCNotification.jsonrpc\n  Input should be '2.0' [type=literal_error, input_value='1.0', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\nJSONRPCNotification.method\n  Field required [type=missing, input_value={'result': {'content': [{...sonrpc': '1.0', 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCResponse.jsonrpc\n  Input should be '2.0' [type=literal_error, input_value='1.0', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\nJSONRPCError.jsonrpc\n  Input should be '2.0' [type=literal_error, input_value='1.0', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\nJSONRPCError.error\n  Field required [type=missing, input_value={'result': {'content': [{...sonrpc': '1.0', 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-jsonrpc-version-recovery",
+          "repeat": 2,
+          "durationMs": 7,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "invalid-jsonrpc-version"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Failed to parse SSE message: 7 validation errors for union[JSONRPCRequest,JSONRPCNotification,JSONRPCResponse,JSONRPCError]\nJSONRPCRequest.jsonrpc\n  Input should be '2.0' [type=literal_error, input_value='1.0', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\nJSONRPCRequest.method\n  Field required [type=missing, input_value={'result': {'content': [{...sonrpc': '1.0', 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCNotification.jsonrpc\n  Input should be '2.0' [type=literal_error, input_value='1.0', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\nJSONRPCNotification.method\n  Field required [type=missing, input_value={'result': {'content': [{...sonrpc': '1.0', 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCResponse.jsonrpc\n  Input should be '2.0' [type=literal_error, input_value='1.0', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\nJSONRPCError.jsonrpc\n  Input should be '2.0' [type=literal_error, input_value='1.0', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\nJSONRPCError.error\n  Field required [type=missing, input_value={'result': {'content': [{...sonrpc': '1.0', 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-jsonrpc-version-recovery",
+          "repeat": 3,
+          "durationMs": 7,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "invalid-jsonrpc-version"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Failed to parse SSE message: 7 validation errors for union[JSONRPCRequest,JSONRPCNotification,JSONRPCResponse,JSONRPCError]\nJSONRPCRequest.jsonrpc\n  Input should be '2.0' [type=literal_error, input_value='1.0', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\nJSONRPCRequest.method\n  Field required [type=missing, input_value={'result': {'content': [{...sonrpc': '1.0', 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCNotification.jsonrpc\n  Input should be '2.0' [type=literal_error, input_value='1.0', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\nJSONRPCNotification.method\n  Field required [type=missing, input_value={'result': {'content': [{...sonrpc': '1.0', 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\nJSONRPCResponse.jsonrpc\n  Input should be '2.0' [type=literal_error, input_value='1.0', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\nJSONRPCError.jsonrpc\n  Input should be '2.0' [type=literal_error, input_value='1.0', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\nJSONRPCError.error\n  Field required [type=missing, input_value={'result': {'content': [{...sonrpc': '1.0', 'id': 2}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "result-with-error-recovery",
+          "repeat": 1,
+          "durationMs": 7,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "result-with-error"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Injected response contains both result and error",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "result-with-error-recovery",
+          "repeat": 2,
+          "durationMs": 7,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "result-with-error"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Injected response contains both result and error",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "result-with-error-recovery",
+          "repeat": 3,
+          "durationMs": 7,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "result-with-error"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": "Injected response contains both result and error",
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "duplicate-response-recovery",
+          "repeat": 1,
+          "durationMs": 7,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "duplicate-response-recovery",
+          "repeat": 2,
+          "durationMs": 6,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "duplicate-response-recovery",
+          "repeat": 3,
+          "durationMs": 7,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "oversized-response-64-kib",
+          "repeat": 1,
+          "durationMs": 8,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "sizeBytes": 65536
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "oversized-response-64-kib",
+          "repeat": 2,
+          "durationMs": 7,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "sizeBytes": 65536
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "oversized-response-64-kib",
+          "repeat": 3,
+          "durationMs": 8,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "sizeBytes": 65536
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-unknown-token",
+          "repeat": 1,
+          "durationMs": 7,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "unknown-token"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-unknown-token",
+          "repeat": 2,
+          "durationMs": 7,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "unknown-token"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-unknown-token",
+          "repeat": 3,
+          "durationMs": 7,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "unknown-token"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-regressing",
+          "repeat": 1,
+          "durationMs": 7,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "regressing-progress"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": [
+              {
+                "progress": 2,
+                "total": 3,
+                "message": null
+              },
+              {
+                "progress": 1,
+                "total": 3,
+                "message": null
+              }
+            ]
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-regressing",
+          "repeat": 2,
+          "durationMs": 7,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "regressing-progress"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": [
+              {
+                "progress": 2,
+                "total": 3,
+                "message": null
+              },
+              {
+                "progress": 1,
+                "total": 3,
+                "message": null
+              }
+            ]
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-regressing",
+          "repeat": 3,
+          "durationMs": 7,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "regressing-progress"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": [
+              {
+                "progress": 2,
+                "total": 3,
+                "message": null
+              },
+              {
+                "progress": 1,
+                "total": 3,
+                "message": null
+              }
+            ]
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-after-completion",
+          "repeat": 1,
+          "durationMs": 7,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "after-completion"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-after-completion",
+          "repeat": 2,
+          "durationMs": 7,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "after-completion"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-after-completion",
+          "repeat": 3,
+          "durationMs": 7,
+          "negotiatedProtocol": "2025-11-25",
+          "arguments": {
+            "variant": "after-completion"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null,
+            "progress": []
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        }
+      ]
+    },
+    {
+      "key": "go",
+      "implementation": {
+        "name": "Official Go MCP SDK",
+        "slug": "go-sdk",
+        "version": "1.8.0",
+        "kind": "client",
+        "repositoryUrl": "https://github.com/modelcontextprotocol/go-sdk"
+      },
+      "rows": [
+        {
+          "transport": "stdio",
+          "scenario": "baseline-ping",
+          "repeat": 1,
+          "durationMs": 180,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "baseline-ping",
+          "repeat": 2,
+          "durationMs": 121,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "baseline-ping",
+          "repeat": 3,
+          "durationMs": 118,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "delay-success",
+          "repeat": 1,
+          "durationMs": 145,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "delayMs": 25
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "delay-success",
+          "repeat": 2,
+          "durationMs": 164,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "delayMs": 25
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "delay-success",
+          "repeat": 3,
+          "durationMs": 153,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "delayMs": 25
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "missing-jsonrpc-recovery",
+          "repeat": 1,
+          "durationMs": 123,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "missing-jsonrpc"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "error",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "missing-jsonrpc-recovery",
+          "repeat": 2,
+          "durationMs": 121,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "missing-jsonrpc"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "error",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "missing-jsonrpc-recovery",
+          "repeat": 3,
+          "durationMs": 121,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "missing-jsonrpc"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "error",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-jsonrpc-version-recovery",
+          "repeat": 1,
+          "durationMs": 122,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "invalid-jsonrpc-version"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "error",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-jsonrpc-version-recovery",
+          "repeat": 2,
+          "durationMs": 127,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "invalid-jsonrpc-version"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "error",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-jsonrpc-version-recovery",
+          "repeat": 3,
+          "durationMs": 120,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "invalid-jsonrpc-version"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "error",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "result-with-error-recovery",
+          "repeat": 1,
+          "durationMs": 128,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "result-with-error"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "result-with-error-recovery",
+          "repeat": 2,
+          "durationMs": 121,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "result-with-error"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "result-with-error-recovery",
+          "repeat": 3,
+          "durationMs": 121,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "result-with-error"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "duplicate-response-recovery",
+          "repeat": 1,
+          "durationMs": 123,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "duplicate-response-recovery",
+          "repeat": 2,
+          "durationMs": 119,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "duplicate-response-recovery",
+          "repeat": 3,
+          "durationMs": 119,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "oversized-response-64-kib",
+          "repeat": 1,
+          "durationMs": 120,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "sizeBytes": 65536
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "oversized-response-64-kib",
+          "repeat": 2,
+          "durationMs": 121,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "sizeBytes": 65536
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "oversized-response-64-kib",
+          "repeat": 3,
+          "durationMs": 121,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "sizeBytes": 65536
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-unknown-token",
+          "repeat": 1,
+          "durationMs": 121,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "unknown-token"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-unknown-token",
+          "repeat": 2,
+          "durationMs": 121,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "unknown-token"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-unknown-token",
+          "repeat": 3,
+          "durationMs": 122,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "unknown-token"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-regressing",
+          "repeat": 1,
+          "durationMs": 120,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "regressing-progress"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-regressing",
+          "repeat": 2,
+          "durationMs": 121,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "regressing-progress"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-regressing",
+          "repeat": 3,
+          "durationMs": 120,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "regressing-progress"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-after-completion",
+          "repeat": 1,
+          "durationMs": 120,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "after-completion"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-after-completion",
+          "repeat": 2,
+          "durationMs": 121,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "after-completion"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "stdio",
+          "scenario": "invalid-progress-after-completion",
+          "repeat": 3,
+          "durationMs": 121,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "after-completion"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "baseline-ping",
+          "repeat": 1,
+          "durationMs": 21,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "baseline-ping",
+          "repeat": 2,
+          "durationMs": 2,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "baseline-ping",
+          "repeat": 3,
+          "durationMs": 4,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "delay-success",
+          "repeat": 1,
+          "durationMs": 29,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "delayMs": 25
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "delay-success",
+          "repeat": 2,
+          "durationMs": 28,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "delayMs": 25
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "delay-success",
+          "repeat": 3,
+          "durationMs": 28,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "delayMs": 25
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "missing-jsonrpc-recovery",
+          "repeat": 1,
+          "durationMs": 2,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "missing-jsonrpc"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "error",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "missing-jsonrpc-recovery",
+          "repeat": 2,
+          "durationMs": 1,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "missing-jsonrpc"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "error",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "missing-jsonrpc-recovery",
+          "repeat": 3,
+          "durationMs": 1,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "missing-jsonrpc"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "error",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-jsonrpc-version-recovery",
+          "repeat": 1,
+          "durationMs": 1,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "invalid-jsonrpc-version"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "error",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-jsonrpc-version-recovery",
+          "repeat": 2,
+          "durationMs": 1,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "invalid-jsonrpc-version"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "error",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-jsonrpc-version-recovery",
+          "repeat": 3,
+          "durationMs": 1,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "invalid-jsonrpc-version"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "error",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "result-with-error-recovery",
+          "repeat": 1,
+          "durationMs": 2,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "result-with-error"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "result-with-error-recovery",
+          "repeat": 2,
+          "durationMs": 1,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "result-with-error"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "result-with-error-recovery",
+          "repeat": 3,
+          "durationMs": 1,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "result-with-error"
+          },
+          "primary": {
+            "outcome": "error",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "duplicate-response-recovery",
+          "repeat": 1,
+          "durationMs": 1,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "duplicate-response-recovery",
+          "repeat": 2,
+          "durationMs": 1,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "duplicate-response-recovery",
+          "repeat": 3,
+          "durationMs": 1,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {},
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "oversized-response-64-kib",
+          "repeat": 1,
+          "durationMs": 2,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "sizeBytes": 65536
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "oversized-response-64-kib",
+          "repeat": 2,
+          "durationMs": 2,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "sizeBytes": 65536
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "oversized-response-64-kib",
+          "repeat": 3,
+          "durationMs": 2,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "sizeBytes": 65536
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-unknown-token",
+          "repeat": 1,
+          "durationMs": 3,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "unknown-token"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-unknown-token",
+          "repeat": 2,
+          "durationMs": 1,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "unknown-token"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-unknown-token",
+          "repeat": 3,
+          "durationMs": 1,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "unknown-token"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-regressing",
+          "repeat": 1,
+          "durationMs": 1,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "regressing-progress"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-regressing",
+          "repeat": 2,
+          "durationMs": 1,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "regressing-progress"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-regressing",
+          "repeat": 3,
+          "durationMs": 1,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "regressing-progress"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-after-completion",
+          "repeat": 1,
+          "durationMs": 1,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "after-completion"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-after-completion",
+          "repeat": 2,
+          "durationMs": 1,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "after-completion"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        },
+        {
+          "transport": "streamable-http",
+          "scenario": "invalid-progress-after-completion",
+          "repeat": 3,
+          "durationMs": 2,
+          "negotiatedProtocol": "2026-07-28",
+          "arguments": {
+            "variant": "after-completion"
+          },
+          "primary": {
+            "outcome": "success",
+            "error": null
+          },
+          "recovery": {
+            "outcome": "success",
+            "error": null
+          }
+        }
+      ]
+    }
+  ]
+}
