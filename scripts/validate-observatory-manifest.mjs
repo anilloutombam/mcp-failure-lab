@@ -138,6 +138,8 @@ export function validateObservatoryManifest(input) {
   );
 
   const allSourceKeys = [];
+  const implementationIdentities = new Map();
+  const scenarioIdentities = new Map();
   for (const report of manifest.reports) {
     if (
       !report.sourceUrl.startsWith(
@@ -147,9 +149,26 @@ export function validateObservatoryManifest(input) {
       throw new Error(`Unexpected report source URL: ${report.sourceUrl}`);
     }
 
+    const implementationIdentity = JSON.stringify({
+      name: report.implementation.name,
+      kind: report.implementation.kind,
+      repositoryUrl: report.implementation.repositoryUrl,
+    });
+    const previousImplementation = implementationIdentities.get(report.implementation.slug);
+    if (previousImplementation && previousImplementation !== implementationIdentity) {
+      throw new Error(`Conflicting implementation metadata: ${report.implementation.slug}`);
+    }
+    implementationIdentities.set(report.implementation.slug, implementationIdentity);
+
     const runAliases = [];
     for (const outcome of report.outcomes) {
-      const scenarioSlug = outcome.scenario[1];
+      const [scenarioName, scenarioSlug, scenarioCategory] = outcome.scenario;
+      const scenarioIdentity = `${scenarioName}\u0000${scenarioCategory}`;
+      const previousScenario = scenarioIdentities.get(scenarioSlug);
+      if (previousScenario && previousScenario !== scenarioIdentity) {
+        throw new Error(`Conflicting scenario metadata: ${scenarioSlug}`);
+      }
+      scenarioIdentities.set(scenarioSlug, scenarioIdentity);
       for (const run of outcome.runs) {
         const alias = `${scenarioSlug}:${run[0]}`;
         runAliases.push(alias);

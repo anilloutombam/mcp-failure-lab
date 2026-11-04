@@ -5006,15 +5006,15 @@
       "testedOn": "2026-11-04",
       "sourceUrl": "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/v0.13.2.md",
       "implementation": {
-        "name": "Official TypeScript MCP SDK",
-        "slug": "typescript-sdk-v2",
+        "name": "TypeScript MCP SDK",
+        "slug": "typescript-sdk",
         "version": "2.4.0",
         "kind": "client",
         "repositoryUrl": "https://github.com/modelcontextprotocol/typescript-sdk"
       },
       "outcomes": [
         {
-          "scenario": ["Baseline ping", "baseline-ping", "baseline"],
+          "scenario": ["Baseline Ping", "baseline-ping", "baseline"],
           "runs": [
             [
               "stdio-1",
@@ -5108,7 +5108,7 @@
           ]
         },
         {
-          "scenario": ["Missing JSON-RPC recovery", "missing-jsonrpc-recovery", "protocol"],
+          "scenario": ["Missing Jsonrpc Recovery", "missing-jsonrpc-recovery", "protocol"],
           "runs": [
             [
               "stdio-1",
@@ -5156,7 +5156,7 @@
         },
         {
           "scenario": [
-            "Invalid JSON-RPC version recovery",
+            "Invalid Jsonrpc Version Recovery",
             "invalid-jsonrpc-version-recovery",
             "protocol"
           ],
@@ -5206,7 +5206,7 @@
           ]
         },
         {
-          "scenario": ["Result with error recovery", "result-with-error-recovery", "protocol"],
+          "scenario": ["Result With Error Recovery", "result-with-error-recovery", "protocol"],
           "runs": [
             [
               "stdio-1",
@@ -5253,7 +5253,7 @@
           ]
         },
         {
-          "scenario": ["Duplicate response recovery", "duplicate-response-recovery", "protocol"],
+          "scenario": ["Duplicate Response Recovery", "duplicate-response-recovery", "protocol"],
           "runs": [
             [
               "stdio-1",
@@ -5499,7 +5499,7 @@
       "testedOn": "2026-11-04",
       "sourceUrl": "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/v0.13.2.md",
       "implementation": {
-        "name": "Official Python MCP SDK",
+        "name": "Python MCP SDK",
         "slug": "python-sdk",
         "version": "2.3.0",
         "kind": "client",
@@ -5507,7 +5507,7 @@
       },
       "outcomes": [
         {
-          "scenario": ["Baseline ping", "baseline-ping", "baseline"],
+          "scenario": ["Baseline Ping", "baseline-ping", "baseline"],
           "runs": [
             [
               "stdio-1",
@@ -5601,7 +5601,7 @@
           ]
         },
         {
-          "scenario": ["Missing JSON-RPC recovery", "missing-jsonrpc-recovery", "protocol"],
+          "scenario": ["Missing Jsonrpc Recovery", "missing-jsonrpc-recovery", "protocol"],
           "runs": [
             [
               "stdio-1",
@@ -5649,7 +5649,7 @@
         },
         {
           "scenario": [
-            "Invalid JSON-RPC version recovery",
+            "Invalid Jsonrpc Version Recovery",
             "invalid-jsonrpc-version-recovery",
             "protocol"
           ],
@@ -5699,7 +5699,7 @@
           ]
         },
         {
-          "scenario": ["Result with error recovery", "result-with-error-recovery", "protocol"],
+          "scenario": ["Result With Error Recovery", "result-with-error-recovery", "protocol"],
           "runs": [
             [
               "stdio-1",
@@ -5746,7 +5746,7 @@
           ]
         },
         {
-          "scenario": ["Duplicate response recovery", "duplicate-response-recovery", "protocol"],
+          "scenario": ["Duplicate Response Recovery", "duplicate-response-recovery", "protocol"],
           "runs": [
             [
               "stdio-1",
@@ -5992,7 +5992,7 @@
       "testedOn": "2026-11-04",
       "sourceUrl": "https://github.com/anilloutombam/mcp-failure-lab/blob/main/docs/compatibility/v0.13.2.md",
       "implementation": {
-        "name": "Official Go MCP SDK",
+        "name": "Go MCP SDK",
         "slug": "go-sdk",
         "version": "1.8.0",
         "kind": "client",
@@ -6000,7 +6000,7 @@
       },
       "outcomes": [
         {
-          "scenario": ["Baseline ping", "baseline-ping", "baseline"],
+          "scenario": ["Baseline Ping", "baseline-ping", "baseline"],
           "runs": [
             [
               "stdio-1",
@@ -6094,7 +6094,7 @@
           ]
         },
         {
-          "scenario": ["Missing JSON-RPC recovery", "missing-jsonrpc-recovery", "protocol"],
+          "scenario": ["Missing Jsonrpc Recovery", "missing-jsonrpc-recovery", "protocol"],
           "runs": [
             [
               "stdio-1",
@@ -6142,7 +6142,7 @@
         },
         {
           "scenario": [
-            "Invalid JSON-RPC version recovery",
+            "Invalid Jsonrpc Version Recovery",
             "invalid-jsonrpc-version-recovery",
             "protocol"
           ],
@@ -6192,7 +6192,7 @@
           ]
         },
         {
-          "scenario": ["Result with error recovery", "result-with-error-recovery", "protocol"],
+          "scenario": ["Result With Error Recovery", "result-with-error-recovery", "protocol"],
           "runs": [
             [
               "stdio-1",
@@ -6239,7 +6239,7 @@
           ]
         },
         {
-          "scenario": ["Duplicate response recovery", "duplicate-response-recovery", "protocol"],
+          "scenario": ["Duplicate Response Recovery", "duplicate-response-recovery", "protocol"],
           "runs": [
             [
               "stdio-1",

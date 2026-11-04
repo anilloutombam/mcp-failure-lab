@@ -13,8 +13,8 @@
     {
       "key": "typescript",
       "implementation": {
-        "name": "Official TypeScript MCP SDK",
-        "slug": "typescript-sdk-v2",
+        "name": "TypeScript MCP SDK",
+        "slug": "typescript-sdk",
         "version": "2.4.0",
         "kind": "client",
         "repositoryUrl": "https://github.com/modelcontextprotocol/typescript-sdk"
@@ -1195,7 +1195,7 @@
     {
       "key": "python",
       "implementation": {
-        "name": "Official Python MCP SDK",
+        "name": "Python MCP SDK",
         "slug": "python-sdk",
         "version": "2.3.0",
         "kind": "client",
@@ -2389,7 +2389,7 @@
     {
       "key": "go",
       "implementation": {
-        "name": "Official Go MCP SDK",
+        "name": "Go MCP SDK",
         "slug": "go-sdk",
         "version": "1.8.0",
         "kind": "client",
