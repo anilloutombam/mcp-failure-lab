@@ -40,6 +40,9 @@ jobs:
       - name: Check TypeScript
         run: npm run typecheck
 
+      - name: Build
+        run: npm run build
+
       - name: Run tests with coverage
         run: npm run test:coverage
 
@@ -53,9 +56,6 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage/lcov.info
           fail_ci_if_error: true
-
-      - name: Build
-        run: npm run build
 
       - name: Validate package contents
         run: npm run package:validate

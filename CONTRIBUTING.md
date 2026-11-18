@@ -17,8 +17,8 @@ Install dependencies and verify the repository:
 npm install
 npm run format:check
 npm run typecheck
-npm test
 npm run build
+npm test
 ```
 
 ## Before you start
@@ -81,8 +81,8 @@ Before requesting review, run:
 ```bash
 npm run format
 npm run typecheck
-npm test
 npm run build
+npm test
 ```
 
 ## Documentation
