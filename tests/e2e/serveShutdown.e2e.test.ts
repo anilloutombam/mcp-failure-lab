@@ -37,7 +37,11 @@ function untilOutput(
     const timer = setTimeout(() => finish(new Error("Server readiness timed out")), deadlineMs);
     const onData = (chunk: Buffer): void => {
       output += chunk.toString();
-      if (matches(output)) finish();
+      try {
+        if (matches(output)) finish();
+      } catch (error) {
+        finish(error instanceof Error ? error : new Error(String(error)));
+      }
     };
     const onClose = (): void => finish(new Error("Server exited before readiness"));
     const onError = (error: Error): void => finish(error);
