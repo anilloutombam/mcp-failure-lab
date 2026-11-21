@@ -20,6 +20,10 @@ import {
   type ResponseAfterCancellationFaults,
 } from "./responseAfterCancellation.js";
 import { registerSessionLossTool, type SessionLossController } from "./sessionLoss.js";
+import {
+  registerTruncatedResponseTool,
+  type TruncatedResponseFaults,
+} from "./truncatedResponse.js";
 import { VERSION } from "./version.js";
 
 export interface ServerDependencies {
@@ -33,6 +37,7 @@ export interface ServerDependencies {
   livenessSleeper?: LivenessSleeper;
   protocolPingRecorder?: ProtocolPingRecorder;
   invalidProgressFaults?: InvalidProgressFaults;
+  truncatedResponseFaults?: TruncatedResponseFaults;
 }
 
 export function createServer(dependencies: ServerDependencies = {}): McpServer {
@@ -60,6 +65,9 @@ export function createServer(dependencies: ServerDependencies = {}): McpServer {
   }
   if (dependencies.duplicateResponseFaults !== undefined) {
     registerDuplicateResponseTool(server, dependencies.duplicateResponseFaults);
+  }
+  if (dependencies.truncatedResponseFaults !== undefined) {
+    registerTruncatedResponseTool(server, dependencies.truncatedResponseFaults);
   }
   if (dependencies.responseAfterCancellationFaults !== undefined) {
     registerResponseAfterCancellationTool(server, dependencies.responseAfterCancellationFaults);

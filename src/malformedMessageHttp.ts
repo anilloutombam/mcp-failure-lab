@@ -20,11 +20,17 @@ import {
   RequestScopedInvalidProgressFaults,
   type InvalidProgressFaults,
 } from "./invalidProgress.js";
+import {
+  RequestScopedTruncatedResponseFaults,
+  TRUNCATED_SSE_PREFIX,
+  type TruncatedResponseFaults,
+} from "./truncatedResponse.js";
 
 export interface HttpResponseFaults {
   malformedMessage: MalformedMessageFaults;
   duplicateResponse: DuplicateResponseFaults;
   invalidProgress: InvalidProgressFaults;
+  truncatedResponse: TruncatedResponseFaults;
 }
 
 export type ResponseFaultServerFactory = (faults: HttpResponseFaults) => McpServer;
@@ -51,6 +57,8 @@ export function createResponseFaultHttpHandler(
         malformedMessage: new RequestScopedMalformedMessageFaults(),
         duplicateResponse: new RequestScopedDuplicateResponseFaults(),
         invalidProgress: new RequestScopedInvalidProgressFaults(),
+        // This handler drops the tracker with the request; its signal also aborts on normal close.
+        truncatedResponse: new RequestScopedTruncatedResponseFaults({ cancelOnAbort: false }),
       };
       return requestFaults.run(faults, async () => {
         const response = await handler.fetch(request, requestOptions);
@@ -59,6 +67,7 @@ export function createResponseFaultHttpHandler(
           faults.malformedMessage,
           faults.duplicateResponse,
           faults.invalidProgress,
+          faults.truncatedResponse,
         );
       });
     },
@@ -70,11 +79,12 @@ export async function applyMalformedMessageResponse(
   faults: MalformedMessageFaults,
   duplicateFaults?: DuplicateResponseFaults,
   progressFaults?: InvalidProgressFaults,
+  truncatedFaults?: TruncatedResponseFaults,
 ): Promise<Response> {
   if (response.headers.get("content-type")?.includes("text/event-stream") && response.body) {
     return replaceResponseBody(
       response,
-      transformSseResponse(response.body, faults, duplicateFaults, progressFaults),
+      transformSseResponse(response.body, faults, duplicateFaults, progressFaults, truncatedFaults),
     );
   }
   if (!response.headers.get("content-type")?.includes("application/json")) {
@@ -86,6 +96,10 @@ export async function applyMalformedMessageResponse(
     message = JSON.parse(await response.clone().text()) as typeof message;
   } catch {
     return response;
+  }
+  const truncated = truncatedFaults?.take(message);
+  if (truncated !== undefined) {
+    return replaceResponseBody(response, truncated);
   }
   const messages = applyResponseFaults(message, faults, duplicateFaults, progressFaults);
   if (messages.length === 1 && messages[0] === message) {
@@ -124,6 +138,7 @@ function transformSseResponse(
   faults: MalformedMessageFaults,
   duplicateFaults?: DuplicateResponseFaults,
   progressFaults?: InvalidProgressFaults,
+  truncatedFaults?: TruncatedResponseFaults,
 ): ReadableStream<Uint8Array> {
   let pending = "";
   const decoder = new TextDecoder();
@@ -145,6 +160,14 @@ function transformSseResponse(
           let separator = SSE_EVENT_SEPARATOR.exec(pending);
           while (separator !== null) {
             const event = pending.slice(0, separator.index);
+            const message = parseSseMessage(event);
+            const prefix = message === undefined ? undefined : truncatedFaults?.take(message);
+            if (prefix !== undefined) {
+              controller.enqueue(TRUNCATED_SSE_PREFIX + prefix);
+              pending = "";
+              controller.terminate();
+              return;
+            }
             controller.enqueue(
               transformSseEvent(event, faults, duplicateFaults, progressFaults).join(separator[0]) +
                 separator[0],
@@ -174,17 +197,8 @@ function transformSseEvent(
   progressFaults?: InvalidProgressFaults,
 ): string[] {
   const lines = event.split(/\r\n|\r|\n/);
-  const data = lines.filter((line) => line.startsWith("data:") || line === "data");
-  if (data.length === 0) return [event];
-
-  let message: Parameters<MalformedMessageFaults["apply"]>[0];
-  try {
-    message = JSON.parse(
-      data.map((line) => line.slice(5).replace(/^ /, "")).join("\n"),
-    ) as typeof message;
-  } catch {
-    return [event];
-  }
+  const message = parseSseMessage(event);
+  if (message === undefined) return [event];
   const messages = applyResponseFaults(message, faults, duplicateFaults, progressFaults);
   if (messages.length === 1 && messages[0] === message) return [event];
 
@@ -198,6 +212,20 @@ function transformSseEvent(
     })
     .join("\n");
   return messages.map((item) => template.replace("__RESPONSE__", JSON.stringify(item)));
+}
+
+function parseSseMessage(event: string): JSONRPCMessage | undefined {
+  const data = event
+    .split(/\r\n|\r|\n/)
+    .filter((line) => line.startsWith("data:") || line === "data");
+  if (data.length === 0) return undefined;
+  try {
+    return JSON.parse(
+      data.map((line) => line.slice(5).replace(/^ /, "")).join("\n"),
+    ) as JSONRPCMessage;
+  } catch {
+    return undefined;
+  }
 }
 
 function applyResponseFaults(
