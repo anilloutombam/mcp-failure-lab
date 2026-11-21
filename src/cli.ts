@@ -19,14 +19,24 @@ import {
   ResponseAfterCancellationTransport,
 } from "./responseAfterCancellation.js";
 import type { ServeOptions } from "./serveArguments.js";
+import {
+  RequestScopedTruncatedResponseFaults,
+  TruncatedStdioTransport,
+} from "./truncatedResponse.js";
 
 async function serve(options: ServeOptions): Promise<void> {
   const malformedMessageFaults = new RequestScopedMalformedMessageFaults();
   const duplicateResponseFaults = new RequestScopedDuplicateResponseFaults();
   const invalidProgressFaults = new RequestScopedInvalidProgressFaults();
+  const truncatedResponseFaults = new RequestScopedTruncatedResponseFaults();
   const serverHandle =
     options.transport === "stdio"
-      ? startStdioServer(malformedMessageFaults, duplicateResponseFaults, invalidProgressFaults)
+      ? startStdioServer(
+          malformedMessageFaults,
+          duplicateResponseFaults,
+          invalidProgressFaults,
+          truncatedResponseFaults,
+        )
       : await startHttpServer(options).then((handle) => {
           console.error(`MCP Failure Lab listening at ${handle.url.toString()}`);
           return handle;
@@ -66,6 +76,7 @@ function startStdioServer(
   malformedMessageFaults: RequestScopedMalformedMessageFaults,
   duplicateResponseFaults: RequestScopedDuplicateResponseFaults,
   invalidProgressFaults: RequestScopedInvalidProgressFaults,
+  truncatedResponseFaults: RequestScopedTruncatedResponseFaults,
 ): { close(): Promise<void> } {
   const stdioTransport = new StdioServerTransport();
   const responseAfterCancellationFaults = new ResponseAfterCancellationFaults(stdioTransport);
@@ -76,18 +87,22 @@ function startStdioServer(
         duplicateResponseFaults,
         responseAfterCancellationFaults,
         invalidProgressFaults,
+        truncatedResponseFaults,
       }),
     {
       legacy: "serve",
-      transport: new InvalidProgressTransport(
-        new ResponseAfterCancellationTransport(
-          new MalformedMessageTransport(
-            new DuplicateResponseTransport(stdioTransport, duplicateResponseFaults),
-            malformedMessageFaults,
+      transport: new TruncatedStdioTransport(
+        new InvalidProgressTransport(
+          new ResponseAfterCancellationTransport(
+            new MalformedMessageTransport(
+              new DuplicateResponseTransport(stdioTransport, duplicateResponseFaults),
+              malformedMessageFaults,
+            ),
+            responseAfterCancellationFaults,
           ),
-          responseAfterCancellationFaults,
+          invalidProgressFaults,
         ),
-        invalidProgressFaults,
+        truncatedResponseFaults,
       ),
     },
   );
@@ -95,6 +110,7 @@ function startStdioServer(
     close: async () => {
       responseAfterCancellationFaults.clear();
       invalidProgressFaults.clear();
+      truncatedResponseFaults.clear();
       await handle.close();
     },
   };

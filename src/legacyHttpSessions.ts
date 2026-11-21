@@ -21,6 +21,10 @@ import {
 } from "./invalidProgress.js";
 import { createServer } from "./server.js";
 import type { SessionLossActivation, SessionLossController } from "./sessionLoss.js";
+import {
+  RequestScopedTruncatedResponseFaults,
+  type TruncatedResponseFaults,
+} from "./truncatedResponse.js";
 
 export const MAX_HTTP_SESSIONS = 128;
 export const HTTP_SESSION_IDLE_TIMEOUT_MS = 5 * 60_000;
@@ -35,6 +39,7 @@ interface LegacySession {
   malformedMessage: MalformedMessageFaults;
   duplicateResponse: DuplicateResponseFaults;
   invalidProgress: InvalidProgressFaults;
+  truncatedResponse: TruncatedResponseFaults;
   loss?: SessionLossActivation;
   lastActivity: number;
   activeRequests: number;
@@ -105,6 +110,7 @@ export class LegacyHttpSessions {
     const malformedMessage = new RequestScopedMalformedMessageFaults();
     const duplicateResponse = new RequestScopedDuplicateResponseFaults();
     const invalidProgress = new RequestScopedInvalidProgressFaults();
+    const truncatedResponse = new RequestScopedTruncatedResponseFaults();
     const controller: SessionLossController = {
       lose: async (activation) => {
         if (session.loss !== undefined) throw new Error("Session loss is already active");
@@ -125,6 +131,7 @@ export class LegacyHttpSessions {
       malformedMessageFaults: malformedMessage,
       duplicateResponseFaults: duplicateResponse,
       invalidProgressFaults: invalidProgress,
+      truncatedResponseFaults: truncatedResponse,
       sessionLoss: controller,
     });
     session = {
@@ -133,6 +140,7 @@ export class LegacyHttpSessions {
       malformedMessage,
       duplicateResponse,
       invalidProgress,
+      truncatedResponse,
       lastActivity: this.now(),
       activeRequests: 0,
       closed: false,
@@ -171,6 +179,7 @@ export class LegacyHttpSessions {
         session.malformedMessage,
         session.duplicateResponse,
         session.invalidProgress,
+        session.truncatedResponse,
       );
     } catch (error) {
       this.finishRequest(session);
@@ -263,6 +272,7 @@ export class LegacyHttpSessions {
     session.malformedMessage.clear();
     session.duplicateResponse.clear();
     session.invalidProgress.clear();
+    session.truncatedResponse.clear();
     await session.server.close();
   }
 }

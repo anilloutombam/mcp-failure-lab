@@ -2,6 +2,43 @@ import { describe, expect, it } from "vitest";
 import { RequestScopedMalformedMessageFaults } from "../../src/malformedMessage.js";
 import { applyMalformedMessageResponse } from "../../src/malformedMessageHttp.js";
 import { RequestScopedDuplicateResponseFaults } from "../../src/duplicateResponse.js";
+import { RequestScopedTruncatedResponseFaults } from "../../src/truncatedResponse.js";
+
+describe("truncated HTTP responses", () => {
+  it("ends a JSON body after the result key", async () => {
+    const truncated = new RequestScopedTruncatedResponseFaults();
+    truncated.activate(7);
+    const response = await applyMalformedMessageResponse(
+      new Response('{"jsonrpc":"2.0","id":7,"result":{"content":[]}}', {
+        headers: { "content-type": "application/json", "content-length": "55" },
+      }),
+      new RequestScopedMalformedMessageFaults(),
+      undefined,
+      undefined,
+      truncated,
+    );
+
+    expect(response.headers.get("content-type")).toBe("application/json");
+    expect(response.headers.get("content-length")).toBeNull();
+    expect(await response.text()).toBe('{"jsonrpc":"2.0","id":7,"result":');
+  });
+
+  it("ends an SSE event inside its data field without a frame delimiter", async () => {
+    const truncated = new RequestScopedTruncatedResponseFaults();
+    truncated.activate(7);
+    const response = await applyMalformedMessageResponse(
+      new Response('event: message\ndata: {"jsonrpc":"2.0","id":7,"result":{}}\n\n', {
+        headers: { "content-type": "text/event-stream" },
+      }),
+      new RequestScopedMalformedMessageFaults(),
+      undefined,
+      undefined,
+      truncated,
+    );
+
+    expect(await response.text()).toBe('event: message\ndata: {"jsonrpc":"2.0","id":7,"result":');
+  });
+});
 
 describe("malformed SSE responses", () => {
   it.each(["\n", "\r\n", "\r"])("handles chunked events with %j separators", async (newline) => {

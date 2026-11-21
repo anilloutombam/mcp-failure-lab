@@ -117,6 +117,7 @@ The built-in server exposes these tools for testing client behavior:
 | `disconnect`                  | Interrupts the active transport while a request is in flight |
 | `malformed_message`           | Violates one selected JSON-RPC response rule exactly once    |
 | `duplicate_response`          | Sends the same JSON-RPC response twice for one request       |
+| `truncated_response`          | Ends one response after its JSON-RPC result key              |
 | `response_after_cancellation` | Sends one late response for a cancelled stdio request        |
 | `session_loss`                | Invalidates the caller's legacy HTTP session                 |
 | `oversized_response`          | Returns a deterministic text payload up to 256 KiB           |
@@ -137,6 +138,33 @@ returned text size and a follow-up request. The JSON-RPC and transport framing a
 the text, so a client's whole-message limit may trigger before `sizeBytes` reaches its threshold.
 The integration test confirms that a stdio client with a 4 KiB message limit accepts a 1 KiB
 payload and rejects an 8 KiB payload.
+
+`truncated_response` cuts the response at the named `after-result-key` point. On stdio it writes
+an incomplete JSON-RPC response and closes that connection. On HTTP it ends the JSON body or the
+SSE `data:` field before the JSON value and, for SSE, before the event delimiter. The tool accepts
+no payload input, affects only its own request, and limits pending activations to 128 and the
+emitted prefix to 256 bytes. A fresh stdio process is needed after the cut; the HTTP listener and
+other requests remain available. This differs from `malformed_message`, which sends a complete
+JSON-RPC message with invalid fields, and `session_loss`, which invalidates a legacy HTTP session.
+
+To inspect the HTTP bytes from a repository checkout, start the server with
+`npm run dev -- serve --transport http`, then run:
+
+```bash
+curl -i -N http://127.0.0.1:3000/mcp \
+  -H 'Accept: application/json, text/event-stream' \
+  -H 'Content-Type: application/json' \
+  -d '{"jsonrpc":"2.0","id":7,"method":"tools/call","params":{"name":"truncated_response","arguments":{}}}'
+```
+
+The response ends at `"result":` rather than returning a complete tool result. A client should
+record whether it reports a parser error, timeout, or transport closure, then try `ping` on the
+same HTTP connection or a fresh stdio process. The built-in scenario runner uses an in-memory
+transport, so it cannot represent partial wire bytes from this tool.
+
+The [client example](examples/ci/truncated-response/run.mjs) records the SDK error and recovery
+result. Run `node examples/ci/truncated-response/run.mjs` for stdio, or start the HTTP server and
+pass `http://127.0.0.1:3000/mcp` as the script argument.
 
 `invalid_progress` requires a client progress token and accepts `unknown-token`,
 `regressing-progress`, or `after-completion`. These are protocol notifications associated with
