@@ -1,6 +1,6 @@
 import { PassThrough } from "node:stream";
 import type { JSONRPCMessage, Transport } from "@modelcontextprotocol/server";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import {
   MAX_PENDING_TRUNCATED_RESPONSES,
@@ -30,6 +30,40 @@ describe("truncated-response faults", () => {
       "Truncated-response prefix exceeds the byte limit",
     );
     expect(faults.take(response(0))).toBeUndefined();
+  });
+
+  it("releases only the cancelled request and removes signal listeners", () => {
+    const faults = new RequestScopedTruncatedResponseFaults();
+    const cancelled = new AbortController();
+    const completed = new AbortController();
+    const removeCancelled = vi.spyOn(cancelled.signal, "removeEventListener");
+    const removeCompleted = vi.spyOn(completed.signal, "removeEventListener");
+    faults.activate(7, cancelled.signal);
+    faults.activate(8, completed.signal);
+
+    cancelled.abort();
+    expect(faults.take(response(7))).toBeUndefined();
+    expect(faults.take(response(8))).toBe('{"jsonrpc":"2.0","id":8,"result":');
+    expect(removeCancelled).toHaveBeenCalledWith("abort", expect.any(Function));
+    expect(removeCompleted).toHaveBeenCalledWith("abort", expect.any(Function));
+
+    const alreadyCancelled = new AbortController();
+    alreadyCancelled.abort();
+    expect(() => faults.activate(9, alreadyCancelled.signal)).toThrow("cancelled");
+    faults.activate(10, completed.signal);
+    faults.clear();
+    expect(removeCompleted).toHaveBeenCalledTimes(2);
+    expect(faults.take(response(10))).toBeUndefined();
+  });
+
+  it("reclaims a pending slot after cancellation", () => {
+    const faults = new RequestScopedTruncatedResponseFaults();
+    const cancelled = new AbortController();
+    faults.activate(0, cancelled.signal);
+    for (let id = 1; id < MAX_PENDING_TRUNCATED_RESPONSES; id += 1) faults.activate(id);
+    cancelled.abort();
+
+    expect(() => faults.activate("replacement")).not.toThrow();
   });
 
   it("writes only the partial JSON bytes and closes stdio", async () => {

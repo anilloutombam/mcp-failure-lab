@@ -15,15 +15,22 @@ export const TRUNCATION_POINT = "after-result-key";
 export const TRUNCATED_SSE_PREFIX = "event: message\ndata: ";
 
 export interface TruncatedResponseFaults {
-  activate(requestId: RequestId): void;
+  activate(requestId: RequestId, signal?: AbortSignal): void;
   take(message: JSONRPCMessage, relatedRequestId?: RequestId): string | undefined;
   clear(): void;
 }
 
-export class RequestScopedTruncatedResponseFaults implements TruncatedResponseFaults {
-  private readonly pending = new Set<RequestId>();
+interface PendingTruncation {
+  signal?: AbortSignal;
+  onAbort?: () => void;
+}
 
-  activate(requestId: RequestId): void {
+export class RequestScopedTruncatedResponseFaults implements TruncatedResponseFaults {
+  private readonly pending = new Map<RequestId, PendingTruncation>();
+
+  constructor(private readonly options: { cancelOnAbort?: boolean } = {}) {}
+
+  activate(requestId: RequestId, signal?: AbortSignal): void {
     if (
       Buffer.byteLength(TRUNCATED_SSE_PREFIX + responsePrefix(requestId)) >
       MAX_TRUNCATED_PREFIX_BYTES
@@ -33,17 +40,39 @@ export class RequestScopedTruncatedResponseFaults implements TruncatedResponseFa
     if (!this.pending.has(requestId) && this.pending.size >= MAX_PENDING_TRUNCATED_RESPONSES) {
       throw new Error("Too many pending truncated-response faults");
     }
-    this.pending.add(requestId);
+    if (this.options.cancelOnAbort !== false && signal?.aborted) {
+      throw new Error("Request was cancelled before truncated-response activation");
+    }
+    this.remove(requestId);
+    const pending: PendingTruncation = {};
+    if (this.options.cancelOnAbort !== false && signal !== undefined) {
+      pending.signal = signal;
+      pending.onAbort = () => this.remove(requestId);
+    }
+    this.pending.set(requestId, pending);
+    if (signal !== undefined && pending.onAbort !== undefined) {
+      signal.addEventListener("abort", pending.onAbort, { once: true });
+    }
   }
 
   take(message: JSONRPCMessage, relatedRequestId?: RequestId): string | undefined {
     const id = relatedRequestId ?? responseId(message);
-    if (id === undefined || !this.pending.delete(id)) return undefined;
+    if (id === undefined || !this.remove(id)) return undefined;
     return responsePrefix(id);
   }
 
   clear(): void {
-    this.pending.clear();
+    for (const requestId of this.pending.keys()) this.remove(requestId);
+  }
+
+  private remove(requestId: RequestId): boolean {
+    const pending = this.pending.get(requestId);
+    if (pending === undefined) return false;
+    this.pending.delete(requestId);
+    if (pending.signal !== undefined && pending.onAbort !== undefined) {
+      pending.signal.removeEventListener("abort", pending.onAbort);
+    }
+    return true;
   }
 }
 
@@ -103,7 +132,7 @@ export function registerTruncatedResponseTool(
       inputSchema: z.object({}),
     },
     async (_args, context) => {
-      faults.activate(context.mcpReq.id);
+      faults.activate(context.mcpReq.id, context.mcpReq.signal);
       return { content: [{ type: "text", text: "truncated response activated" }] };
     },
   );

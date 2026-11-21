@@ -38,6 +38,65 @@ describe("truncated HTTP responses", () => {
 
     expect(await response.text()).toBe('event: message\ndata: {"jsonrpc":"2.0","id":7,"result":');
   });
+
+  it("keeps another request's activation after a JSON truncation", async () => {
+    const truncated = new RequestScopedTruncatedResponseFaults();
+    truncated.activate(7);
+    truncated.activate(8);
+    const response = await applyMalformedMessageResponse(
+      new Response('{"jsonrpc":"2.0","id":7,"result":{}}', {
+        headers: { "content-type": "application/json" },
+      }),
+      new RequestScopedMalformedMessageFaults(),
+      undefined,
+      undefined,
+      truncated,
+    );
+
+    expect(await response.text()).toBe('{"jsonrpc":"2.0","id":7,"result":');
+    expect(truncated.take({ jsonrpc: "2.0", id: 8, result: {} })).toBe(
+      '{"jsonrpc":"2.0","id":8,"result":',
+    );
+  });
+
+  it("keeps another request's activation after an SSE response ends", async () => {
+    const truncated = new RequestScopedTruncatedResponseFaults();
+    truncated.activate(7);
+    const response = await applyMalformedMessageResponse(
+      new Response('event: message\ndata: {"jsonrpc":"2.0","id":8,"result":{}}\n\n', {
+        headers: { "content-type": "text/event-stream" },
+      }),
+      new RequestScopedMalformedMessageFaults(),
+      undefined,
+      undefined,
+      truncated,
+    );
+
+    expect(await response.text()).toContain('"id":8');
+    expect(truncated.take({ jsonrpc: "2.0", id: 7, result: {} })).toBe(
+      '{"jsonrpc":"2.0","id":7,"result":',
+    );
+  });
+
+  it("keeps another request's activation after an SSE truncation", async () => {
+    const truncated = new RequestScopedTruncatedResponseFaults();
+    truncated.activate(7);
+    truncated.activate(8);
+    const response = await applyMalformedMessageResponse(
+      new Response('event: message\ndata: {"jsonrpc":"2.0","id":7,"result":{}}\n\n', {
+        headers: { "content-type": "text/event-stream" },
+      }),
+      new RequestScopedMalformedMessageFaults(),
+      undefined,
+      undefined,
+      truncated,
+    );
+
+    expect(await response.text()).toBe('event: message\ndata: {"jsonrpc":"2.0","id":7,"result":');
+    expect(truncated.take({ jsonrpc: "2.0", id: 8, result: {} })).toBe(
+      '{"jsonrpc":"2.0","id":8,"result":',
+    );
+  });
 });
 
 describe("malformed SSE responses", () => {

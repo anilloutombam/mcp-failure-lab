@@ -57,7 +57,8 @@ export function createResponseFaultHttpHandler(
         malformedMessage: new RequestScopedMalformedMessageFaults(),
         duplicateResponse: new RequestScopedDuplicateResponseFaults(),
         invalidProgress: new RequestScopedInvalidProgressFaults(),
-        truncatedResponse: new RequestScopedTruncatedResponseFaults(),
+        // This handler drops the tracker with the request; its signal also aborts on normal close.
+        truncatedResponse: new RequestScopedTruncatedResponseFaults({ cancelOnAbort: false }),
       };
       return requestFaults.run(faults, async () => {
         const response = await handler.fetch(request, requestOptions);
@@ -98,7 +99,6 @@ export async function applyMalformedMessageResponse(
   }
   const truncated = truncatedFaults?.take(message);
   if (truncated !== undefined) {
-    truncatedFaults?.clear();
     return replaceResponseBody(response, truncated);
   }
   const messages = applyResponseFaults(message, faults, duplicateFaults, progressFaults);
@@ -164,10 +164,6 @@ function transformSseResponse(
             const prefix = message === undefined ? undefined : truncatedFaults?.take(message);
             if (prefix !== undefined) {
               controller.enqueue(TRUNCATED_SSE_PREFIX + prefix);
-              faults.clear();
-              duplicateFaults?.clear();
-              progressFaults?.clear();
-              truncatedFaults?.clear();
               pending = "";
               controller.terminate();
               return;
@@ -188,7 +184,6 @@ function transformSseResponse(
           faults.clear();
           duplicateFaults?.clear();
           progressFaults?.clear();
-          truncatedFaults?.clear();
         },
       }),
     )
