@@ -36,11 +36,13 @@
     "observatory:validate": "node scripts/validate-observatory-manifest.mjs",
     "example:client-recovery": "node examples/ci/client-timeout-recovery/run.mjs",
     "test": "vitest run",
+    "pretest": "npm run build",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
+    "pretest:watch": "npm run build",
     "audit:prod": "npm audit --omit=dev --audit-level=high",
     "package:validate": "node scripts/validate-package-contents.mjs",
-    "release:verify": "npm run format:check && npm run typecheck && npm test && npm run build && npm run package:validate && npm run audit:prod",
+    "release:verify": "npm run format:check && npm run typecheck && npm test && npm run package:validate && npm run audit:prod",
     "prepublishOnly": "npm run release:verify"
   },
   "keywords": [
