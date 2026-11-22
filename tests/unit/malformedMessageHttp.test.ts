@@ -97,6 +97,25 @@ describe("truncated HTTP responses", () => {
       '{"jsonrpc":"2.0","id":8,"result":',
     );
   });
+
+  it("leaves invalid SSE data untouched before truncating the matching response", async () => {
+    const truncated = new RequestScopedTruncatedResponseFaults();
+    truncated.activate(7);
+    const response = await applyMalformedMessageResponse(
+      new Response(
+        'event: message\ndata: {invalid\n\nevent: message\ndata: {"jsonrpc":"2.0","id":7,"result":{}}\n\n',
+        { headers: { "content-type": "text/event-stream" } },
+      ),
+      new RequestScopedMalformedMessageFaults(),
+      undefined,
+      undefined,
+      truncated,
+    );
+
+    expect(await response.text()).toBe(
+      'event: message\ndata: {invalid\n\nevent: message\ndata: {"jsonrpc":"2.0","id":7,"result":',
+    );
+  });
 });
 
 describe("malformed SSE responses", () => {

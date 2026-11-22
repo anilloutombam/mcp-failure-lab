@@ -93,4 +93,41 @@ describe("truncated-response faults", () => {
     expect(closed).toBe(true);
     expect(faults.take(response(7))).toBeUndefined();
   });
+
+  it("forwards stdio callbacks and protocol versions", async () => {
+    const delegate: Transport = {
+      start: vi.fn(async () => undefined),
+      send: vi.fn(async () => undefined),
+      close: vi.fn(async () => undefined),
+      setProtocolVersion: vi.fn(),
+      setSupportedProtocolVersions: vi.fn(),
+    };
+    const transport = new TruncatedStdioTransport(
+      delegate,
+      new RequestScopedTruncatedResponseFaults(),
+    );
+    const onClose = vi.fn();
+    const onError = vi.fn();
+    const onMessage = vi.fn();
+    transport.onclose = onClose;
+    transport.onerror = onError;
+    transport.onmessage = onMessage;
+
+    await transport.start();
+    delegate.onmessage?.(response(7));
+    delegate.onerror?.(new Error("stdio failed"));
+    delegate.onclose?.();
+    transport.setProtocolVersion("2026-07-28");
+    transport.setSupportedProtocolVersions(["2025-11-25", "2026-07-28"]);
+
+    expect(delegate.start).toHaveBeenCalledOnce();
+    expect(onMessage).toHaveBeenCalledWith(response(7), undefined);
+    expect(onError).toHaveBeenCalledWith(expect.objectContaining({ message: "stdio failed" }));
+    expect(onClose).toHaveBeenCalledOnce();
+    expect(delegate.setProtocolVersion).toHaveBeenCalledWith("2026-07-28");
+    expect(delegate.setSupportedProtocolVersions).toHaveBeenCalledWith([
+      "2025-11-25",
+      "2026-07-28",
+    ]);
+  });
 });
