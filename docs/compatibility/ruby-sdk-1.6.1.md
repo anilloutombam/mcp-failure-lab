@@ -26,6 +26,7 @@ Failures denote unmet harness assertions, not independently established upstream
 
 - Ruby 3.4.11
 - Official Ruby MCP SDK (`mcp`) 1.6.1
+- Faraday 2.14.1
 - Node.js 22 container runtime
 - Published `mcp-failure-lab@0.12.0`
 - Protocol `2025-11-25`
@@ -55,6 +56,8 @@ docker run --rm \
 ```
 
 The machine-readable output is written to `work/ruby-sdk-results/ruby-sdk-1.6.1-results.json`.
+The current experiment pins Faraday 2.14.3 to address security advisories. A new run therefore
+uses a different Faraday version from the recorded October 2026 results.
 
 ## Scope
 
