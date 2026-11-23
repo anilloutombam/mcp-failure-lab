@@ -158,6 +158,7 @@ describe("Streamable HTTP server", () => {
           "disconnect",
           "malformed_message",
           "duplicate_response",
+          "truncated_response",
         ]),
       );
       expect(tools.map((tool) => tool.name)).not.toContain("session_loss");
@@ -293,6 +294,39 @@ describe("Streamable HTTP server", () => {
       await handle.close();
     }
   });
+
+  it.each(["2026-07-28", "2025-11-25"] as const)(
+    "rejects a truncated response and keeps HTTP available (%s)",
+    async (version) => {
+      const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });
+      const affected = new Client(
+        { name: "truncated-http-test", version: "0.1.0" },
+        {
+          supportedProtocolVersions: [version],
+          versionNegotiation:
+            version === "2025-11-25" ? { mode: "legacy" } : { mode: { pin: version } },
+        },
+      );
+      const healthy = createClient();
+      try {
+        await affected.connect(new StreamableHTTPClientTransport(handle.url));
+        await healthy.connect(new StreamableHTTPClientTransport(handle.url));
+        await expect(
+          affected.callTool({ name: "truncated_response", arguments: {} }, { timeout: 500 }),
+        ).rejects.toThrow();
+        await expect(healthy.callTool({ name: "ping", arguments: {} })).resolves.toMatchObject({
+          content: [{ type: "text" }],
+        });
+        await expect(
+          affected.callTool({ name: "ping", arguments: {} }, { timeout: 1000 }),
+        ).resolves.toMatchObject({ content: [{ type: "text" }] });
+      } finally {
+        await affected.close().catch(() => undefined);
+        await healthy.close().catch(() => undefined);
+        await handle.close();
+      }
+    },
+  );
 
   it("emits two SSE events with the same request ID", async () => {
     const handle = await startHttpServer({ host: "127.0.0.1", port: 0, path: "/mcp" });

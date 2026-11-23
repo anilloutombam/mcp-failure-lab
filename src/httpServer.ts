@@ -73,6 +73,7 @@ export async function startHttpServer(options: HttpServerOptions): Promise<HttpS
       malformedMessageFaults: responseFaults.malformedMessage,
       duplicateResponseFaults: responseFaults.duplicateResponse,
       invalidProgressFaults: responseFaults.invalidProgress,
+      truncatedResponseFaults: responseFaults.truncatedResponse,
     });
   const modernHandler = createResponseFaultHttpHandler(createFaultServer, {
     legacy: "reject",
